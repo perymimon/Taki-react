@@ -1,5 +1,7 @@
 import createStore from 'unistore'
 import devtools from 'unistore/devtools'
+import io from "socket.io-client/dist/socket.io.slim.js"
+
 import {actions,state} from './actions';
 
 export const store = devtools(createStore(state));

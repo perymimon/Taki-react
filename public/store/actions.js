@@ -1,18 +1,13 @@
-import io from "socket.io-client/dist/socket.io.slim.js"
-import {store} from './store';
-
 export const state = {
     isOnline: false,
     gameInProgress: false,
-    player: null,
-    // player: {hand: []},
+    player: {itHisTurn: false, hand: []},
     players: [],
     messages: [],
 };
 
 
 export function actions(store, socket) {
-
 
     socket.on('update-game-state', function (partialState) {
         store.setState(partialState);
@@ -22,7 +17,7 @@ export function actions(store, socket) {
         store.actions.setOn('isOnline');
 
     });
-    socket.on('reconnect',function(){
+    socket.on('reconnect', function () {
         store.actions.setOff('isOnline');
     });
 
@@ -31,11 +26,11 @@ export function actions(store, socket) {
         initialize(state, newState) {
             store.setState(newState, true/*replace state*/)
         },
-        setOn(keyName){
-            return {[keyName]:true};
+        setOn(keyName) {
+            return {[keyName]: true};
         },
-        setOff(keyName){
-            return {[keyName]:false};
+        setOff(keyName) {
+            return {[keyName]: false};
         },
 
         /*pre game actions*/
@@ -45,7 +40,7 @@ export function actions(store, socket) {
         startGame() {
             socket.emit('start');
         },
-        readyToPlay(){
+        readyToPlay() {
 
         },
 

@@ -26,7 +26,8 @@ const cards = (function () {
 
     const cardsSet = magicSet.map((symbol, index) => ({symbol, color: '', id: [symbol, index].join('')}));
     cards.push(cardsSet);
-    return cards.flat();
+    // until cards.flat() will come to node;
+    return [].concat(...cards);
 
 })();
 

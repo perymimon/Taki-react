@@ -29,7 +29,7 @@ module.exports = function (io) {
 
     function updatingGameState(socket) {
         const token = socket.handshake.query.token;
-        socket.emit(SOCKET_EVENTS.UPDATE_GAME_STATE, game.getUserState(token));
+        socket.emit(SOCKET_EVENTS.UPDATE_GAME_STATE, game.getPlayerState(token));
     }
 
 

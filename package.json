@@ -5,10 +5,10 @@
   "main": "server/server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "parcel": "parcel -d public/dist public/index.html",
+    "parcel": "parcel serve -d public/dist public/index.html",
     "build": "parcel build -d public/dist public/index.html",
     "webpack": "webpack --env=qa3 --progress --watch --colors --config .config/webpack.config.js",
-    "server": "nodemon --inspect",
+    "server": "nodemon --inspect-brk",
     "start": "npm run server"
   },
   "author": "",

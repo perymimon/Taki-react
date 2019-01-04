@@ -114,6 +114,7 @@ function Game() {
             players.forEach((p, i) => {
                 p.hand = deck.splice(0, 8);
                 p.index = i;
+                p.__defineGetter__('itHisTurn', function(){return this.index === currentIndex});
                 player$messages.set(p, []);
             });
             Object.freeze(players);
@@ -127,11 +128,11 @@ function Game() {
             players.push(player);
             emitter.emit(GAME_EVENTS.GAME_STATE_UPDATE);
         },
-        getUserState(token) {
+        getPlayerState(token) {
             const messages = player$messages.get(this.getPlayer(token)) || [];
-            const player = this.getPlayer(token);
-            const itHisTurn = (player.index === currentIndex);
-            return {...state, player, messages, itHisTurn};
+            const player = this.getPlayer(token) || {/*no player*/};
+            // const itHisTurn = (player.index === currentIndex);
+            return {...state, player, messages, /*itHisTurn*/};
         },
         flushMessages() {
             player$messages.clear();
