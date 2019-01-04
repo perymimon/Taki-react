@@ -1,0 +1,42 @@
+@import "variables";
+
+/*
+$shadow-green:#316144;
+$shadow-yellow:hsla(60, 5%, 50%, 1);
+$shadow-red:#bf6659;
+$shadow-blue:#584775;*/
+
+color-select{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  grid-column-gap: 0.1rem;
+  grid-row-gap: 0.1rem;
+  float: right;
+  width: 10em;
+  height: 10em;
+  border: 2px solid black;
+  margin-left: 0.5rem;
+  padding: 0.2em;
+  box-sizing: border-box;
+  border-radius: 1em;
+  box-shadow: 0 0 3px black;
+
+  .cube{
+    border-radius: inherit;
+    box-shadow: inherit;
+  }
+
+  [data-color="red"]{
+    background: $card-red;
+  }
+  [data-color="blue"]{
+    background: $card-blue;
+  }
+  [data-color="yellow"]{
+    background: $card-yellow;
+  }
+  [data-color="green"]{
+    background: $card-green;
+  }
+}

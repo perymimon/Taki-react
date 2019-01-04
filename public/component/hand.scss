@@ -1,0 +1,35 @@
+hand-game{
+  display: block;
+  position: relative;
+  flex-shrink: 0;
+  border-top: 2px solid;
+  min-height: 10em;
+  border-color: currentColor;
+  padding: 1em;
+  box-sizing: border-box;
+  transition: background-color, transform;
+  //transform: translateY(1rem);
+  transition-duration: 0.1s;
+  //transform-style: preserve-3d;
+  //perspective: var(--pespective);
+
+  .title{
+    color: white;
+    font-size: 1.5rem;
+  }
+
+  .btn-end-turn{
+    border: 0.2em solid;
+    height: 2em;
+    float: right;
+    border-radius: 1em;
+    text-transform: capitalize;
+    font-size: 1rem;
+    font-weight: bold;
+  }
+}
+
+[myturn="true"] hand{
+  background-color: currentColor;
+  transform: translateY(0rem);
+}

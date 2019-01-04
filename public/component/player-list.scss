@@ -1,0 +1,122 @@
+@import "../common/decoration";
+
+$border-round: .5em;
+
+player-list {
+  display: flex;
+  flex-flow: wrap column;
+  justify-content: flex-start;
+  height: 7em;
+  align-content: flex-start;
+}
+
+player-game {
+  display: flex;
+  color: white;
+  align-self: baseline;
+  align-items: center;
+  justify-content: space-between;
+  margin-left: 1rem;
+  border-bottom: 3px solid var(--player-color);
+
+  .icon.avatar {
+    float: left;
+    font-size: 2em;
+    height: 1em;
+    width: 1.2em;
+    background: var(--color);
+    /* padding: 0.1em; */
+    text-align: center;
+
+    *:before {
+      display: inline-block;
+
+    }
+
+
+  }
+
+  panel-game {
+    display: inline-block;
+    margin-left: .5em;
+    padding: 0.3em;
+  }
+  .name {
+    color: var(--player-color);
+  }
+
+  .slogan{
+    display: none;
+  }
+  &.active {
+
+  }
+}
+
+
+player-game.main {
+  display: flex;
+  width: 27em;
+  flex-flow: wrap;
+  height: 100%;
+  margin-left: 0;
+  border: none;
+
+  span {
+    white-space: nowrap;
+  }
+  .name, .slogan {
+    font-style: italic;
+    display: unset;
+  }
+
+  .name {
+    color: var(--player-color);
+    font-size: 3em;
+  }
+
+  .slogan {
+    font-size: 2em;
+    align-self: flex-end;
+  }
+
+  .hand-cards {
+    display: block;
+    height: 1.5rem;
+    //border: 1px solid;
+    text-align: right;
+    line-height: 1.5rem;
+    flex: 0 30%;
+    margin: 0.5em;
+    padding: 0 0.5em;
+    box-sizing: border-box;
+
+    .card-icon {
+      font-size: 2em;
+      color: white;
+      float: left;
+      margin-top: -0.2em;
+      position: relative;
+      z-index: 1;
+    }
+
+
+  }
+
+  .icon.avatar {
+    float: left;
+    font-size: 4em;
+    height: 1em;
+    width: 1.2em;
+    background: var(--color);
+    /* padding: 0.1em; */
+    text-align: center;
+
+    *:before {
+      display: inline-block;
+
+    }
+  }
+
+}
+

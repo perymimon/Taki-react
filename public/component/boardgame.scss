@@ -1,0 +1,58 @@
+@import "card";
+
+board-game{
+  flex: 1;
+  //z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  align-content: center;
+  justify-content: space-evenly;
+  transform: rotateX(12deg) translateZ(0em);
+  transform-origin: bottom;
+  border: 3px solid var(--border-color);
+  background-color: rgba(43, 43, 43, 0.25);
+  //transform-style: preserve-3d;
+  overflow: visible;
+
+  talk-box{
+    display: block;
+    height: 3em;
+    width: 25rem;
+
+    .text-line{
+      position: relative;
+      transition: transform 1s , opacity 1s ;
+      transform: translateY(0em);
+      opacity: 1;
+    }
+    .text-line.leave/*:nth-child(n + 2)*/{
+      transform: translateY(-2em);
+      opacity: 0;
+    }
+
+    .previous-message{
+
+    }
+
+  }
+
+  .deck{
+    background-image: url("../assets/back_card.png");
+    background-size: cover;
+    align-self: start;
+    text-align: center;
+    width: 10.6rem;
+    height: 14rem;
+    font-size: 40px;
+    overflow: visible;
+    padding-top: 0.5em;
+    box-sizing: border-box;
+  }
+
+  .stack{
+    width: 10.6rem;
+    height: 14rem;
+  }
+
+}

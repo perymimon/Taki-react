@@ -1,0 +1,99 @@
+
+button.main-button{
+  position: relative;
+  border-radius: inherit;
+  font-size: 31px;
+  width: 80%;
+  height: 4em;
+  background-image: radial-gradient(20px at top right, white, transparent), linear-gradient(to bottom, #4f7a85 10%, #FFD14A);
+  box-shadow: 0 5px 4px #323825, inset 0 4px 1px 1px #ffffff1c, inset 0px -3px 1px 1px rgba(204, 198, 197, .5);
+  border: 0.1em solid rgba(31, 31, 31, 0.5);
+  border-bottom-width: 0.25em;
+  background-clip: padding-box;
+  font-family: 'Slackey', cursive;
+  font-weight: bold;
+  color: #FFFFCC;
+  -webkit-text-stroke: 1px #582E00;
+  text-transform: uppercase;
+  align-self: center;
+  /* &:before{
+     content: '';
+     width: calc(100% - 0.4em);
+     height: calc(100% - 0.4em);
+     right: 0.1em;
+     position: absolute;
+     display: block;
+     top: 0.2em;
+     box-shadow: -1px 2px 5px rgba(0, 0, 0, 0.4);
+     border-radius: 0.1em;
+   }*/
+  &:active {
+    box-shadow: none;
+  }
+}
+
+.shiny-block{
+  position: relative;
+
+
+  &:before {
+    content: '';
+    display: block;
+    width: 98%;
+    height: 30%;
+    max-height: 10em;
+    background:rgba(255, 255, 255, 0.14);
+    position: absolute;
+    border-radius: 0.5em;
+    left: 50%;
+    top: 1%;
+    transform: translateX(-50%);
+    z-index: 1;
+  }
+}
+
+
+
+.dramatic-text{
+  -webkit-text-stroke: 1px black;
+  text-transform: uppercase;
+}
+
+.four-color-background{
+  position: relative;
+  &:after {
+    content: '';
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    background: radial-gradient(ellipse at top right, #a59f40, transparent 80%),
+    radial-gradient(ellipse at bottom left, #7a9545, transparent 80%),
+    radial-gradient(ellipse at top left, #5e9fc9, transparent 80%),
+    radial-gradient(ellipse at top right, #9d5c4d, transparent 80%);
+    border-radius: inherit;
+    z-index: 0;
+
+  }
+}
+
+.panel-show-value{
+  @extend .shiny-block;
+  @extend .four-color-background;
+  box-shadow: 0px 0px 4px #00000094;
+
+  &:after{
+    border: 2px solid #5d677e;
+  }
+
+  text,.icon {
+    position: relative;
+    z-index: 1;
+  }
+}
+
+text-game{
+  position: relative;
+  z-index: 1;
+}

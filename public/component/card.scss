@@ -1,0 +1,120 @@
+@import "./variables";
+
+card-game {
+  display: inline-block;
+  position: relative;
+  height: 6rem;
+  width: 5rem;
+  border-radius: 0.6rem;
+  align-items: center;
+  justify-content: center;
+  font-size: 80px;
+  user-select: none;
+  color: white;
+  /* vertical-align: -1em; */
+  background-size: 500% 400%;
+  background-position: calc( var(--colum) * 100% / 4) calc(var(--row) * 100% / 3);
+  //transform-style: preserve-3d;
+  transform-origin: left bottom;
+
+  &:after{
+    content:'';
+    background-image: url("../assets/back_card.png");
+    position: absolute;
+    top:0;
+    left: 0;right: 0;
+    bottom: 0;
+    transform: rotateX(0.5turn);
+    background-size: cover;
+    background-repeat: no-repeat;
+  }
+  &.R{
+    background-image: url("../assets/redCards.png");
+  }
+
+  &.B{
+    background-image: url("../assets/blueCards.png");
+  }
+
+  &.G{
+    background-image: url("../assets/greenCards.png");
+  }
+
+
+  &.Y{
+    background-image: url("../assets/yellowCards.png");
+  }
+
+
+  &[data-symbol="1"]{ --row:0; --colum:0;  }
+  &[data-symbol="W"]{ --row:0; --colum:1;  }
+  &[data-symbol="3"]{ --row:0; --colum:2;  }
+  &[data-symbol="4"]{ --row:0; --colum:3;  }
+  &[data-symbol="5"]{ --row:0; --colum:4;  }
+  &[data-symbol="6"]{ --row:0; --colum:0;  }
+  &[data-symbol="7"]{ --row:1; --colum:1;  }
+  &[data-symbol="8"]{ --row:1; --colum:2;  }
+  &[data-symbol="9"]{ --row:1; --colum:3;  }
+  &[data-symbol="S"]{ --row:1; --colum:4;  }
+  &[data-symbol="P"]{ --row:2; --colum:0;  }
+  &[data-symbol="D"]{ --row:2; --colum:1;  }
+  &[data-symbol="T"]{ --row:2; --colum:2;  }
+
+
+  /*raect animation*/
+  &.card-leave{
+    animation-iteration-count: 3;
+    animation-direction: alternate;
+    animation: go-to-stack 0.8s both;
+  }
+  &.card-enter{
+
+  }
+  &.big-no-no{
+    animation: wobble-hor-bottom 0.8s both;
+  }
+}
+
+
+
+
+
+@keyframes wobble-hor-bottom {
+  0%,
+  100% {
+    transform: translateX(0%);
+    transform-origin: 50% 50%;
+  }
+  15% {
+    transform: translateX(-30px) rotate(-6deg);
+  }
+  30% {
+    transform: translateX(15px) rotate(6deg);
+  }
+  45% {
+    transform: translateX(-15px) rotate(-3.6deg);
+  }
+  60% {
+    transform: translateX(9px) rotate(2.4deg);
+  }
+  75% {
+    transform: translateX(-6px) rotate(-1.2deg);
+  }
+}
+
+@keyframes go-to-stack {
+  20%{
+    transform: translate3d(0px , 0px, 50px) rotateX(12deg);
+    position: absolute;
+
+  }
+  to{
+    transform: rotateX(12deg) translate3d(var(--x), var(--y), 57px)  ;
+    height:  14rem;
+    width:10.6rem;
+    position: absolute;
+
+  }
+
+
+}
