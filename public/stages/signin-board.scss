@@ -1,0 +1,41 @@
+avatar-select {
+    display: flex;
+    flex-direction: row;
+    flex-flow: wrap;
+    justify-content: space-around;
+
+    label {
+        float: left;
+        margin: 0.5em;
+        cursor: pointer;
+        border-radius: 0.5em;
+        position: relative;
+
+        &:hover {
+            background: #449fdb;
+        }
+    }
+
+    [type=radio] {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        position: absolute;
+        top: 0;    bottom: 0;
+
+        margin: 0;
+        padding: 0;
+        z-index: 0;
+        width: 100%;
+
+        &:checked {
+            background: #449fdb;
+        }
+    }
+}
+
+.icon {
+    font-size: 4em;
+    z-index: 1;
+    position: relative;
+}

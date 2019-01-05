@@ -1,39 +1,49 @@
+const {GAME_STAGE} = require('../../common/game-consts');
 export const state = {
     isOnline: false,
     gameInProgress: false,
     player: {itHisTurn: false, hand: []},
     players: [],
     messages: [],
+    stage: GAME_STAGE.PLAYER_SIGNIN,
 };
 
-
-export function actions(store, socket) {
+export function storeContentActions(store, socket) {
 
     socket.on('update-game-state', function (partialState) {
         store.setState(partialState);
     });
 
     socket.on('disconnect', function () {
-        store.actions.setOn('isOnline');
+        store.run.setOff('isOnline');
+    });
 
-    });
     socket.on('reconnect', function () {
-        store.actions.setOff('isOnline');
+        store.run.setOn('isOnline');
     });
+
+    socket.on('connect', function () {
+        store.run.setOn('isOnline');
+    });
+
+    socket.on('logged-in', function () {
+        store.setState({stage: GAME_STAGE.WELCOME})
+    });
+    console.log('some text');
 
     return {
-        /* general actions */
+        /* GENERAL ACTIONS */
         initialize(state, newState) {
             store.setState(newState, true/*replace state*/)
         },
-        setOn(keyName) {
+        setOn(state, keyName) {
             return {[keyName]: true};
         },
-        setOff(keyName) {
+        setOff(state, keyName) {
             return {[keyName]: false};
         },
 
-        /*pre game actions*/
+        /*PREGAME ACTIONS*/
         login(state, data) {
             socket.emit('login', data);
         },

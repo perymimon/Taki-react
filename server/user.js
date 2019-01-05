@@ -1,18 +1,20 @@
-
 const users ={};
 var color = "F44336,9C27B0,673AB7,3F51B5,2196f3,03a9f4,00BCD4,009688,4CAF50,8BC34A,cddc39,ffeb3b,ffc107,ff9800,ff5722,607d8b".split(',');
 
 
-exports.fetchUser = function (token, {name,slogan, avatar}) {
+exports.letUser = function (token, {name,slogan, avatar}) {
     users[token] = users[token] || {
         hand :[],
         token,
         color: randomColor(),
-
+        name,
+        slogan,
+        avatar
     };
-    users[token].name = name;
-    users[token].slogan = slogan;
-    users[token].avatar = avatar;
+
+    // users[token].name = name;
+    // users[token].slogan = slogan;
+    // users[token].avatar = avatar;
 
     return users[token];
 };

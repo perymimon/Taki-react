@@ -9,9 +9,9 @@ module.exports = function (io) {
     let messages = [];
     const game = /*new */Game();
 
-    // game.joinPlayer(Users.fetchUser('a97a7eca', {name: 'pery'}));
-    // game.joinPlayer(Users.fetchUser('c9e9ca9c', {name: 'pery'}));
-    // game.joinPlayer(Users.fetchUser('97ce7a97', {name: 'doron'}));
+    // game.joinPlayer(Users.letUser('a97a7eca', {name: 'pery'}));
+    // game.joinPlayer(Users.letUser('c9e9ca9c', {name: 'pery'}));
+    // game.joinPlayer(Users.letUser('97ce7a97', {name: 'doron'}));
     // game.setup();
 
     const emitGameState = debounce(function emitClientsState() {
@@ -29,7 +29,8 @@ module.exports = function (io) {
 
     function updatingGameState(socket) {
         const token = socket.handshake.query.token;
-        socket.emit(SOCKET_EVENTS.UPDATE_GAME_STATE, game.getPlayerState(token));
+        const playerState = game.getPlayerState(token);
+        socket.emit(SOCKET_EVENTS.UPDATE_GAME_STATE, playerState);
     }
 
 
@@ -38,8 +39,9 @@ module.exports = function (io) {
     });
 
     io.on(SOCKET_EVENTS.LOGIN, (ctx, data) => {
-        const player = Users.fetchUser(ctx.token, data);
+        const player = Users.letUser(ctx.token, data);
         game.joinPlayer(player);
+        ctx.socket.emit(SOCKET_EVENTS.LOGGED_IN);
     });
 
     io.on(SOCKET_EVENTS.START_GAME, (ctx, data) => {

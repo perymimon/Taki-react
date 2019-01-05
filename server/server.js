@@ -16,8 +16,9 @@ lobbyIO.attach(app); // Socket is now available as app.io if you prefer
 app.keys = ["some key loop", "another key loop"];
 
 app.use(function resetCookieToken(ctx, next){
-    const token = ctx.cookies.get('token');
-    ctx.cookies.set('token', token || createToken(), {
+    const tokenName = 'game-token';
+    const token = ctx.cookies.get(tokenName) || createToken();
+    ctx.cookies.set(tokenName, token, {
         maxAge: 10 * 365 * 24 * 60 * 60 * 1000, /*10 years*/
         httpOnly: false,
         overwrite: true

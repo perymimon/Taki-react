@@ -1,18 +1,26 @@
-import createStore from 'unistore'
+import {createStore} from 'unistore/src/combined/react'
 import devtools from 'unistore/devtools'
 import io from "socket.io-client/dist/socket.io.slim.js"
 
-import {actions,state} from './actions';
+import {storeContentActions,state} from './store-content-actions';
 
 export const store = devtools(createStore(state));
-const token = document.cookie.replace(/.*token=(\w+).*/, (a, b) => b);
-const socket = io('localhost:8080', {query: {token: token, autoConnect: false}});
-store.actions = {};
+export const actions = {};
 
-/* bind actions to store's state */
-for( let name in actions(store, socket)){
-    store.actions[name] = store.action(actions[name]);
+
+const token = document.cookie.replace(/.*token=(\w+).*/, '$1');
+console.log('player token:',token);
+
+const socket = io('localhost:8080', {query: {token: token, autoConnect: false}});
+
+/* bind storeContentActions to store's state */
+const boundActions = storeContentActions(store, socket);
+for( let [name,action] of Object.entries(boundActions) ){
+    actions[name] = store.action(action);
 }
+
+store.run = actions;
+
 // store.subscribe(function (state) {
 //     if (!state.gameInProgress) {
 //         route('/welcome');
