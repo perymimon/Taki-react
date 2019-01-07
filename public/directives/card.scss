@@ -15,6 +15,7 @@ card {
   background-size: 500% 400%;
   background-position: calc( var(--colum) * 100% / 4) calc(var(--row) * 100% / 3);
   transform-style: preserve-3d;
+  //transform: rotateX(50deg) rotateY(10deg);
   //transform-origin: left bottom;
 
   &:after{
