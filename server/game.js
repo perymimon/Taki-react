@@ -74,38 +74,7 @@ function Game() {
 
     };
 
-    function moveToNextPlayer() {
-        currentIndex = (players.length + currentIndex + state.direction) % players.length;
-        currentPlayer = players[currentIndex];
-        // emitMessage( `put or draw card` );
-        return currentPlayer;
-    }
-
-    function isCardValid(card) {
-        const lastCard = stack[0];
-        /*if this is first card any card valid*/
-        if (!lastCard) return true;
-        const colorMatch = (lastCard.color === card.color) && !state.mode;
-        const symboleMatch = (card.symbol === lastCard.symbol) && !state.mode;
-        const isMagicCard = (!card.color) && !state.mode;
-        const strictMode = (function () {
-            switch (state.mode) {
-                case MODE.PLUS_TWO:
-                    return card.symbol === 'W';
-                case MODE.TAKI :
-                    return card.color === lastCard.color;
-            }
-            return false;
-        })();
-
-
-        return colorMatch || symboleMatch || isMagicCard || strictMode;
-    }
-
-    function checkVictoryCondition() {
-        return currentPlayer.hand.length === 0;
-    }
-
+    
     /** API **/
     return {
         on: emitter.on.bind(emitter),
@@ -121,18 +90,25 @@ function Game() {
             state.gameInProgress = true;
             moveToNextPlayer();
             notifyPlayers(SENTENCE.setup);
-            emitter.emit(GAME_EVENTS.GAME_STATE_UPDATE);
+            emitter.emit(GAME_EVENTS.STATE_UPDATE);
         },
         joinPlayer(player) {
-            if (this.getPlayer(player.token)) return;
+            if (this.isPlayerInGame(player.token)) return false;
             players.push(player);
-            emitter.emit(GAME_EVENTS.GAME_STATE_UPDATE);
+            emitter.emit(GAME_EVENTS.STATE_UPDATE);
+            return true;
+        },
+        isPlayerInGame(token){
+            return this.getPlayer(token);
         },
         getPlayerState(token) {
             const messages = player$messages.get(this.getPlayer(token)) || [];
-            const player = this.getPlayer(token) || {/*no player*/};
+            const player = this.getPlayer(token) || null;
             // const itHisTurn = (player.index === currentIndex);
-            return {...state, player, messages, /*itHisTurn*/};
+            const extra = {
+              playerInGame:!!player
+            };
+            return {...state, player, messages, ...extra/*itHisTurn*/};
         },
         flushMessages() {
             player$messages.clear();
@@ -148,7 +124,7 @@ function Game() {
                 state.punishmentCounter = 0;
             }
             moveToNextPlayer();
-            emitter.emit(GAME_EVENTS.GAME_STATE_UPDATE);
+            emitter.emit(GAME_EVENTS.STATE_UPDATE);
         },
         drawCards(amount = 1) {
             if (deck.length < amount) {
@@ -158,7 +134,7 @@ function Game() {
             currentPlayer.hand.push(...deck.splice(0, amount));
             notifyPlayers(SENTENCE.drawCards, {amount});
             moveToNextPlayer();
-            emitter.emit(GAME_EVENTS.GAME_STATE_UPDATE);
+            emitter.emit(GAME_EVENTS.STATE_UPDATE);
         },
         selectColor(colorSelected) {
             if (state.mode === MODE.CHANGE_COLOR) {
@@ -166,7 +142,7 @@ function Game() {
                 state.mode = MODE.NATURAL;
                 notifyPlayers(SENTENCE.SelectColor);
                 moveToNextPlayer();
-                emitter.emit(GAME_EVENTS.GAME_STATE_UPDATE);
+                emitter.emit(GAME_EVENTS.STATE_UPDATE);
             }
         },
         playCard(card) {
@@ -232,7 +208,7 @@ function Game() {
                     players.splice(currentIndex, 1);
                 }
 
-                emitter.emit(GAME_EVENTS.GAME_STATE_UPDATE);
+                emitter.emit(GAME_EVENTS.STATE_UPDATE);
 
             } else {
                 notifyPlayers(SENTENCE.playInvalid, {card});
@@ -242,4 +218,37 @@ function Game() {
 
 
     }
+
+    function moveToNextPlayer() {
+        currentIndex = (players.length + currentIndex + state.direction) % players.length;
+        currentPlayer = players[currentIndex];
+        // emitMessage( `put or draw card` );
+        return currentPlayer;
+    }
+
+    function isCardValid(card) {
+        const lastCard = stack[0];
+        /*if this is first card any card valid*/
+        if (!lastCard) return true;
+        const colorMatch = (lastCard.color === card.color) && !state.mode;
+        const symboleMatch = (card.symbol === lastCard.symbol) && !state.mode;
+        const isMagicCard = (!card.color) && !state.mode;
+        const strictMode = (function () {
+            switch (state.mode) {
+                case MODE.PLUS_TWO:
+                    return card.symbol === 'W';
+                case MODE.TAKI :
+                    return card.color === lastCard.color;
+            }
+            return false;
+        })();
+
+
+        return colorMatch || symboleMatch || isMagicCard || strictMode;
+    }
+
+    function checkVictoryCondition() {
+        return currentPlayer.hand.length === 0;
+    }
+
 }

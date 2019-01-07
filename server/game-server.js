@@ -10,7 +10,7 @@ module.exports = function (io) {
     const game = /*new */Game();
 
     // game.joinPlayer(Users.letUser('a97a7eca', {name: 'pery'}));
-    // game.joinPlayer(Users.letUser('c9e9ca9c', {name: 'pery'}));
+    // game.joinPlayer(Users.letUser('c9e9ca9c', {name: 'poron'}));
     // game.joinPlayer(Users.letUser('97ce7a97', {name: 'doron'}));
     // game.setup();
 
@@ -25,7 +25,7 @@ module.exports = function (io) {
         emitGameState();
     });
 
-    game.on(GAME_EVENTS.GAME_STATE_UPDATE, emitGameState);
+    game.on(GAME_EVENTS.STATE_UPDATE, emitGameState);
 
     function updatingGameState(socket) {
         const token = socket.handshake.query.token;
@@ -35,6 +35,7 @@ module.exports = function (io) {
 
 
     io.on(SOCKET_EVENTS.CONNECTION, (ctx, data) => {
+        ctx.token = ctx.socket.handshake.query.token;
         updatingGameState(ctx.socket);
     });
 

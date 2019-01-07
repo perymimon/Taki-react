@@ -1,6 +1,6 @@
-@import "./variables";
+@import "../common/variables";
 
-card-game {
+card {
   display: inline-block;
   position: relative;
   height: 6rem;
@@ -14,8 +14,8 @@ card-game {
   /* vertical-align: -1em; */
   background-size: 500% 400%;
   background-position: calc( var(--colum) * 100% / 4) calc(var(--row) * 100% / 3);
-  //transform-style: preserve-3d;
-  transform-origin: left bottom;
+  transform-style: preserve-3d;
+  //transform-origin: left bottom;
 
   &:after{
     content:'';
@@ -24,9 +24,10 @@ card-game {
     top:0;
     left: 0;right: 0;
     bottom: 0;
-    transform: rotateX(0.5turn);
+    transform: rotateY(0.5turn);
     background-size: cover;
     background-repeat: no-repeat;
+    backface-visibility: hidden;
   }
   &.R{
     background-image: url("../assets/redCards.png");
@@ -39,7 +40,6 @@ card-game {
   &.G{
     background-image: url("../assets/greenCards.png");
   }
-
 
   &.Y{
     background-image: url("../assets/yellowCards.png");

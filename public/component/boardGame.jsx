@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import './boardgame.scss';
-import Card from './card'
+import Card from '../directives/card'
 
 import {connect} from 'unistore/react';
 // import  {connect} from 'unistore/src/integrations/react';

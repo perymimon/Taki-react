@@ -11,7 +11,7 @@ const avatars = [
 
 export default function SignInBoard(props) {
     return (
-        <form onSubmit={(e) => submit(e)}>
+        <form className="sign-in-board board shiny-block" onSubmit={(e) => submit(e)}>
             <input placeholder="your name" name="name" />
             <input placeholder="slogan" name="slogan" />
             <avatar-select>

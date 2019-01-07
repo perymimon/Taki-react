@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {TransitionGroup} from 'react-transition-group'
 import Transition from 'react-transition-group/Transition';
-import Card from './card'
+import Card from '../directives/card'
 import './hand.scss';
 import './select-color.scss';
 import {connect} from 'unistore/react';

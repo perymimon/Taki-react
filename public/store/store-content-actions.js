@@ -1,4 +1,4 @@
-const {GAME_STAGE} = require('../../common/game-consts');
+const {GAME_STAGE, SOCKET_EVENTS} = require('../../common/game-consts');
 export const state = {
     isOnline: false,
     gameInProgress: false,
@@ -10,8 +10,9 @@ export const state = {
 
 export function storeContentActions(store, socket) {
 
-    socket.on('update-game-state', function (partialState) {
+    socket.on(SOCKET_EVENTS.UPDATE_GAME_STATE, function (partialState) {
         store.setState(partialState);
+        store.run.updateCurrentStage();
     });
 
     socket.on('disconnect', function () {
@@ -26,9 +27,6 @@ export function storeContentActions(store, socket) {
         store.run.setOn('isOnline');
     });
 
-    socket.on('logged-in', function () {
-        store.setState({stage: GAME_STAGE.WELCOME})
-    });
     console.log('some text');
 
     return {
@@ -47,8 +45,8 @@ export function storeContentActions(store, socket) {
         login(state, data) {
             socket.emit('login', data);
         },
-        startGame() {
-            socket.emit('start');
+        startGame(state) {
+            socket.emit('start-game');
         },
         readyToPlay() {
 
@@ -67,6 +65,18 @@ export function storeContentActions(store, socket) {
         },
         selectColor(state, color) {
             socket.emit('action:select-color', {color});
+        },
+
+        updateCurrentStage(state) {
+            if (state.playerInGame) {
+                if (state.gameInProgress) {
+                    store.setState({stage: GAME_STAGE.GAME_TABLE})
+                } else {
+                    store.setState({stage: GAME_STAGE.WELCOME})
+                }
+            } else {
+                store.setState({stage: GAME_STAGE.PLAYER_SIGNIN});
+            }
         },
     }
 }

@@ -1,9 +1,7 @@
-import React, {Component, Fragment} from "react";
-import ReactDOM from 'react-dom';
-
-
-const {GAME_STAGE} = require('../common/game-consts');
 import './game.scss';
+import React, {Component, Fragment} from "react";
+import get from 'lodash/get';
+const {GAME_STAGE} = require('../common/game-consts');
 import SignInBoard from './stages/signin-board';
 import WelcomeBoard from './stages/welcome-board.jsx';
 import PlayerList from './component/player-list';
@@ -21,10 +19,7 @@ export default connect('isOnline, player, gameInProgress, stage')(
             return <Loading/>;
 
         return (
-            <div className="game" myturn={player.itHisTurn + ''}>
-                <header className="top-header">
-                    <PlayerList/>
-                </header>
+            <div className="game" myturn={ get(player,'itHisTurn') + ''}>
                 <Stage value={stage}/>
             </div>
         )
@@ -39,8 +34,11 @@ function Stage({value}) {
     const stages ={
         [GAME_STAGE.PLAYER_SIGNIN]:<SignInBoard/>,
         [GAME_STAGE.WELCOME]:<WelcomeBoard path="/welcome"/>,
-        [GAME_STAGE.GAME]:(
+        [GAME_STAGE.GAME_TABLE]:(
             <Fragment>
+                <header className="top-header">
+                    <PlayerList/>
+                </header>
                 <BoardGame/>
                 <Hand/>
             </Fragment>)

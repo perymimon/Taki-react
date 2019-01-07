@@ -1,34 +1,9 @@
-@import "assets/icomoon/style.css";
-@import url('https://fonts.googleapis.com/css?family=Slackey');
-@import "common/variable";
-body{
-
-
-  padding: 0;
-  height: 100vh;
-  box-sizing: content-box;
-  margin: 0;
-  font-family: 'Slackey', cursive;
-  //overflow: hidden;
-
-  perspective-origin: bottom center;
-  perspective: 30em;
-  //transform-style: preserve-3d;
-}
-* {
-  transition-duration: 0.1s;
-  border-radius: 0.5em;
-  :focus {
-    outline: none;
-  }
-}
-
-.game{
+.game {
   display: flex;
+  justify-content: center;
   height: 100vh;
   flex-direction: column;
   background-image: url("assets/etc/background2.png");
-
 
 
   header.top-header {
@@ -40,7 +15,8 @@ body{
       width: 5em;
 
     }
-    player-list{
+
+    player-list {
       flex: 1;
     }
   }

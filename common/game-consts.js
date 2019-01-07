@@ -9,17 +9,17 @@ exports.SOCKET_EVENTS = {
     // logout: 'logout',
     // SIGN_IN: 'sign-in',
     // SIGN_OUT:'sign-out',
-    START_GAME:'start'
+    START_GAME:'start-game'
 };
 
 exports.GAME_EVENTS = {
     INCOMING_MESSAGE: 'incoming-message',
-    GAME_STATE_UPDATE: 'game-state-update',
+    STATE_UPDATE: 'game-state-update',
 };
 
 
 exports.GAME_STAGE = {
     PLAYER_SIGNIN: 'signin',
     WELCOME: 'welcome',
-    GAME: 'game',
+    GAME_TABLE: 'game',
 };

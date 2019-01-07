@@ -26,7 +26,7 @@ app.use(function resetCookieToken(ctx, next){
     return next();
 });
 
-app.use(require('koa-static')(path.resolve('public/dist'), {extensions: ['html']}));
+app.use(require('koa-static')(path.resolve('public/.dist'), {extensions: ['html']}));
 app.use(require('koa-static')(path.resolve('public'), {extensions: ['html']}));
 app.use(require('koa-static')(path.resolve('bower_components')));
 app.use(require('koa-static')(path.resolve('node_modules')));
