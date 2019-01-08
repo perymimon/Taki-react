@@ -11,6 +11,7 @@ body {
   perspective-origin: bottom center;
   perspective: 260em;
   //transform-style: preserve-3d;
+  overflow: hidden;
 }
 
 * {

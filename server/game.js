@@ -216,7 +216,7 @@ function Game() {
                 emitter.emit(GAME_EVENTS.STATE_UPDATE);
 
             } else {
-                notifyPlayers(SENTENCE.playInvalid, {card});
+                notifyPlayers(SENTENCE.playInvalidCard, {card});
                 return false;
             }
         },

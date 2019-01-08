@@ -12,27 +12,11 @@ board-game{
   background-color: rgba(43, 43, 43, 0.25);
   //transform-style: preserve-3d;
   overflow: visible;
+  align-items: center;
 
-  talk-box{
-    display: block;
-    height: 3em;
-    width: 25rem;
-
-    .text-line{
-      position: relative;
-      transition: transform 1s , opacity 1s ;
-      transform: translateY(0em);
-      opacity: 1;
-    }
-    .text-line.leave/*:nth-child(n + 2)*/{
-      transform: translateY(-2em);
-      opacity: 0;
-    }
-
-    .previous-message{
-
-    }
-
+  .deck,.stack{
+    width: 8rem;
+    height: 14rem;
   }
 
   .deck{
@@ -40,17 +24,20 @@ board-game{
     background-size: cover;
     align-self: start;
     text-align: center;
-    width: 10.6rem;
-    height: 14rem;
+
     font-size: 40px;
     overflow: visible;
     padding-top: 0.5em;
     box-sizing: border-box;
+    background-color: #66339985;
+    display: flex;
+    align-items: flex-end;
+    padding-bottom: 0.4em;
+    text-shadow: 1px 2px 5px grey;
   }
 
   .stack{
-    width: 10.6rem;
-    height: 14rem;
+
   }
 
 }

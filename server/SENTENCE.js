@@ -67,18 +67,18 @@ module.exports.factoryMessages = function (_state) {
                 private: `${state.playerName} you should play card or draw card from deck`,
             }
         },
-        playInvalid({card}) {
-            return {
-                code: 500,
-                public: `${state.playerName} try to play invalid card ... `,
-                private: `${card.symbol}/${card.color} are invalid to play..`,
-            }
-        },
         SelectColor({color}) {
             return {
                 code: 9,
                 public: `${state.playerName} choose ${color} color`,
                 private: `${color} selected`,
+            }
+        },
+        playInvalidCard({card}) {
+            return {
+                code: 500,
+                public: `${state.playerName} try to play invalid card ... `,
+                private: `${card.symbol}:${card.color} are invalid to play..`,
             }
         },
 

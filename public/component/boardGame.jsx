@@ -10,12 +10,12 @@ export default connect(['stack','deck','messages','players','turn'])(
     function BoardGame({stack, deck, messages, players,turn, lastMove, drawCards}) {
         return (
             <board-game>
-                <div className="player-turn">
+                {/*<div className="player-turn">*/}
                     {/*{lastMove && <div>{lastMove.player.name} just play <Card card={lastMove.card}/> </div>}*/}
                     {/*turn {players[turn].name}*/}
                     {/*<TalkBox messages={messages}/>*/}
-                </div>
-                <Card className="stack" card={stack.topCard}/>
+                {/*</div>*/}
+                <Card className="stack self-v-center" card={stack.topCard}/>
                 <Card className="deck" onClick={store.run.drawCards}>{deck.length}</Card>
             </board-game>
         )
