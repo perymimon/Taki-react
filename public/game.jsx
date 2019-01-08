@@ -2,11 +2,12 @@ import './game.scss';
 import React, {Component, Fragment} from "react";
 import get from 'lodash/get';
 const {GAME_STAGE} = require('../common/game-consts');
-import SignInBoard from './stages/signin-board';
-import WelcomeBoard from './stages/welcome-board.jsx';
+import SignInBoard from './boards/signin-board';
+import WelcomeBoard from './boards/welcome-board.jsx';
 import PlayerList from './component/player-list';
 import BoardGame from './component/boardGame';
 import Hand from './component/hand';
+import Sidebar from './boards/side-bar'
 
 
 import {connect} from 'unistore/src/combined/react'
@@ -36,6 +37,7 @@ function Stage({value}) {
         [GAME_STAGE.WELCOME]:<WelcomeBoard path="/welcome"/>,
         [GAME_STAGE.GAME_TABLE]:(
             <Fragment>
+                <Sidebar/>
                 <header className="top-header">
                     <PlayerList/>
                 </header>

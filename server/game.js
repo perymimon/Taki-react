@@ -1,7 +1,7 @@
 const taki = require('./taki-cards');
 const EventEmitter = require('events');
-const SENTENCE = require('./SENTENCE').messages;
-const {GAME_EVENTS} = require('../common/game-consts');
+const shortId = require('shortid');
+const {GAME_EVENTS, GAME_MODE} = require('../common/game-consts');
 
 const colorCode$ColorName = {
     B: 'blue',
@@ -11,25 +11,10 @@ const colorCode$ColorName = {
     '': 'uncolor',
 };
 
-const MODE = require('../common/game-consts').MODE;
-
 module.exports = Game;
 
 function Game() {
     const emitter = new EventEmitter();
-    const player$messages = new Map;
-
-    function notifyPlayers(message, args) {
-        var {personal, other, code} = message({...args, currentPlayer});
-        var public = {code, text: other};
-        var private = {code, text: personal};
-        players.forEach((p, i) => {
-            let messagesQueue = player$messages.get(p);
-            messagesQueue.push(p === currentPlayer ? private : public);
-        });
-        emitter.emit(emitter, 'message', public, private);
-    }
-
     const lastMove = {};
 
     let deck = taki.getNewDeck();
@@ -38,12 +23,10 @@ function Game() {
     let currentPlayer = null;
     const players = [];
     // let allPlayers = players.slice();
-
+    const player$messages = new Map;
     const state = {
         gameInProgress: false,
-
-        /*return public player info*/
-        get players() {
+        get players() {/*return public player info*/
             /*todo:change player to inerihete from common object*/
             return players.map(
                 ({hand, token, color, name, slogan, avatar}) => ({
@@ -67,14 +50,33 @@ function Game() {
         get turn() {
             return currentIndex;
         },
-        mode: MODE.NATURAL,
+        mode: GAME_MODE.NATURAL,
         punishmentCounter: 0,
         direction: 1,
         victoryRank: [],
 
     };
+    const SENTENCE = require('./SENTENCE').factoryMessages(state);
 
-    
+    function notifyPlayers(messageFactory, args) {
+        var {code, private, public} = messageFactory(args);
+        var id = shortId.generate();
+        var other = {id, code, text: public};
+        var personal = {id, code, text: private};
+
+        player$messages.get(currentPlayer).push(personal);
+        getOtherPlayer().forEach(function (p, i) {
+            player$messages.get(p).push(other)
+        });
+
+        emitter.emit(GAME_EVENTS.OUTGOING_MESSAGE, player$messages);
+    }
+
+    function getOtherPlayer() {
+        return players.filter(p => p !== currentPlayer);
+    }
+
+
     /** API **/
     return {
         on: emitter.on.bind(emitter),
@@ -83,7 +85,9 @@ function Game() {
             players.forEach((p, i) => {
                 p.hand = deck.splice(0, 8);
                 p.index = i;
-                p.__defineGetter__('itHisTurn', function(){return this.index === currentIndex});
+                p.__defineGetter__('itHisTurn', function () {
+                    return this.index === currentIndex
+                });
                 player$messages.set(p, []);
             });
             Object.freeze(players);
@@ -98,7 +102,8 @@ function Game() {
             emitter.emit(GAME_EVENTS.STATE_UPDATE);
             return true;
         },
-        isPlayerInGame(token){
+
+        isPlayerInGame(token) {
             return this.getPlayer(token);
         },
         getPlayerState(token) {
@@ -106,7 +111,7 @@ function Game() {
             const player = this.getPlayer(token) || null;
             // const itHisTurn = (player.index === currentIndex);
             const extra = {
-              playerInGame:!!player
+                playerInGame: !!player,
             };
             return {...state, player, messages, ...extra/*itHisTurn*/};
         },
@@ -118,11 +123,11 @@ function Game() {
             return players.find(p => p.token === token)
         },
         endTurn: function () {
-            state.mode = MODE.NATURAL;
-            if (state.mode === MODE.PLUS_TWO) {
+            if (state.mode === GAME_MODE.PLUS_TWO) {
                 this.drawCards(state.punishmentCounter);
                 state.punishmentCounter = 0;
             }
+            state.mode = GAME_MODE.NATURAL;
             moveToNextPlayer();
             emitter.emit(GAME_EVENTS.STATE_UPDATE);
         },
@@ -137,9 +142,9 @@ function Game() {
             emitter.emit(GAME_EVENTS.STATE_UPDATE);
         },
         selectColor(colorSelected) {
-            if (state.mode === MODE.CHANGE_COLOR) {
+            if (state.mode === GAME_MODE.CHANGE_COLOR) {
                 stack[0].color = colorSelected;
-                state.mode = MODE.NATURAL;
+                state.mode = GAME_MODE.NATURAL;
                 notifyPlayers(SENTENCE.SelectColor);
                 moveToNextPlayer();
                 emitter.emit(GAME_EVENTS.STATE_UPDATE);
@@ -155,11 +160,11 @@ function Game() {
 
                 const colorName = colorCode$ColorName[card.color];
                 state.lastMove = {card, player: state.players[currentIndex]};
-                if (state.mode !== MODE.TAKI) {
+                if (state.mode !== GAME_MODE.TAKI) {
                     switch (card.symbol) {
                         case "T": {
                             notifyPlayers(SENTENCE.playTaki, {color: colorName});
-                            state.mode = MODE.TAKI;
+                            state.mode = GAME_MODE.TAKI;
                             break;
                         }
 
@@ -171,13 +176,13 @@ function Game() {
                         }
 
                         case "C": {
-                            state.mode = MODE.CHANGE_COLOR;
+                            state.mode = GAME_MODE.CHANGE_COLOR;
                             notifyPlayers(SENTENCE.playColor, {color: colorName});
                             break;
                         }
 
                         case "W": {
-                            state.mode = MODE.PLUS_TWO;
+                            state.mode = GAME_MODE.PLUS_TWO;
                             state.punishmentCounter += 2;
                             let nextPlayer = moveToNextPlayer();
                             notifyPlayers(SENTENCE.playPlus2, {nextPlayer});
@@ -230,14 +235,14 @@ function Game() {
         const lastCard = stack[0];
         /*if this is first card any card valid*/
         if (!lastCard) return true;
-        const colorMatch = (lastCard.color === card.color) && !state.mode;
+        const colorMatch = (lastCard.color === card.color) && state.mode === GAME_MODE.NATURAL;
         const symboleMatch = (card.symbol === lastCard.symbol) && !state.mode;
         const isMagicCard = (!card.color) && !state.mode;
         const strictMode = (function () {
             switch (state.mode) {
-                case MODE.PLUS_TWO:
+                case GAME_MODE.PLUS_TWO:
                     return card.symbol === 'W';
-                case MODE.TAKI :
+                case GAME_MODE.TAKI :
                     return card.color === lastCard.color;
             }
             return false;

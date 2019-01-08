@@ -15,6 +15,10 @@ export function storeContentActions(store, socket) {
         store.run.updateCurrentStage();
     });
 
+    socket.on(SOCKET_EVENTS.INCOMING_MESSAGE,function(messages){
+        store.setState({messages});
+    });
+
     socket.on('disconnect', function () {
         store.run.setOff('isOnline');
     });
@@ -56,8 +60,7 @@ export function storeContentActions(store, socket) {
         drawCards() {
             socket.emit('action:draw-card')
         },
-        playCard(state, card, i) {
-            card.i = i;
+        playCard(state, card) {
             socket.emit('action:play-card', {card});
         },
         endTurn() {

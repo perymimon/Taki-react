@@ -8,6 +8,9 @@ const {SOCKET_EVENTS,GAME_EVENTS} = require('../common/game-consts');
 module.exports = function (io) {
     let messages = [];
     const game = /*new */Game();
+    function sockets(){
+        return Object.values(io.socket.clients().sockets);
+    }
 
     // game.joinPlayer(Users.letUser('a97a7eca', {name: 'pery'}));
     // game.joinPlayer(Users.letUser('c9e9ca9c', {name: 'poron'}));
@@ -15,17 +18,22 @@ module.exports = function (io) {
     // game.setup();
 
     const emitGameState = debounce(function emitClientsState() {
-        const sockets = Object.values(io.socket.clients().sockets);
-        sockets.forEach(updatingGameState);
-        game.flushMessages();
+        sockets().forEach(updatingGameState);
     }, 200);
 
-    game.on(GAME_EVENTS.INCOMING_MESSAGE, message => {
-        messages.push(message);
-        emitGameState();
-    });
+    const emitGameMessages = debounce(function(player$messages){
+        sockets().forEach(function (socket) {
+            const token = socket.handshake.query.token;
+            const player = game.getPlayer(token);
+            messages = player$messages.get(player);
+            socket.emit(SOCKET_EVENTS.INCOMING_MESSAGE, messages);
+        });
+        game.flushMessages();
+    },10);
 
     game.on(GAME_EVENTS.STATE_UPDATE, emitGameState);
+
+    game.on(GAME_EVENTS.OUTGOING_MESSAGE, emitGameMessages);
 
     function updatingGameState(socket) {
         const token = socket.handshake.query.token;
@@ -36,6 +44,11 @@ module.exports = function (io) {
 
     io.on(SOCKET_EVENTS.CONNECTION, (ctx, data) => {
         ctx.token = ctx.socket.handshake.query.token;
+        const player = game.getPlayer(ctx.token) || {};
+        console.log(
+            `${ctx.token}: ${ player.name || '\b'} connected`
+        );
+
         updatingGameState(ctx.socket);
     });
 

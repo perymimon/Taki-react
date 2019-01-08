@@ -18,7 +18,10 @@ const cards = (function () {
         /* create set */
         for (let color of basicColor) {
             const cardsSet = basicSymbols.map(symbol => ({
-                symbol, color, set, id: [symbol, color, set].join(''),
+                symbol,
+                color,
+                set,
+                id: [symbol, color, set].join(''),
             }));
             cards.push(cardsSet);
         }

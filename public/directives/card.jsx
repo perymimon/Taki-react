@@ -1,10 +1,11 @@
 import React, {Component} from "react";
 import './card.scss';
+import get from 'lodash/get'
 
-export default function ({card = {color: ''}, onClick, className, children}) {
+export default function ({card, onClick, className, children}) {
 
-    return  <card className={`${className || ""} ${card.color}`}
+    return  <card className={`${className || ""} ${get(card,'color')}`}
                    onClick={onClick}
-                   data-symbol={card.symbol}>{children}</card>
+                   data-symbol={get(card,'symbol')}>{children}</card>
 
 }

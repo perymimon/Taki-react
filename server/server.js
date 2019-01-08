@@ -43,7 +43,7 @@ lobbyIO.use( (ctx,next ) => {
 });
 
 lobbyIO.on('connection', function (sock, data) {
-    console.log('somebody connected');
+    // console.log('connected');
 });
 
 require('./game-server')(lobbyIO,app);
