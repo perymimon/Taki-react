@@ -2,6 +2,7 @@ const taki = require('./taki-cards');
 const EventEmitter = require('events');
 const shortId = require('shortid');
 const {GAME_EVENTS, GAME_MODE} = require('../common/game-consts');
+const {Card} = require('./taki-cards');
 
 const colorCode$ColorName = {
     B: 'blue',
@@ -151,6 +152,7 @@ function Game() {
             }
         },
         playCard(card) {
+            card = Card.toCard(card);
             if (isCardValid(card)) {
                 stack.unshift(card);
 

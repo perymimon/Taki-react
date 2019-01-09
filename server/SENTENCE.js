@@ -2,6 +2,7 @@ module.exports.factoryMessages = function (_state) {
     const state = Object.create(_state);
     state.__defineGetter__('playerName', () => state.players[state.turn].name);
 
+
     return {
         setup() {
             return {
@@ -78,7 +79,7 @@ module.exports.factoryMessages = function (_state) {
             return {
                 code: 500,
                 public: `${state.playerName} try to play invalid card ... `,
-                private: `${card.symbol}:${card.color} are invalid to play..`,
+                private: `${card.toString()} are invalid to play..`,
             }
         },
 
