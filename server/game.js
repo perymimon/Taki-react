@@ -108,13 +108,12 @@ function Game() {
             return this.getPlayer(token);
         },
         getPlayerState(token) {
-            const messages = player$messages.get(this.getPlayer(token)) || [];
             const player = this.getPlayer(token) || null;
             // const itHisTurn = (player.index === currentIndex);
             const extra = {
                 playerInGame: !!player,
             };
-            return {...state, player, messages, ...extra/*itHisTurn*/};
+            return {...state, player, ...extra/*itHisTurn*/};
         },
         flushMessages() {
             player$messages.clear();
