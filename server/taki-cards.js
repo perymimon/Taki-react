@@ -7,7 +7,6 @@ P - Plus
 W - +2
 */
 
-
 class Card {
     constructor(symbol, color, set) {
         Object.assign(this, {

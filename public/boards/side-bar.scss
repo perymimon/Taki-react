@@ -13,4 +13,50 @@ side-bar{
     box-shadow: 0px 0px 5px black;
     min-width: 15em;
     max-width: 20em;
+
+    .message{
+        display: flex;
+        align-content: flex-start;
+        align-items: center;
+        font-family: "Helvetica Neue" ;
+
+        card{
+            height: 2em;
+            font-size: inherit;
+            width: 1.8em;
+            -webkit-margin-end: 0.3em;
+            margin-bottom: 0.3em;
+        }
+    }
+
+    separator{
+        color: #9ce2e238;
+        display: block;
+        height: 0;
+        border-bottom: 1px solid currentColor;
+        margin: 0.5em 0.3em;
+        position: relative;
+
+
+        &:before,&:after{
+            content: '';
+            display: block;
+            position: absolute;
+            width: 0.4em;
+            height: 0.4em;
+            top: 50%;
+            transform: translateY(-50%) rotate(45deg);
+            background-color: currentColor;
+            box-shadow: 0px 0px 2px currentColor;
+        }
+
+        &:before{
+            right: 100%;
+        }
+        &:after{
+            left: 100%;
+        }
+
+    }
+
 }

@@ -12,22 +12,24 @@ function toCardObject(token) {
     return {symbol, color}
 }
 
-function Messages({children}) {
-    const text = children;
-    const tokens = text.split(cardExp);
+function Messages({value}) {
 
-    // return (
-    //     <div>{
-    //         tokens.map(function (token) {
-    //             return cardExp.test(token) ? <Card card={toCardObject(token)}/> : token
-    //         })
-    //     }</div>
-    // );
-    const pp = tokens.map(function (token) {
-        return cardExp.test(token) ? <Card card={toCardObject(token)}/> : token
-    });
 
-    return pp
+    if( value ==='separator'){
+        return <separator/>
+    }else{
+        const text = value.text;
+        const tokens = text.split(cardExp);
+        return (
+            <div className={'message'}>{
+                tokens.map(function (token) {
+                    return cardExp.test(token) ? <Card card={toCardObject(token)} key={0}/> : token
+                })
+            }</div>
+        );
+
+    }
+
 }
 
 export default connect('messages')(
@@ -36,7 +38,7 @@ export default connect('messages')(
             <side-bar>
                 {
                     messages.map(message => {
-                        return <Messages key={message.id}>{message.text}</Messages>
+                        return <Messages key={message.id} value={message}/>
                     })
                 }
             </side-bar>

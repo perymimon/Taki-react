@@ -1,4 +1,8 @@
 const {GAME_STAGE, SOCKET_EVENTS} = require('../../common/game-consts');
+const debounce = require('lodash/debounce');
+
+const addSeparatorTimeout = 1000;
+
 export const state = {
     isOnline: false,
     gameInProgress: false,
@@ -8,15 +12,22 @@ export const state = {
     stage: GAME_STAGE.PLAYER_SIGNIN,
 };
 
+
 export function storeContentActions(store, socket) {
+
+    const addSeparator = debounce(store.action(function(state){
+        return {messages:['separator',...state.messages]}
+    }),addSeparatorTimeout);
 
     socket.on(SOCKET_EVENTS.UPDATE_GAME_STATE, function (partialState) {
         store.setState(partialState);
         store.run.updateCurrentStage();
     });
 
-    socket.on(SOCKET_EVENTS.INCOMING_MESSAGE,function(messages){
-        store.setState({messages});
+    socket.on(SOCKET_EVENTS.INCOMING_MESSAGE, function (messages) {
+        var state = store.getState();
+        store.setState({messages:[...messages, ...state.messages ]});
+        addSeparator()
     });
 
     socket.on('disconnect', function () {
