@@ -12,7 +12,9 @@ export default connect('players')(
         };
 
         return (
-            <player-name style={customProperties}>{player.name}</player-name>
+            <player-name
+                class="dramatic-text"
+                style={customProperties}>{player.name}</player-name>
         )
     },
 )

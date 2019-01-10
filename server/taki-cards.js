@@ -44,7 +44,7 @@ const cards = (function createCardsPack() {
         }
     }
 
-    const cardsSet = magicSet.map((symbol) => new Card(symbol, '', 'magic'));
+    const cardsSet = magicSet.map((symbol) => new Card(symbol, 'M', 0));
 
     cards.push(cardsSet);
     // until cards.flat() will come to node;

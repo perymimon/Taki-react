@@ -45,6 +45,9 @@ card {
   &.Y{
     background-image: url("../assets/yellowCards.png");
   }
+  &.M{
+    background-image: url("../assets/globalCards.png");
+  }
 
 
   &[data-symbol="1"]{ --row:0; --colum:0;  }
@@ -60,6 +63,7 @@ card {
   &[data-symbol="P"]{ --row:2; --colum:0;  }
   &[data-symbol="D"]{ --row:2; --colum:1;  }
   &[data-symbol="T"]{ --row:2; --colum:2;  }
+  &[data-symbol="C"]{ --row:0; --colum:1;  }
 
 
   /*raect animation*/

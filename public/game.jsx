@@ -16,7 +16,7 @@ import {connect} from 'unistore/src/combined/react'
 export default connect('isOnline, player, gameInProgress, stage')(
     function Game({isOnline, player, gameInProgress, stage}) {
         const customProperties = {
-            '--player-color': player.color,
+            '--player-color': player && player.color,
         };
         if (!isOnline)
             return <Loading/>;

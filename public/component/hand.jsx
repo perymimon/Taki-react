@@ -13,7 +13,6 @@ import {GAME_MODE} from '../../common/game-consts';
 
 export default connect('turn, players, player, mode')(
     function Hand({turn, players, player, mode}) {
-        debugger;
         return (
             <hand-game style={{color: player.color}}>
                 {/*{(mode === MODE.CHANGE_COLOR) ?*/}
