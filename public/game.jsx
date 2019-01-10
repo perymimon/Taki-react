@@ -15,12 +15,17 @@ import {connect} from 'unistore/src/combined/react'
 
 export default connect('isOnline, player, gameInProgress, stage')(
     function Game({isOnline, player, gameInProgress, stage}) {
-
+        const customProperties = {
+            '--player-color': player.color,
+        };
         if (!isOnline)
             return <Loading/>;
 
         return (
-            <div className="game" myturn={ get(player,'itHisTurn') + ''}>
+            <div className="game"
+                 myturn={ get(player,'itHisTurn') + ''}
+                 style={customProperties}
+            >
                 <Stage value={stage}/>
             </div>
         )

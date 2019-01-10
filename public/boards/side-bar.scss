@@ -15,18 +15,22 @@ side-bar{
     max-width: 20em;
 
     .message{
-        display: flex;
-        align-content: flex-start;
-        align-items: center;
-        font-family: "Helvetica Neue" ;
+        display: block;
 
+        font-family: "Helvetica Neue" ;
+        * {
+            vertical-align: center;
+        }
         card{
+            display: inline-block;
             height: 2em;
             font-size: inherit;
             width: 1.8em;
             -webkit-margin-end: 0.3em;
             margin-bottom: 0.3em;
         }
+
+
     }
 
     separator{

@@ -25,19 +25,11 @@ function Game() {
     const players = [];
     // let allPlayers = players.slice();
     const player$messages = new Map;
-    const state = {
+    const publicState = {
         gameInProgress: false,
         get players() {/*return public player info*/
             /*todo:change player to inerihete from common object*/
-            return players.map(
-                ({hand, token, color, name, slogan, avatar}) => ({
-                    hand: hand.length,
-                    token,
-                    color,
-                    name,
-                    slogan,
-                    avatar,
-                }));
+            return players.map(p => p.public );
         },
         get stack() {
             return {
@@ -57,7 +49,7 @@ function Game() {
         victoryRank: [],
 
     };
-    const SENTENCE = require('./SENTENCE').factoryMessages(state);
+    const SENTENCE = require('./SENTENCE').factoryMessages(publicState);
 
     function notifyPlayers(messageFactory, args) {
         var {code, private, public} = messageFactory(args);
@@ -92,7 +84,7 @@ function Game() {
                 player$messages.set(p, []);
             });
             Object.freeze(players);
-            state.gameInProgress = true;
+            publicState.gameInProgress = true;
             moveToNextPlayer();
             notifyPlayers(SENTENCE.setup);
             emitter.emit(GAME_EVENTS.STATE_UPDATE);
@@ -113,7 +105,7 @@ function Game() {
             const extra = {
                 playerInGame: !!player,
             };
-            return {...state, player, ...extra/*itHisTurn*/};
+            return {...publicState, player, ...extra/*itHisTurn*/};
         },
         flushMessages() {
             player$messages.clear();
@@ -123,11 +115,11 @@ function Game() {
             return players.find(p => p.token === token)
         },
         endTurn: function () {
-            if (state.mode === GAME_MODE.PLUS_TWO) {
-                this.drawCards(state.punishmentCounter);
-                state.punishmentCounter = 0;
+            if (publicState.mode === GAME_MODE.PLUS_TWO) {
+                this.drawCards(publicState.punishmentCounter);
+                publicState.punishmentCounter = 0;
             }
-            state.mode = GAME_MODE.NATURAL;
+            publicState.mode = GAME_MODE.NATURAL;
             moveToNextPlayer();
             emitter.emit(GAME_EVENTS.STATE_UPDATE);
         },
@@ -142,9 +134,9 @@ function Game() {
             emitter.emit(GAME_EVENTS.STATE_UPDATE);
         },
         selectColor(colorSelected) {
-            if (state.mode === GAME_MODE.CHANGE_COLOR) {
+            if (publicState.mode === GAME_MODE.CHANGE_COLOR) {
                 stack[0].color = colorSelected;
-                state.mode = GAME_MODE.NATURAL;
+                publicState.mode = GAME_MODE.NATURAL;
                 notifyPlayers(SENTENCE.SelectColor);
                 moveToNextPlayer();
                 emitter.emit(GAME_EVENTS.STATE_UPDATE);
@@ -160,12 +152,12 @@ function Game() {
                     .filter(handCard => handCard.id !== card.id);
 
                 const colorName = colorCode$ColorName[card.color];
-                state.lastMove = {card, player: state.players[currentIndex]};
-                if (state.mode !== GAME_MODE.TAKI) {
+                publicState.lastMove = {card, player: publicState.players[currentIndex]};
+                if (publicState.mode !== GAME_MODE.TAKI) {
                     switch (card.symbol) {
                         case "T": {
                             notifyPlayers(SENTENCE.playTaki, {color: colorName});
-                            state.mode = GAME_MODE.TAKI;
+                            publicState.mode = GAME_MODE.TAKI;
                             break;
                         }
 
@@ -177,14 +169,14 @@ function Game() {
                         }
 
                         case "C": {
-                            state.mode = GAME_MODE.CHANGE_COLOR;
+                            publicState.mode = GAME_MODE.CHANGE_COLOR;
                             notifyPlayers(SENTENCE.playColor, {color: colorName});
                             break;
                         }
 
                         case "W": {
-                            state.mode = GAME_MODE.PLUS_TWO;
-                            state.punishmentCounter += 2;
+                            publicState.mode = GAME_MODE.PLUS_TWO;
+                            publicState.punishmentCounter += 2;
                             let nextPlayer = moveToNextPlayer();
                             notifyPlayers(SENTENCE.playPlus2, {nextPlayer});
                             break;
@@ -196,7 +188,7 @@ function Game() {
                         }
 
                         case "D": {
-                            state.direction = state.direction > 0 ? -1 : +1;
+                            publicState.direction = publicState.direction > 0 ? -1 : +1;
                             notifyPlayers(SENTENCE.playChangeDirection)
                         }
 
@@ -210,7 +202,7 @@ function Game() {
                 }
 
                 if (checkVictoryCondition()) {
-                    state.victoryRank.push(currentPlayer.id);
+                    publicState.victoryRank.push(currentPlayer.id);
                     players.splice(currentIndex, 1);
                 }
 
@@ -226,7 +218,7 @@ function Game() {
     }
 
     function moveToNextPlayer() {
-        currentIndex = (players.length + currentIndex + state.direction) % players.length;
+        currentIndex = (players.length + currentIndex + publicState.direction) % players.length;
         currentPlayer = players[currentIndex];
         // emitMessage( `put or draw card` );
         return currentPlayer;
@@ -236,21 +228,22 @@ function Game() {
         const lastCard = stack[0];
         /*if this is first card any card valid*/
         if (!lastCard) return true;
-        const colorMatch = (lastCard.color === card.color) && state.mode === GAME_MODE.NATURAL;
-        const symboleMatch = (card.symbol === lastCard.symbol) && !state.mode;
-        const isMagicCard = (!card.color) && !state.mode;
-        const strictMode = (function () {
-            switch (state.mode) {
-                case GAME_MODE.PLUS_TWO:
-                    return card.symbol === 'W';
-                case GAME_MODE.TAKI :
-                    return card.color === lastCard.color;
-            }
-            return false;
-        })();
-
-
-        return colorMatch || symboleMatch || isMagicCard || strictMode;
+        switch (publicState.mode) {
+            case GAME_MODE.NATURAL:
+                const colorMatch = (card.color === lastCard.color);
+                const symbolMatch = (card.symbol === lastCard.symbol);
+                const isMagicCard = (card.set === 'magic');
+                return colorMatch || symbolMatch || isMagicCard;
+            case GAME_MODE.CHANGE_COLOR:
+                return true;
+            case GAME_MODE.PLUS_TWO :
+                /*strictMode*/
+                return (card.symbol === 'W');
+            case GAME_MODE.TAKI :
+                /*strictMode*/
+                return (card.color === lastCard.color);
+        }
+        return false;
     }
 
     function checkVictoryCondition() {
