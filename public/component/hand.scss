@@ -8,16 +8,18 @@ hand-game{
   padding: 1em;
   box-sizing: border-box;
   transition: background-color, transform;
-  //transform: translateY(1rem);
   transition-duration: 0.1s;
-  //transform-style: preserve-3d;
-  //perspective: var(--pespective);
-
   perspective-origin: center center;
+  max-height: 30vh;
+  overflow-y: auto;
+  //padding-top: 2em;
 
   .title{
     color: white;
     font-size: 1.5rem;
+    position: sticky;
+    top: 0;
+    z-index: 1;
   }
 
   .btn-end-turn{

@@ -4,8 +4,8 @@ import get from 'lodash/get';
 const {GAME_STAGE} = require('../common/game-consts');
 import SignInBoard from './boards/signin-board';
 import WelcomeBoard from './boards/welcome-board.jsx';
-import PlayerList from './component/player-list';
-import BoardGame from './component/boardGame';
+import PlayerList from './boards/players-board';
+import BoardGame from './boards/boardGame';
 import Hand from './component/hand';
 import Sidebar from './boards/side-bar'
 

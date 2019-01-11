@@ -26,7 +26,7 @@ card {
     left: 0;right: 0;
     bottom: 0;
     transform: rotateY(0.5turn);
-    background-size: cover;
+    background-size: 100% 100%;
     background-repeat: no-repeat;
     backface-visibility: hidden;
   }
@@ -47,6 +47,8 @@ card {
   }
   &.M{
     background-image: url("../assets/globalCards.png");
+    background-size: 200% 200%;
+    background-position: calc( var(--colum) * 100% / 1) calc(var(--row) * 100% / 1);
   }
 
 

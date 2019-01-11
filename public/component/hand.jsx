@@ -10,7 +10,6 @@ import {store, actions} from '../store/store';
 
 import {GAME_MODE} from '../../common/game-consts';
 
-
 export default connect('turn, players, player, mode')(
     function Hand({turn, players, player, mode}) {
         return (
@@ -19,7 +18,7 @@ export default connect('turn, players, player, mode')(
                 {/*<ColorSelect onSelectColor={(evt) => selectColor(evt.target.dataset.value)}/> : null*/}
                 {/*}*/}
 
-                <div className={'title'}>
+                <div className={'title dramatic-text'}>
                     {
                         (mode === GAME_MODE.TAKI) ?
                             <button className={'btn-end-turn'}

@@ -1,4 +1,4 @@
-.shiny-block{
+.shiny-block {
   position: relative;
 
 
@@ -8,7 +8,7 @@
     width: 98%;
     height: 30%;
     max-height: 10em;
-    background:rgba(255, 255, 255, 0.14);
+    background: rgba(255, 255, 255, 0.14);
     position: absolute;
     border-radius: 0.5em;
     left: 50%;
@@ -18,20 +18,20 @@
     pointer-events: none;
   }
 
-  *{
+  * {
     z-index: 2;
   }
 }
 
 
-
-.dramatic-text{
+.dramatic-text {
   -webkit-text-stroke: 1px black;
   text-transform: uppercase;
 }
 
-.four-color-background{
+.four-color-background {
   position: relative;
+
   &:after {
     content: '';
     position: absolute;
@@ -49,22 +49,22 @@
   }
 }
 
-.panel-show-value{
+.panel-show-value {
   @extend .shiny-block;
   @extend .four-color-background;
   box-shadow: 0px 0px 4px #00000094;
 
-  &:after{
+  &:after {
     border: 2px solid #5d677e;
   }
 
-  text,.icon {
+  text, .icon {
     position: relative;
     z-index: 1;
   }
 }
 
-.board{
+.board {
   display: flex;
   flex-direction: column;
   background-color: rgba(0, 0, 0, 0.5);
@@ -84,21 +84,27 @@
   width: 40rem;
 }
 
-.self-center{
+.self-center {
   position: relative;
-  top:50%;
+  top: 50%;
   left: 50%;
   transform: translateY(-50%);
 }
 
-.self-v-center{
+.self-v-center {
   position: relative;
-  top:50%;
+  top: 50%;
   transform: translateY(-50%);
 }
-.self-h-center{
+
+.self-h-center {
   position: relative;
   left: 50%;
   transform: translateX(-50%);
 }
 
+/*Anim*/
+
+.flip-card{
+  transform:rotateY(0.5turn);
+}

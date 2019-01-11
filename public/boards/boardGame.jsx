@@ -15,8 +15,12 @@ export default connect(['stack','deck','messages','players','turn'])(
                     {/*turn {players[turn].name}*/}
                     {/*<TalkBox messages={messages}/>*/}
                 {/*</div>*/}
-                <Card className="stack self-v-center" card={stack.topCard}/>
-                <Card className="deck" onClick={store.run.drawCards}>{deck.length}</Card>
+                <Card className="stack self-center" card={stack.topCard}/>
+                <div className="deck" onClick={store.run.drawCards}>
+                    {deck.length}
+                    <Card className="flip-card" />
+                </div>
+
             </board-game>
         )
     }
