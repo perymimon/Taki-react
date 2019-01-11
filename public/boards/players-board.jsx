@@ -18,7 +18,7 @@ export default connect('player, players, turn')(
 
         return (
             <player-list>
-                <Player player={player} isMain={true}/>
+                <MainPlayer player={player}/>
 
                 {players.map((p) => (
                     <Player player={p} isActive={(player.index === turn)} key={player.token}/>
@@ -29,24 +29,39 @@ export default connect('player, players, turn')(
     },
 );
 
-function Player({player, isActive, isMain}) {
+function MainPlayer({player}) {
+    const customProperties = {
+        '--player-color': player.color,
+    };
+
+    var hand = player.hand.length;
+
+    return <player class="main-player" style={customProperties}>
+        <Icon className={`${player.avatar} avatar`}/>
+        <div className="player-name dramatic-text">{player.name}</div>
+        <div className="player-slogan">{player.slogan}</div>
+        <SmallPanelValue className="amount-hand-cards" icon={'icon-gambling'} value={hand}/>
+        <SmallPanelValue className="time-left" icon={'icon-stopwatch'} value={hand}/>
+    </player>
+}
+
+function Player({player, isActive}) {
 
     const customProperties = {
         '--player-color': player.color,
     };
-    const classStyle = [];
-    if (isMain) classStyle.push('main');
-    if (isActive) classStyle.push('active');
+    const className = ['small-player-panel'];
+    if (isActive) className.push('active');
 
-    var hand = (Array.isArray(player.hand) ? player.hand.length : player.hand);
+    var hand =  player.hand;
 
 
-    return <player class={classStyle.join(' ')} style={customProperties}>
+    return <player class={className.join(' ')} style={customProperties}>
         <Icon className={`${player.avatar} avatar`}/>
         <div className="player-name dramatic-text">{player.name}</div>
         <div className="player-slogan">{player.slogan}</div>
-        <SmallPanelValue className="amount-hand-cards" icon={'card-icon'} value={hand}/>
-        <SmallPanelValue className="time-left" icon={'icon-gambling'} value={hand}/>
+        <SmallPanelValue className="amount-hand-cards" icon='icon-gambling' value={hand}/>
+        <SmallPanelValue className="time-left" icon='icon-stopwatch' value={hand}/>
     </player>
 }
 

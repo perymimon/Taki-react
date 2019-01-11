@@ -83,7 +83,7 @@ function Game() {
                 });
                 player$messages.set(p, []);
             });
-            Object.freeze(players);
+            // Object.freeze(players);
             publicState.gameInProgress = true;
             moveToNextPlayer();
             notifyPlayers(SENTENCE.setup);
