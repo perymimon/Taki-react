@@ -84,8 +84,8 @@ export function storeContentActions(store, socket) {
         },
         playCard(state, card) {
             const lay={
-                rotate:random(-40,-40),
-                origin:[random(5,95),random(5,95)]
+                rotate:random(-40,40),
+                origin:[random(30,70),random(30,70)]
             }
             socket.emit('action:play-card', {card,lay});
         },

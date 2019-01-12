@@ -11,6 +11,7 @@ export default function ({card, onClick, className, children, lay}) {
 
     return <tk-card class={`${className || ""} ${get(card, 'color')}`}
                     onClick={onClick}
+                    style={style}
                     data-symbol={get(card, 'symbol')}>{children}</tk-card>
 
 }

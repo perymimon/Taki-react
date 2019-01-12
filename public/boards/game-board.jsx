@@ -17,7 +17,7 @@ export default connect('stack, deck, stackLay')(
                 {/*<TalkBox messages={messages}/>*/}
                 {/*</div>*/}
                 <div className="stack self-center">
-                    {stack.topCards.map(({card,lay},i) => {
+                    {stack.topCards.reverse().map(({card,lay}) => {
                         return <Card card={card} lay={lay} key={card.id}/>
                     })}
                 </div>
