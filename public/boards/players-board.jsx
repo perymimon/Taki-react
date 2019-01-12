@@ -39,13 +39,13 @@ function MainPlayer({player, timeLeft}) {
 
     var hand = player.hand.length;
 
-    return <player class="main-player" style={customProperties}>
+    return <tk-player class="main-player" style={customProperties}>
         <Icon className={`${player.avatar} avatar`}/>
         <div className="player-name dramatic-text">{player.name}</div>
         <div className="player-slogan">{player.slogan}</div>
         <SmallPanelValue className="amount-hand-cards" icon={'icon-gambling'} value={hand}/>
         <SmallPanelValue className="time-left" icon={'icon-stopwatch'} value={timeLeft}/>
-    </player>
+    </tk-player>
 }
 
 function Player({player, isActive, timeLeft}) {
@@ -59,13 +59,13 @@ function Player({player, isActive, timeLeft}) {
     var hand =  player.hand;
 
 
-    return <player class={className.join(' ')} style={customProperties}>
+    return <tk-player class={className.join(' ')} style={customProperties}>
         <Icon className={`${player.avatar} avatar`}/>
         <div className="player-name dramatic-text">{player.name}</div>
         <div className="player-slogan">{player.slogan}</div>
         <SmallPanelValue className="amount-hand-cards" icon='icon-gambling' value={hand}/>
         <SmallPanelValue className="time-left" icon='icon-stopwatch' value={timeLeft}/>
-    </player>
+    </tk-player>
 }
 
 

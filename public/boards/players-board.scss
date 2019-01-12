@@ -7,7 +7,7 @@ player-list {
   height: 7em;
   align-content: flex-start;
 }
-player{
+tk-player{
   color: white;
 
   .time-left {
@@ -18,7 +18,7 @@ player{
 
 }
 
-player.small-player-panel {
+tk-player.small-player-panel {
   display: grid;
   grid-template-columns: 3em 1fr 1fr 1fr;
   grid-template-rows: 1fr 1fr;
@@ -79,7 +79,7 @@ player.small-player-panel {
 }
 
 
-player.main-player {
+tk-player.main-player {
   display: grid;
   //width: 27em;
   margin-right: 1em;

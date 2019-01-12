@@ -62,8 +62,8 @@ module.exports = function (io) {
         game.setup();
     });
 
-    io.on('action:play-card', (ctx, {card, extra = {}}) => {
-        game.playCard(card, extra);
+    io.on('action:play-card', (ctx, {card, lay}) => {
+        game.playCard(card, lay);
     });
 
     io.on('action:draw-card', (ctx, {amount} = {}) => {

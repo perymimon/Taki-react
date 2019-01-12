@@ -1,3 +1,6 @@
+import {random} from '../utils/utils';
+
+
 const {GAME_STAGE, SOCKET_EVENTS} = require('../../common/game-consts');
 const debounce = require('lodash/debounce');
 
@@ -10,11 +13,18 @@ export const state = {
     players: [],
     messages: [],
     stage: GAME_STAGE.PLAYER_SIGNIN,
-    timeLeft:0
+    timeLeft:0,
+    stackLay:[],
+    stack: {
+        topCards: []
+    }
+
 };
 
 
 export function storeContentActions(store, socket) {
+
+    global.$store = store;
 
     const addSeparator = debounce(store.action(function(state){
         return {messages:['separator',...state.messages]}
@@ -73,7 +83,11 @@ export function storeContentActions(store, socket) {
             socket.emit('action:draw-card')
         },
         playCard(state, card) {
-            socket.emit('action:play-card', {card});
+            const lay={
+                rotate:random(-40,-40),
+                origin:[random(5,95),random(5,95)]
+            }
+            socket.emit('action:play-card', {card,lay});
         },
         endTurn() {
             socket.emit('action:end-turn');

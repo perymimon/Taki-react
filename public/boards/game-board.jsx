@@ -1,31 +1,36 @@
+import './game-board.scss';
 import React, {Component} from "react";
-import './boardgame.scss';
 import Card from '../directives/card'
 
-import {connect} from 'unistore/react';
+import {connect} from 'unistore/src/integrations/react';
 // import  {connect} from 'unistore/src/integrations/react';
-import {store,actions} from '../store/store';
+import {store, actions} from '../store/store';
 
-export default connect(['stack','deck','messages','players','turn'])(
-    function BoardGame({stack, deck, messages, players,turn, lastMove, drawCards}) {
+
+export default connect('stack, deck, stackLay')(
+    function GameBoard({stack, deck}) {
         return (
             <board-game>
                 {/*<div className="player-turn">*/}
-                    {/*{lastMove && <div>{lastMove.player.name} just play <Card card={lastMove.card}/> </div>}*/}
-                    {/*turn {players[turn].name}*/}
-                    {/*<TalkBox messages={messages}/>*/}
+                {/*{lastMove && <div>{lastMove.player.name} just play <Card card={lastMove.card}/> </div>}*/}
+                {/*turn {players[turn].name}*/}
+                {/*<TalkBox messages={messages}/>*/}
                 {/*</div>*/}
-                <Card className="stack self-center" card={stack.topCard}/>
+                <div className="stack self-center">
+                    {stack.topCards.map(({card,lay},i) => {
+                        return <Card card={card} lay={lay} key={card.id}/>
+                    })}
+                </div>
+
                 <div className="deck" onClick={store.run.drawCards}>
                     {deck.length}
-                    <Card className="flip-card" />
+                    <Card className="flip-card"/>
                 </div>
 
             </board-game>
         )
-    }
+    },
 )
-
 
 
 // class TalkBox extends Component {

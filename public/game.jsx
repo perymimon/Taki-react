@@ -5,7 +5,7 @@ const {GAME_STAGE} = require('../common/game-consts');
 import SignInBoard from './boards/signin-board';
 import WelcomeBoard from './boards/welcome-board.jsx';
 import PlayerList from './boards/players-board';
-import BoardGame from './boards/boardGame';
+import BoardGame from './boards/game-board';
 import Hand from './component/hand';
 import Sidebar from './boards/side-bar'
 

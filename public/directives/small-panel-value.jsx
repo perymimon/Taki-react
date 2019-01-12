@@ -8,7 +8,7 @@ export default function SmallPanelValue({icon, value,className}) {
     return (
         <small-panel-value class={`${className} panel-show-value`} value={value}>
             <Icon className={`${icon}`}/>
-            <text>{value}</text>
+            <tk-text>{value}</tk-text>
         </small-panel-value>
     )
 

@@ -33,7 +33,7 @@ function Game() {
         },
         get stack() {
             return {
-                topCard: stack[0],
+                topCards: stack.slice(0,3),
                 length: stack.length,
             };
         },
@@ -135,17 +135,17 @@ function Game() {
         },
         selectColor(colorSelected) {
             if (publicState.mode === GAME_MODE.CHANGE_COLOR) {
-                stack[0].color = colorSelected;
+                stack[0].card.color = colorSelected;
                 publicState.mode = GAME_MODE.NATURAL;
                 notifyPlayers(SENTENCE.SelectColor);
                 moveToNextPlayer();
                 emitter.emit(GAME_EVENTS.STATE_UPDATE);
             }
         },
-        playCard(card) {
+        playCard(card,lay) {
             card = Card.toCard(card);
             if (isCardValid(card)) {
-                stack.unshift(card);
+                stack.unshift({card,lay});
 
                 /*remove card from player hand*/
                 currentPlayer.hand = currentPlayer.hand
@@ -225,9 +225,11 @@ function Game() {
     }
 
     function isCardValid(card) {
-        const lastCard = stack[0];
         /*if this is first card any card valid*/
-        if (!lastCard) return true;
+        if (!stack[0]) return true;
+
+        const lastCard = stack[0].card;
+
         switch (publicState.mode) {
             case GAME_MODE.NATURAL:
                 const colorMatch = (card.color === lastCard.color);

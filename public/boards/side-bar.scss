@@ -22,7 +22,7 @@ side-bar{
         * {
             vertical-align: middle;
         }
-        card{
+        tk-card{
             display: inline-block;
             height: 2em;
             font-size: inherit;
@@ -34,7 +34,7 @@ side-bar{
 
     }
 
-    separator{
+    tk-separator{
         color: #9ce2e238;
         display: block;
         height: 0;

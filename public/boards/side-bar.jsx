@@ -9,26 +9,26 @@ const cardPropsExp = /{(\w):(\w)}/;
 const tokensExp = /({\w:\w})|(\[\w+?])/;
 const userExp = /\[(\w+?)]/;
 
-function Messages({value}) {
-    if (value === 'separator') {
-        return <separator/>
+function Messages({message}) {
+    if (message === 'separator') {
+        return <tk-separator/>
     } else {
-        const text = value.text;
+        const text = message.text;
         const tokens = text.split(tokensExp).filter(Boolean); /*clean undefined*/
         let match = null;
         return (
             <div className={'message'}>{
-                tokens.map(function (token) {
+                tokens.map(function (token,i) {
                     match = token.match(cardPropsExp);
                     if (match) {
                         const [, symbol, color] = match;
                         const card = {symbol, color};
-                        return <Card card={card} key={card.id}/>;
+                        return <Card card={card} key={i}/>;
                     }
                     match = token.match(userExp);
                     if (match) {
                         const [, playerName] = match;
-                        return <PlayerName name={playerName}/>;
+                        return <PlayerName name={playerName} key={i}/>;
                     }
                     return token;
                 })
@@ -43,7 +43,7 @@ export default connect('messages')(
             <side-bar>
                 {
                     messages.map(message => {
-                        return <Messages key={message.id} value={message}/>
+                        return <Messages key={message.id} message={message}/>
                     })
                 }
             </side-bar>
