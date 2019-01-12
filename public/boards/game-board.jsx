@@ -10,7 +10,7 @@ import {store, actions} from '../store/store';
 export default connect('stack, deck, stackLay')(
     function GameBoard({stack, deck}) {
         return (
-            <board-game>
+            <board-game class="preserve-3d">
                 {/*<div className="player-turn">*/}
                 {/*{lastMove && <div>{lastMove.player.name} just play <Card card={lastMove.card}/> </div>}*/}
                 {/*turn {players[turn].name}*/}
@@ -23,7 +23,7 @@ export default connect('stack, deck, stackLay')(
                 </div>
 
                 <div className="deck" onClick={store.run.drawCards}>
-                    {deck.length}
+                    <tk-text>{deck.length}</tk-text>
                     <Card className="flip-card"/>
                 </div>
 

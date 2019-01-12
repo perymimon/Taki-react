@@ -3,6 +3,11 @@ welcome-board {
   .icon {
     margin-right: 0.3em;
   }
+  h1{
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: #00000024;
+  }
   h2{
     margin: 0;
   }

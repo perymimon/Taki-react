@@ -29,24 +29,17 @@
   text-transform: uppercase;
 }
 
-.four-color-background {
+.four-color-background, .four-color-background-after:after {
   position: relative;
 
-  &:after {
-    content: '';
-    position: absolute;
-    top: 0px;
-    bottom: 0px;
-    left: 0px;
-    right: 0px;
-    background: radial-gradient(ellipse at top right, #a59f40, transparent 80%),
-    radial-gradient(ellipse at bottom left, #7a9545, transparent 80%),
-    radial-gradient(ellipse at top left, #5e9fc9, transparent 80%),
-    radial-gradient(ellipse at top right, #9d5c4d, transparent 80%);
-    border-radius: inherit;
-    z-index: 0;
+  content: '';
+  background-image: radial-gradient(ellipse at top right, #a59f40, transparent 80%),
+  radial-gradient(ellipse at bottom left, #7a9545, transparent 80%),
+  radial-gradient(ellipse at top left, #5e9fc9, transparent 80%),
+  radial-gradient(ellipse at top right, #9d5c4d, transparent 80%);
+  border-radius: inherit;
+  z-index: 0;
 
-  }
 }
 
 .panel-show-value {
@@ -105,6 +98,14 @@
 
 /*Anim*/
 
-.flip-card{
-  transform:rotateY(0.5turn);
+.flip-card {
+  transform: rotateY(0.5turn);
+}
+
+.preserve-3d {
+  transform-style: preserve-3d;
+
+  * {
+    transform-style: preserve-3d;
+  }
 }

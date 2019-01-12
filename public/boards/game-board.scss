@@ -1,4 +1,5 @@
 board-game {
+
   flex: 1;
 
   display: flex;
@@ -10,7 +11,7 @@ board-game {
   align-items: center;
   align-content: center;
   justify-content: space-evenly;
-  transform: rotateX(40deg) translateZ(0em);
+  transform: rotateX(45deg) translateZ(0em);
   transform-origin: bottom;
   border: 3px solid var(--border-color);
   background-color: rgba(43, 43, 43, 0.25);
@@ -25,6 +26,10 @@ board-game {
     height: 14em;
     position: absolute;
     font-size: 1.6vh;
+
+    tk-text{
+      font-size:4em;
+    }
   }
 
   .stack {
