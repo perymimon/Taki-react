@@ -10,6 +10,7 @@ export const state = {
     players: [],
     messages: [],
     stage: GAME_STAGE.PLAYER_SIGNIN,
+    timeLeft:0
 };
 
 

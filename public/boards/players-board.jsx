@@ -11,17 +11,20 @@ import ReactDOM, {render} from 'react-dom';
 import {connect} from 'unistore/react'
 
 
-export default connect('player, players, turn')(
-    function PlayersBoard({player, players, turn}) {
+export default connect('player, players, turn, timeLeft')(
+    function PlayersBoard({player, players, turn, timeLeft}) {
         if (!player) return null;
         // players = players.filter( p => p.token != player.token);
 
         return (
             <player-list>
-                <MainPlayer player={player}/>
+                <MainPlayer player={player} timeLeft={timeLeft}/>
 
                 {players.map((p) => (
-                    <Player player={p} isActive={(player.index === turn)} key={player.token}/>
+                    <Player player={p}
+                            isActive={(player.index === turn)}
+                            key={player.token}
+                            timeLeft={timeLeft}/>
                 ))}
 
             </player-list>
@@ -29,7 +32,7 @@ export default connect('player, players, turn')(
     },
 );
 
-function MainPlayer({player}) {
+function MainPlayer({player, timeLeft}) {
     const customProperties = {
         '--player-color': player.color,
     };
@@ -41,11 +44,11 @@ function MainPlayer({player}) {
         <div className="player-name dramatic-text">{player.name}</div>
         <div className="player-slogan">{player.slogan}</div>
         <SmallPanelValue className="amount-hand-cards" icon={'icon-gambling'} value={hand}/>
-        <SmallPanelValue className="time-left" icon={'icon-stopwatch'} value={hand}/>
+        <SmallPanelValue className="time-left" icon={'icon-stopwatch'} value={timeLeft}/>
     </player>
 }
 
-function Player({player, isActive}) {
+function Player({player, isActive, timeLeft}) {
 
     const customProperties = {
         '--player-color': player.color,
@@ -61,7 +64,7 @@ function Player({player, isActive}) {
         <div className="player-name dramatic-text">{player.name}</div>
         <div className="player-slogan">{player.slogan}</div>
         <SmallPanelValue className="amount-hand-cards" icon='icon-gambling' value={hand}/>
-        <SmallPanelValue className="time-left" icon='icon-stopwatch' value={hand}/>
+        <SmallPanelValue className="time-left" icon='icon-stopwatch' value={timeLeft}/>
     </player>
 }
 
