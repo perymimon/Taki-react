@@ -23,12 +23,12 @@ function Messages({message}) {
                     if (match) {
                         const [, symbol, color] = match;
                         const card = {symbol, color};
-                        return <Card card={card} key={i}/>;
+                        return <Card card={card}/>;
                     }
                     match = token.match(userExp);
                     if (match) {
                         const [, playerName] = match;
-                        return <PlayerName name={playerName} key={i}/>;
+                        return <PlayerName name={playerName}/>;
                     }
                     return token;
                 })
@@ -36,6 +36,7 @@ function Messages({message}) {
         );
     }
 }
+let separatorCounter = 0;
 
 export default connect('messages')(
     function ({messages}) {
@@ -43,7 +44,7 @@ export default connect('messages')(
             <side-bar>
                 {
                     messages.map(message => {
-                        return <Messages key={message.id} message={message}/>
+                      return <Messages key={message.id || separatorCounter++} message={message}/>;
                     })
                 }
             </side-bar>
