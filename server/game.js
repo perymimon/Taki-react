@@ -34,7 +34,7 @@ function Game() {
         },
         get stack() {
             return {
-                topCards: stack.slice(0, 3),
+                topCards: stack.slice(0, 10),
                 length: stack.length,
             };
         },
@@ -136,6 +136,9 @@ function Game() {
             currentPlayer.hand.push(...deck.splice(0, amount));
             notifyPlayers(SENTENCE.drawCards, {amount});
             moveToNextPlayer();
+            if([GAME_MODE.TAKI,GAME_MODE.PLUS_TWO].includes(publicState.mode)){
+                publicState.mode = GAME_MODE.NATURAL;
+            }
             emitter.emit(GAME_EVENTS.STATE_UPDATE);
         },
         selectColor(colorSelected) {
@@ -186,6 +189,7 @@ function Game() {
                             publicState.mode = GAME_MODE.PLUS_TWO;
                             publicState.punishmentCounter += 2;
                             let nextPlayer = moveToNextPlayer();
+                            //todo: should be error here currentPlayer == nextPlayer
                             notifyPlayers(SENTENCE.playPlus2, {nextPlayer});
                             break;
                         }
@@ -201,6 +205,7 @@ function Game() {
                         }
 
                         default: {
+                            publicState.mode = GAME_MODE.NATURAL;
                             moveToNextPlayer();
                             notifyPlayers(SENTENCE.playRegular);
 

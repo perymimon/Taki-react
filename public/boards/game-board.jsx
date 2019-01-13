@@ -9,15 +9,11 @@ import {store, actions} from '../store/store';
 
 export default connect('stack, deck, stackLay')(
     function GameBoard({stack, deck}) {
+        var topStackCards = [...stack.topCards];
         return (
             <board-game class="preserve-3d">
-                {/*<div className="player-turn">*/}
-                {/*{lastMove && <div>{lastMove.player.name} just play <Card card={lastMove.card}/> </div>}*/}
-                {/*turn {players[turn].name}*/}
-                {/*<TalkBox messages={messages}/>*/}
-                {/*</div>*/}
                 <div className="stack self-center">
-                    {stack.topCards.reverse().map(({card,lay}) => {
+                    {topStackCards.reverse().map(({card,lay}) => {
                         return <Card card={card} lay={lay} key={card.id}/>
                     })}
                 </div>
