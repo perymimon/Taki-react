@@ -16,6 +16,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "animate.css": "^3.7.0",
     "koa": "^2.5.0",
     "koa-bodyparser": "^4.2.0",
     "koa-passport": "^4.0.1",
@@ -25,8 +26,8 @@
     "koa-socketio-cookie-helper": "^1.1.1",
     "koa-static": "^4.0.2",
     "lodash": "^4.17.5",
-    "react": "^16.3.2",
-    "react-dom": "^16.3.2",
+    "react": "^16.8.0-alpha.0",
+    "react-dom": "^16.7.0",
     "react-transition-group": "^2.3.1",
     "shortid": "^2.2.14",
     "socket.io": "^2.0.4",

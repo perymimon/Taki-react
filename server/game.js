@@ -3,7 +3,7 @@ const EventEmitter = require('events');
 const shortId = require('shortid');
 const {GAME_EVENTS, GAME_MODE} = require('../common/game-consts');
 const {Card} = require('./taki-cards');
-
+const {isCardValid} = require('../common/common-methods');
 const colorCode$ColorName = {
     B: 'blue',
     R: 'red',
@@ -25,15 +25,16 @@ function Game() {
     const players = [];
     // let allPlayers = players.slice();
     const player$messages = new Map;
+
     const publicState = {
         gameInProgress: false,
         get players() {/*return public player info*/
             /*todo:change player to inerihete from common object*/
-            return players.map(p => p.public );
+            return players.map(p => p.public);
         },
         get stack() {
             return {
-                topCards: stack.slice(0,3),
+                topCards: stack.slice(0, 3),
                 length: stack.length,
             };
         },
@@ -47,6 +48,10 @@ function Game() {
         punishmentCounter: 0,
         direction: 1,
         victoryRank: [],
+        lastMove:{
+            card:null,
+            player:null
+        }
 
     };
     const SENTENCE = require('./SENTENCE').factoryMessages(publicState);
@@ -142,17 +147,20 @@ function Game() {
                 emitter.emit(GAME_EVENTS.STATE_UPDATE);
             }
         },
-        playCard(card,lay) {
+        playCard(card, lay) {
             card = Card.toCard(card);
-            if (isCardValid(card)) {
-                stack.unshift({card,lay});
+
+            if (isCardValid(publicState, card)) {
+                stack.unshift({card, lay});
 
                 /*remove card from player hand*/
                 currentPlayer.hand = currentPlayer.hand
                     .filter(handCard => handCard.id !== card.id);
 
                 const colorName = colorCode$ColorName[card.color];
+
                 publicState.lastMove = {card, player: publicState.players[currentIndex]};
+
                 if (publicState.mode !== GAME_MODE.TAKI) {
                     switch (card.symbol) {
                         case "T": {
@@ -207,15 +215,14 @@ function Game() {
                 }
 
                 emitter.emit(GAME_EVENTS.STATE_UPDATE);
-
+                return true
             } else {
                 notifyPlayers(SENTENCE.playInvalidCard, {card});
                 return false;
             }
         },
 
-
-    }
+    };
 
     function moveToNextPlayer() {
         currentIndex = (players.length + currentIndex + publicState.direction) % players.length;
@@ -224,29 +231,6 @@ function Game() {
         return currentPlayer;
     }
 
-    function isCardValid(card) {
-        /*if this is first card any card valid*/
-        if (!stack[0]) return true;
-
-        const lastCard = stack[0].card;
-
-        switch (publicState.mode) {
-            case GAME_MODE.NATURAL:
-                const colorMatch = (card.color === lastCard.color);
-                const symbolMatch = (card.symbol === lastCard.symbol);
-                const isMagicCard = (card.set === 'magic');
-                return colorMatch || symbolMatch || isMagicCard;
-            case GAME_MODE.CHANGE_COLOR:
-                return true;
-            case GAME_MODE.PLUS_TWO :
-                /*strictMode*/
-                return (card.symbol === 'W');
-            case GAME_MODE.TAKI :
-                /*strictMode*/
-                return (card.color === lastCard.color);
-        }
-        return false;
-    }
 
     function checkVictoryCondition() {
         return currentPlayer.hand.length === 0;

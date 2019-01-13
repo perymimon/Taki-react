@@ -14,7 +14,8 @@ console.log('player token:',token);
 const socket = io('localhost:8080', {query: {token: token, autoConnect: false}});
 
 /* bind storeContentActions to store's state */
-const boundActions = storeContentActions(store, socket);
+const boundActions = storeContentActions(store, socket, actions);
+
 for( let [name,action] of Object.entries(boundActions) ){
     actions[name] = store.action(action);
 }

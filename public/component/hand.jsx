@@ -1,4 +1,4 @@
-import React, {Component} from "react";
+import React, {Component, useState} from "react";
 import {TransitionGroup} from 'react-transition-group'
 import Transition from 'react-transition-group/Transition';
 import Card from '../directives/card'
@@ -9,14 +9,20 @@ import {connect} from 'unistore/react';
 import {store, actions} from '../store/store';
 
 import {GAME_MODE} from '../../common/game-consts';
+import {animate, classnames} from '../utils/utils';
+
 
 export default connect('turn, players, player, mode')(
     function Hand({turn, players, player, mode}) {
+
+        function handleCardClick(card) {
+            return function (event) {
+                actions.playCard(card, event.target);
+            }
+        }
+
         return (
             <hand-game style={{color: player.color}}>
-                {/*{(mode === MODE.CHANGE_COLOR) ?*/}
-                {/*<ColorSelect onSelectColor={(evt) => selectColor(evt.target.dataset.value)}/> : null*/}
-                {/*}*/}
 
                 <div className={'title dramatic-text'}>
                     {
@@ -26,15 +32,14 @@ export default connect('turn, players, player, mode')(
                     }
                     {player.hand.length} cards
                 </div>
+                {
+                    player.hand.map((card) => {
+                        return <Card card={card}
+                                     key={card.id}
+                                     onClick={handleCardClick(card)}/>
 
-                {player.hand.map((card) => (
-                    <Card card={card}
-                          key={card.id}
-                          onClick={() => {
-                              actions.playCard(card);
-                          }}/>
-
-                ))}
+                    })
+                }
             </hand-game>
         )
     },

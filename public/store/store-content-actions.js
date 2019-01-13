@@ -1,5 +1,8 @@
-import {random} from '../utils/utils';
+import {measurement} from '../utils/measurement';
+import {animate, random} from '../utils/utils';
 
+
+const {isCardValid} = require('../../common/common-methods');
 
 const {GAME_STAGE, SOCKET_EVENTS} = require('../../common/game-consts');
 const debounce = require('lodash/debounce');
@@ -13,22 +16,21 @@ export const state = {
     players: [],
     messages: [],
     stage: GAME_STAGE.PLAYER_SIGNIN,
-    timeLeft:0,
-    stackLay:[],
+    timeLeft: 0,
+    stackLay: [],
     stack: {
-        topCards: []
-    }
+        topCards: [],
+    },
 
 };
 
-
-export function storeContentActions(store, socket) {
+export function storeContentActions(store, socket, actions) {
 
     global.$store = store;
 
-    const addSeparator = debounce(store.action(function(state){
-        return {messages:['separator',...state.messages]}
-    }),addSeparatorTimeout);
+    const addSeparator = debounce(store.action(function (state) {
+        return {messages: ['separator', ...state.messages]}
+    }), addSeparatorTimeout);
 
     socket.on(SOCKET_EVENTS.UPDATE_GAME_STATE, function (partialState) {
         store.setState(partialState);
@@ -37,7 +39,7 @@ export function storeContentActions(store, socket) {
 
     socket.on(SOCKET_EVENTS.INCOMING_MESSAGE, function (messages) {
         var state = store.getState();
-        store.setState({messages:[...messages, ...state.messages ]});
+        store.setState({messages: [...messages, ...state.messages]});
         addSeparator()
     });
 
@@ -66,8 +68,10 @@ export function storeContentActions(store, socket) {
         setOff(state, keyName) {
             return {[keyName]: false};
         },
+        /*UTIL ACTIONS*/
+        /* not put util here , it not return values*/
 
-        /*PREGAME ACTIONS*/
+        /*PRE GAME ACTIONS*/
         login(state, data) {
             socket.emit('login', data);
         },
@@ -82,12 +86,28 @@ export function storeContentActions(store, socket) {
         drawCards() {
             socket.emit('action:draw-card')
         },
-        playCard(state, card) {
-            const lay={
-                rotate:random(-40,40),
-                origin:[random(30,70),random(30,70)]
+        playCard(state, card, cardElement) {
+            const lay = {
+                rotate: random(-40, 40),
+                origin: [random(30, 70), random(30, 70)],
+            };
+            if (!isCardValid(state, card)) {
+                animate(cardElement, 'shake');
+            } else {
+                const stack = state.stack;
+                stack.topCards.unshift({card, lay});
+
+                store.setState({stack: Object.assign({}, stack)});
+
+                window.requestAnimationFrame(function () {
+                    const stackCard = document.querySelector('.stack tk-card:last-child');
+                    measurement(stackCard, cardElement);
+                })
             }
-            socket.emit('action:play-card', {card,lay});
+
+            // socket.emit('action:play-card', {card, lay}, function (isSuccess) {
+            //
+            // });
         },
         endTurn() {
             socket.emit('action:end-turn');

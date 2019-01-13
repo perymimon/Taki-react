@@ -1,0 +1,21 @@
+.put-card {
+  animation: putCard 1s ease-in;
+}
+
+@keyframes putCard {
+  from {
+    transform: rotateX(-45deg) translate(var(--correctionX), var(--correctionY));
+    transform-origin: center center;
+  }
+  10% {
+    transform: rotateX(-45deg) translate(var(--correctionX), var(--correctionY)) translateY(5em);
+  }
+  20% {
+    transform: rotateX(-45deg) translate(var(--correctionX), var(--correctionY)) translateY(1em) rotateX(45deg);
+  }
+  to {
+    transform: rotateX(0) translate(0);
+    transform-origin: var(--origin);
+
+  }
+}
