@@ -1,21 +1,33 @@
 .put-card {
-  animation: putCard 1s ease-in;
+  //animation: put-card 1s cubic-bezier(0.165, 0.84, 0.44, 1);
+  animation: put-card 1s ease-out;
 }
 
-@keyframes putCard {
+@keyframes put-card {
   from {
-    transform: rotateX(-45deg) translate(var(--correctionX), var(--correctionY));
-    transform-origin: center center;
+    transform:translateY(var(--corrZ)) rotateX(-45deg) translate(var(--corrX), var(--corrY)) ;
+    transform-origin: bottom center;
   }
-  10% {
-    transform: rotateX(-45deg) translate(var(--correctionX), var(--correctionY)) translateY(5em);
+  70% {
+    transform: translateY(var(--corrZ)) rotateX(-45deg)  translateY(-3em) rotateX(25deg);
   }
-  20% {
-    transform: rotateX(-45deg) translate(var(--correctionX), var(--correctionY)) translateY(1em) rotateX(45deg);
+  85% {
+    transform: translateY(var(--corrZ)) rotateX(-45deg) translateY(-4.2em) rotateX(45deg);
   }
-  to {
-    transform: rotateX(0) translate(0);
-    transform-origin: var(--origin);
 
-  }
 }
+
+
+/*
+0% {
+    transform: rotateX(-45deg) translate3d(var(--correctionX), var(--correctionY),2em);
+    transform-origin: center center;
+}
+60% {
+    transform: rotateX(-45deg) translate3d(var(--correctionX), var(--correctionY),2em) translateY(-2em) rotateX(25deg);
+}
+85% {
+    transform: rotateX(-45deg) translate3d(0em, 0em,0em) translateY(-1em) rotateX(35deg);
+}
+100% {
+}*/

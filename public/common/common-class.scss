@@ -98,7 +98,7 @@
 
 /*Anim*/
 
-.flip-card {
+.flip-transform {
   transform: rotateY(0.5turn);
 }
 
@@ -108,4 +108,8 @@
   * {
     transform-style: preserve-3d;
   }
+}
+
+.rotateY75{
+  transform: rotateY(75deg);
 }

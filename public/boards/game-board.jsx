@@ -11,17 +11,16 @@ export default connect('stack, deck, stackLay')(
     function GameBoard({stack, deck}) {
         var topStackCards = [...stack.topCards];
         return (
-            <board-game class="preserve-3d">
-                <div className="stack self-center">
+            <board-game>
+                <tk-card class="stack self-center">
                     {topStackCards.reverse().map(({card,lay}) => {
                         return <Card card={card} lay={lay} key={card.id}/>
                     })}
-                </div>
+                </tk-card>
 
-                <div className="deck" onClick={store.run.drawCards}>
-                    <tk-text>{deck.length}</tk-text>
-                    <Card className="flip-card"/>
-                </div>
+                <tk-card class="deck flip-transform" onClick={store.run.drawCards}>
+                    <tk-text class="flip-transform">{deck.length}</tk-text>
+                </tk-card>
 
             </board-game>
         )

@@ -48,10 +48,10 @@ function Game() {
         punishmentCounter: 0,
         direction: 1,
         victoryRank: [],
-        lastMove:{
-            card:null,
-            player:null
-        }
+        lastMove: {
+            card: null,
+            player: null,
+        },
 
     };
     const SENTENCE = require('./SENTENCE').factoryMessages(publicState);
@@ -120,36 +120,36 @@ function Game() {
             return players.find(p => p.token === token)
         },
         endTurn: function () {
-            if (publicState.mode === GAME_MODE.PLUS_TWO) {
-                this.drawCards(publicState.punishmentCounter);
-                publicState.punishmentCounter = 0;
-            }
-            publicState.mode = GAME_MODE.NATURAL;
-            moveToNextPlayer();
-            emitter.emit(GAME_EVENTS.STATE_UPDATE);
+           this.drawCards(0);
         },
         drawCards(amount = 1) {
+            if (publicState.mode === GAME_MODE.PLUS_TWO) {
+                amount = (publicState.punishmentCounter);
+                publicState.punishmentCounter = 0;
+            }
+
             if (deck.length < amount) {
                 let returnStack = stack.splice(1);
                 deck.push(...returnStack.sort(_ => Math.random() - .5));
             }
             currentPlayer.hand.push(...deck.splice(0, amount));
             notifyPlayers(SENTENCE.drawCards, {amount});
-            moveToNextPlayer();
-            if([GAME_MODE.TAKI,GAME_MODE.PLUS_TWO].includes(publicState.mode)){
+
+            if ([GAME_MODE.TAKI, GAME_MODE.PLUS_TWO].includes(publicState.mode)) {
                 publicState.mode = GAME_MODE.NATURAL;
             }
+            moveToNextPlayer();
             emitter.emit(GAME_EVENTS.STATE_UPDATE);
         },
-        selectColor(colorSelected) {
-            if (publicState.mode === GAME_MODE.CHANGE_COLOR) {
-                stack[0].card.color = colorSelected;
-                publicState.mode = GAME_MODE.NATURAL;
-                notifyPlayers(SENTENCE.SelectColor);
-                moveToNextPlayer();
-                emitter.emit(GAME_EVENTS.STATE_UPDATE);
-            }
-        },
+        // selectColor(colorSelected) {
+        //     if (publicState.mode === GAME_MODE.CHANGE_COLOR) {
+        //         stack[0].card.color = colorSelected;
+        //         publicState.mode = GAME_MODE.NATURAL;
+        //         notifyPlayers(SENTENCE.SelectColor);
+        //         moveToNextPlayer();
+        //         emitter.emit(GAME_EVENTS.STATE_UPDATE);
+        //     }
+        // },
         playCard(card, lay) {
             card = Card.toCard(card);
 

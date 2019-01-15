@@ -41,7 +41,6 @@ module.exports = function (io) {
         socket.emit(SOCKET_EVENTS.UPDATE_GAME_STATE, playerState);
     }
 
-
     io.on(SOCKET_EVENTS.CONNECTION, (ctx, data) => {
         ctx.token = ctx.socket.handshake.query.token;
         const player = game.getPlayer(ctx.token) || {};
