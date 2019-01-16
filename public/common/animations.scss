@@ -8,6 +8,10 @@
     transform:translateY(var(--corrZ)) rotateX(-45deg) translate(var(--corrX), var(--corrY)) ;
     transform-origin: bottom center;
   }
+  20%{
+    transform:translateY(var(--corrZ)) rotateX(-45deg) translate(var(--corrX), var(--corrY))  translateZ(2em);
+    transform-origin: bottom center;
+  }
   70% {
     transform: translateY(var(--corrZ)) rotateX(-45deg)  translateY(-3em) rotateX(25deg);
   }
