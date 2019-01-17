@@ -1,9 +1,11 @@
-body{
+body {
   background-image: url("assets/etc/background2.png");
 }
-game{
+
+game {
   display: block;
 }
+
 .game {
   display: flex;
   justify-content: center;
@@ -11,6 +13,9 @@ game{
   flex-direction: column;
   //background-image: url("assets/etc/background2.png");
 
+  side-bar {
+    transform: translateZ(-14em);
+  }
 
   header.top-header {
     display: flex;

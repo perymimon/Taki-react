@@ -5,33 +5,85 @@
 
 @keyframes put-card {
   from {
-    transform:translateY(var(--corrZ)) rotateX(-45deg) translate(var(--corrX), var(--corrY)) ;
+    transform: translateY(var(--corrZ)) rotateX(-45deg) translate(var(--corrX), var(--corrY));
     transform-origin: bottom center;
   }
-  20%{
-    transform:translateY(var(--corrZ)) rotateX(-45deg) translate(var(--corrX), var(--corrY))  translateZ(2em);
+  20% {
+    transform: translateY(var(--corrZ)) rotateX(-45deg) translate(var(--corrX), var(--corrY)) translateZ(1em);
     transform-origin: bottom center;
   }
   70% {
-    transform: translateY(var(--corrZ)) rotateX(-45deg)  translateY(-3em) rotateX(25deg);
+    transform: translateY(var(--corrZ)) rotateX(-45deg) translateY(-10rem) rotateX(25deg);
   }
   85% {
-    transform: translateY(var(--corrZ)) rotateX(-45deg) translateY(-4.2em) rotateX(45deg);
+    transform: translateY(var(--corrZ)) rotateX(-45deg) translateY(-15rem) rotateX(45deg);
+  }
+
+}
+
+.take-card {
+  animation: take-card 1s ease-out;
+}
+
+
+@keyframes take-card {
+  from {
+    transform: translate(var(--corrX), var(--corrY)) rotateX(45deg) translateY(var(--corrZ)) rotateY(-180deg);
+    transform-origin: bottom center;
+  }
+  20% {
+    transform: translate(var(--corrX), var(--corrY)) rotateX(45deg) translateY(var(--corrZ)) rotateY(-180deg) translateZ(-2em) rotateX(25deg);
+    transform-origin: bottom center;
+  }
+  70% {
+    transform: translate(var(--corrX), var(--corrY)) translateZ(2em);
+  }
+  85% {
+    transform: translate(var(--corrX), var(--corrY))
   }
 
 }
 
 
-/*
-0% {
-    transform: rotateX(-45deg) translate3d(var(--correctionX), var(--correctionY),2em);
-    transform-origin: center center;
+.other-take-card {
+  animation: other-take-card 1s ease-out;
 }
-60% {
-    transform: rotateX(-45deg) translate3d(var(--correctionX), var(--correctionY),2em) translateY(-2em) rotateX(25deg);
+
+
+@keyframes other-take-card {
+  from {
+    transform: translate(var(--corrX), var(--corrY)) rotateX(45deg) translateY(var(--corrZ)) rotateY(-180deg);
+    transform-origin: bottom center;
+  }
+  50% {
+    transform: translate(var(--corrX), var(--corrY)) rotateX(45deg) translateY(var(--corrZ)) rotateY(-180deg) translateZ(-2rem) translate(var(--right), var(--top)) rotateX(35deg);
+    transform-origin: bottom center;
+  }
+  //40% {
+  //  transform: translate(var(--corrX), var(--corrY)) rotateX(45deg) translateY(var(--corrZ)) rotateY(-180deg) translateZ(-2rem) translate(var(--right),var(--top)) rotateX(35deg);
+  //  transform-origin: bottom center;
+  //}
 }
-85% {
-    transform: rotateX(-45deg) translate3d(0em, 0em,0em) translateY(-1em) rotateX(35deg);
+
+.other-put-card {
+  //animation: put-card 1s cubic-bezier(0.165, 0.84, 0.44, 1);
+  animation: other-put-card 1s ease-out;
 }
-100% {
-}*/
+
+@keyframes other-put-card {
+  from {
+    transform: translateY(var(--corrZ)) rotateX(-45deg) translate(var(--corrX), var(--corrY)) scale(0.4);
+    transform-origin: bottom center;
+  }
+  20% {
+    transform: translateY(var(--corrZ)) rotateX(-45deg) translate(var(--corrX), var(--corrY)) translateZ(1em);
+    transform-origin: bottom center;
+  }
+  70% {
+    transform: translateY(var(--corrZ)) rotateX(-45deg) translateY(-10rem) rotateX(25deg);
+  }
+  85% {
+    transform: translateY(var(--corrZ)) rotateX(-45deg) translateY(-15rem) rotateX(45deg);
+  }
+
+}

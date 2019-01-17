@@ -7,7 +7,8 @@ player-list {
   height: 7em;
   align-content: flex-start;
 }
-tk-player{
+
+tk-player-board{
   color: white;
 
   .time-left {
@@ -15,10 +16,15 @@ tk-player{
       opacity: 0.2;
     }
   }
-
+  tk-card{
+    position: absolute;
+    transform: translate(-50%,-50%) rotateY(180deg) scale(0.4);
+    top:50%;
+    left:50%;
+  }
 }
 
-tk-player.small-player-panel {
+tk-player-board.small-player-panel {
   display: grid;
   grid-template-columns: 3em 1fr 1fr 1fr;
   grid-template-rows: 1fr 1fr;
@@ -79,7 +85,7 @@ tk-player.small-player-panel {
 }
 
 
-tk-player.main-player {
+tk-player-board.main-player {
   display: grid;
   //width: 27em;
   margin-right: 1em;

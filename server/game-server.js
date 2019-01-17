@@ -61,13 +61,14 @@ module.exports = function (io) {
         game.setup();
     });
 
-    io.on('action:play-card', (ctx, {card, lay}, emitback) => {
+    io.on('action:play-card', (ctx, {card, lay}) => {
         const isSuccess = game.playCard(card, lay);
         ctx.acknowledge(isSuccess);
     });
 
     io.on('action:draw-card', (ctx, {amount} = {}) => {
-        game.drawCards(amount);
+        const cards = game.drawCards(amount);
+        ctx.acknowledge(cards);
     });
 
     io.on('action:end-turn', (ctx) => {

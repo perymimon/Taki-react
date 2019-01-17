@@ -16,7 +16,7 @@ class User {
 
     get public() {
         const userClone = Object.create(User.prototype);
-        Object.assign(userClone,this);
+        Object.assign(userClone, this);
         userClone.hand = this.hand.length;
         return userClone;
     }
@@ -26,9 +26,7 @@ class User {
     }
 }
 
-
-exports
-    .letUser = function (token, {name, slogan, avatar}) {
+exports.letUser = function (token, {name, slogan, avatar}) {
     users[token] = users[token] || new User(token, name, slogan, avatar);
 
     // users[token].name = name;
@@ -37,15 +35,11 @@ exports
 
     return users[token];
 };
-exports
-    .getUsers = () => users;
+exports.getUsers = () => users;
 
-var
-    colorPool = [...color];
+var colorPool = [...color];
 
-function
-
-randomColor() {
+function randomColor() {
     var i = (Math.random() * colorPool.length) | 1;
     var color = colorPool.splice(i, 1)[0];
     return '#' + color;

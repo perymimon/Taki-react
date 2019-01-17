@@ -1,4 +1,5 @@
 import Icon from '../component/icon'
+import Card from '../directives/card';
 import SmallPanelValue from '../directives/small-panel-value';
 
 
@@ -39,13 +40,13 @@ function MainPlayer({player, timeLeft}) {
 
     var hand = player.hand.length;
 
-    return <tk-player class="main-player" style={customProperties}>
+    return <tk-player-board class="main-player" style={customProperties}>
         <Icon className={`${player.avatar} avatar`}/>
         <div className="player-name dramatic-text">{player.name}</div>
         <div className="player-slogan">{player.slogan}</div>
         <SmallPanelValue className="amount-hand-cards" icon={'icon-gambling'} value={hand}/>
         <SmallPanelValue className="time-left" icon={'icon-stopwatch'} value={timeLeft}/>
-    </tk-player>
+    </tk-player-board>
 }
 
 function Player({player, isActive, timeLeft}) {
@@ -59,13 +60,14 @@ function Player({player, isActive, timeLeft}) {
     var hand =  player.hand;
 
 
-    return <tk-player class={className.join(' ')} style={customProperties}>
+    return <tk-player-board class={className.join(' ')} style={customProperties} id={player.token}>
         <Icon className={`${player.avatar} avatar`}/>
         <div className="player-name dramatic-text">{player.name}</div>
         <div className="player-slogan">{player.slogan}</div>
         <SmallPanelValue className="amount-hand-cards" icon='icon-gambling' value={hand}/>
         <SmallPanelValue className="time-left" icon='icon-stopwatch' value={timeLeft}/>
-    </tk-player>
+        <Card/>
+    </tk-player-board>
 }
 
 

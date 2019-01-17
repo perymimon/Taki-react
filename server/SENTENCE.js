@@ -18,6 +18,7 @@ module.exports.factoryMessages = function (_state) {
                 code: 1,
                 public: `${state.player.toString()} take ${amount > 1 ? `${amount} cards` : 'card'}`,
                 private: `you take ${amount > 1 ? `${amount} cards` : 'card'}`,
+                meta:{amount, player:state.player.token}
             }
         },
         playTaki({color}) {
@@ -75,6 +76,14 @@ module.exports.factoryMessages = function (_state) {
                 code: 9,
                 public: `${state.player.toString()} choose ${color} color`,
                 private: `${color} selected`,
+            }
+        },
+        playCard({card}) {
+            return {
+                code: 10,
+                public: `${state.player.toString()} play ${card.toString()} `,
+                private: `you play ${card.toString()}`,
+                meta:{card, player:state.player.token}
             }
         },
         playInvalidCard({card}) {

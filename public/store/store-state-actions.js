@@ -1,34 +1,10 @@
-import {measurement} from '../utils/measurement';
+import {measurementPutCard, measurementTakeCard} from '../utils/measuremens';
 import {animate, random} from '../utils/utils';
+import {responseToMessage} from './message-listener';
+
 const {GAME_MODE} = require('./../../common/game-consts');
 
-function isCardValid(state, card) {
-    /*if this is first card any card valid*/
-    if (state.stack.topCards[0]){
-        const lastCard = state.stack.topCards[0].card;
-
-        switch (state.mode) {
-            case GAME_MODE.NATURAL:
-                const colorMatch = (card.color === lastCard.color);
-                const symbolMatch = (card.symbol === lastCard.symbol);
-                const isMagicCard = (card.color === 'M');
-                return colorMatch || symbolMatch || isMagicCard;
-            case GAME_MODE.CHANGE_COLOR:
-                return true;
-            case GAME_MODE.PLUS_TWO :
-                /*strictMode*/
-                return (card.symbol === 'W');
-            case GAME_MODE.TAKI :
-                /*strictMode*/
-                return (card.color === lastCard.color);
-        }
-        return false;
-    }
-    return true;
-
-}
-
-// const {isCardValid} = require('../../common/common-methods');
+const {isCardValid} = require('../../common/common-methods');
 
 const {GAME_STAGE, SOCKET_EVENTS} = require('../../common/game-consts');
 const debounce = require('lodash/debounce');
@@ -50,7 +26,7 @@ export const state = {
 
 };
 
-export function storeContentActions(store, socket, actions) {
+export function storeStateActions(store, socket, actions) {
 
     global.$store = store;
 
@@ -64,6 +40,8 @@ export function storeContentActions(store, socket, actions) {
     });
 
     socket.on(SOCKET_EVENTS.INCOMING_MESSAGE, function (messages) {
+        responseToMessage(messages, store);
+
         var state = store.getState();
         store.setState({messages: [...messages, ...state.messages]});
         addSeparator()
@@ -109,8 +87,18 @@ export function storeContentActions(store, socket, actions) {
         },
 
         /* player game action */
-        drawCards() {
-            socket.emit('action:draw-card')
+        drawCards(state) {
+            socket.emit('action:draw-card', {}, function (cards) {
+                const player = Object.assign({},state.player);
+                player.hand.push(...cards);
+                store.setState({player:player});
+                requestAnimationFrame(function () {
+                    for (let cardObj of cards) {
+                        const card = document.getElementById(cardObj.id);
+                        measurementTakeCard(card);
+                    }
+                });
+            })
         },
         playCard(state, card, cardElement) {
             const lay = {
@@ -125,10 +113,9 @@ export function storeContentActions(store, socket, actions) {
 
                 store.setState({stack: Object.assign({}, stack)});
 
-                window.requestAnimationFrame(function () {
-                    const stackCard = document.querySelector('.stack tk-card:last-child');
-                    measurement(stackCard, cardElement);
-                })
+                // requestAnimationFrame(function () {
+                //     measurementPutCard(cardElement);
+                // })
             }
 
             socket.emit('action:play-card', {card, lay}, function (isSuccess) {

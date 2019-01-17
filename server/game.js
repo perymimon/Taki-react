@@ -57,10 +57,10 @@ function Game() {
     const SENTENCE = require('./SENTENCE').factoryMessages(publicState);
 
     function notifyPlayers(messageFactory, args) {
-        var {code, private, public} = messageFactory(args);
+        var {code, private, public, meta} = messageFactory(args);
         var id = shortId.generate();
-        var other = {id, code, text: public};
-        var personal = {id, code, text: private};
+        var other = {id, code, text: public, meta, private:false};
+        var personal = {id, code, text: private, meta, private:true};
 
         player$messages.get(currentPlayer).push(personal);
         getOtherPlayer().forEach(function (p, i) {
@@ -120,7 +120,7 @@ function Game() {
             return players.find(p => p.token === token)
         },
         endTurn: function () {
-           this.drawCards(0);
+            this.drawCards(0);
         },
         drawCards(amount = 1) {
             if (publicState.mode === GAME_MODE.PLUS_TWO) {
@@ -128,18 +128,29 @@ function Game() {
                 publicState.punishmentCounter = 0;
             }
 
+            let cards = [];
+
             if (deck.length < amount) {
                 let returnStack = stack.splice(1);
                 deck.push(...returnStack.sort(_ => Math.random() - .5));
             }
-            currentPlayer.hand.push(...deck.splice(0, amount));
+            cards = deck.splice(0, amount);
+            currentPlayer.hand.push(...cards);
+
+            // publicState.lastMove = {
+            //     cards.length,
+            //     player: publicState.players[currentIndex],
+            //     action:'drawCards'
+            // };
+
             notifyPlayers(SENTENCE.drawCards, {amount});
 
             if ([GAME_MODE.TAKI, GAME_MODE.PLUS_TWO].includes(publicState.mode)) {
                 publicState.mode = GAME_MODE.NATURAL;
             }
             moveToNextPlayer();
-            emitter.emit(GAME_EVENTS.STATE_UPDATE);
+            // emitter.emit(GAME_EVENTS.STATE_UPDATE);
+            return cards;
         },
         // selectColor(colorSelected) {
         //     if (publicState.mode === GAME_MODE.CHANGE_COLOR) {
@@ -162,7 +173,13 @@ function Game() {
 
                 const colorName = colorCode$ColorName[card.color];
 
-                publicState.lastMove = {card, player: publicState.players[currentIndex]};
+                publicState.lastMove = {
+                    cards: [card],
+                    player: publicState.players[currentIndex],
+                    action: 'playCard',
+                };
+
+                notifyPlayers(SENTENCE.playCard, {card});
 
                 if (publicState.mode !== GAME_MODE.TAKI) {
                     switch (card.symbol) {

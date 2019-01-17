@@ -2,7 +2,7 @@ import {createStore} from 'unistore/src/combined/react'
 import devtools from 'unistore/devtools'
 import io from "socket.io-client/dist/socket.io.slim.js"
 
-import {storeContentActions,state} from './store-content-actions';
+import {storeStateActions,state} from './store-state-actions';
 
 export const store = devtools(createStore(state));
 export const actions = {};
@@ -13,8 +13,8 @@ console.log('player token:',token);
 
 const socket = io('localhost:8080', {query: {token: token, autoConnect: false}});
 
-/* bind storeContentActions to store's state */
-const boundActions = storeContentActions(store, socket, actions);
+/* bind storeStateActions to store's state */
+const boundActions = storeStateActions(store, socket, actions);
 
 for( let [name,action] of Object.entries(boundActions) ){
     actions[name] = store.action(action);
