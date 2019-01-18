@@ -1,7 +1,6 @@
 import React from "react";
 import {render} from 'react-dom';
 
-import Card from '../directives/card';
 import {measurementOtherTakeCard, measurementOtherPutCard} from '../utils/measuremens';
 
 
@@ -9,7 +8,8 @@ export function responseToMessage(messages, store) {
     for (let i = 0; i < messages.length; i++) {
         const message = messages[i];
         switch (message.code) {
-            case 1:
+            case 100:
+            case 101:
                 return drawCards(message, store);
             case 10:
                 return putCard(message, store);

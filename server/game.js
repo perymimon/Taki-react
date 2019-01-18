@@ -123,7 +123,8 @@ function Game() {
             this.drawCards(0);
         },
         drawCards(amount = 1) {
-            if (publicState.mode === GAME_MODE.PLUS_TWO) {
+            const punishmentMode = (publicState.mode === GAME_MODE.PLUS_TWO);
+            if (punishmentMode) {
                 amount = (publicState.punishmentCounter);
                 publicState.punishmentCounter = 0;
             }
@@ -142,8 +143,12 @@ function Game() {
             //     player: publicState.players[currentIndex],
             //     action:'drawCards'
             // };
+            if(punishmentMode){
+                notifyPlayers(SENTENCE.punishmentCards, {amount,cards});
+            }else{
+                notifyPlayers(SENTENCE.drawCards, {amount, cards});
+            }
 
-            notifyPlayers(SENTENCE.drawCards, {amount});
 
             if ([GAME_MODE.TAKI, GAME_MODE.PLUS_TWO].includes(publicState.mode)) {
                 publicState.mode = GAME_MODE.NATURAL;

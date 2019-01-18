@@ -13,11 +13,19 @@ module.exports.factoryMessages = function (_state) {
                 private: `new game, ${state.player.toString()} you begin by playing any card`,
             }
         },
-        drawCards({amount}) {
+        drawCards({amount, cards}) {
             return {
-                code: 1,
+                code: 100,
                 public: `${state.player.toString()} take ${amount > 1 ? `${amount} cards` : 'card'}`,
-                private: `you take ${amount > 1 ? `${amount} cards` : 'card'}`,
+                private: `you take ${amount > 1 ? `${amount} cards` : `card ${cards[0].toString()}`}`,
+                meta:{amount, player:state.player.token}
+            }
+        },
+        punishmentCards({amount, cards}) {
+            return {
+                code: 101,
+                public: `${state.player.toString()} punishment with ${amount > 1 ? `${amount} cards` : 'card'}`,
+                private: `you punishment with ${amount > 1 ? `${amount} cards` : `card ${cards[0].toString()}`}`,
                 meta:{amount, player:state.player.token}
             }
         },

@@ -42,11 +42,11 @@ export default connect('messages')(
     function ({messages}) {
         return (
             <side-bar>
-                {/*{*/}
-                    {/*messages.map(message => {*/}
-                      {/*return <Messages key={message.id || separatorCounter++} message={message}/>;*/}
-                    {/*})*/}
-                {/*}*/}
+                {
+                    messages.map(message => {
+                      return <Messages key={message.id || separatorCounter++} message={message}/>;
+                    })
+                }
             </side-bar>
         )
     },

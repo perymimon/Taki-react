@@ -72,7 +72,6 @@ export function measurementOtherPutCard(card, callback) {
         transformOrigin:'bottom center'
     });
 
-
     const {x, y} = rectDiff(stackCard, card);
 
     restores();

@@ -113,9 +113,9 @@ export function storeStateActions(store, socket, actions) {
 
                 store.setState({stack: Object.assign({}, stack)});
 
-                // requestAnimationFrame(function () {
-                //     measurementPutCard(cardElement);
-                // })
+                requestAnimationFrame(function () {
+                    measurementPutCard(cardElement);
+                })
             }
 
             socket.emit('action:play-card', {card, lay}, function (isSuccess) {

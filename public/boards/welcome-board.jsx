@@ -21,7 +21,7 @@ export default connect('player, gameInProgress')(
                 <button className="main-button start-game"
                         onClick={store.run.startGame}>
 
-                    {gameInProgress?'join':'start'} game
+                    {gameInProgress?'join':'start a'} game
 
                 </button>
             </welcome-board>
