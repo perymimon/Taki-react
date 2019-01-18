@@ -18,7 +18,7 @@ export function responseToMessage(messages, store) {
 }
 
 function drawCards(message, store) {
-    //todo: if it public not private
+    if(message.private) return;
     const {player, amount} = message.meta;
     const playerBoard = document.getElementById(player);
     const cardElement = playerBoard.querySelector('tk-card');
@@ -29,6 +29,7 @@ function drawCards(message, store) {
 }
 
 function putCard(message,store){
+    if(message.private) return;
     const {player, amount} = message.meta;
     const playerBoard = document.getElementById(player);
     const cardElement = playerBoard.querySelector('tk-card');
