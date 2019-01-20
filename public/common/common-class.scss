@@ -30,7 +30,6 @@
 }
 
 .four-color-background, .four-color-background-after:after {
-  position: relative;
 
   content: '';
   background-image: radial-gradient(ellipse at top right, #a59f40, transparent 80%),

@@ -36,27 +36,37 @@ board-game {
     --card-color: #e44520;
   }
 
-  tk-text {
+  & > tk-text {
     position: absolute;
     top: 0;
     font-size: 4em;
+
+    -webkit-background-clip: text;
+    color: var(--card-color);
+    -webkit-text-fill-color: transparent;
+    filter: opacity(0);
   }
+
 
   &.taki-mode {
     box-shadow: inset 0 0 5rem var(--card-color);
-    animation: glow 5s ease-out alternate infinite;
+    animation: glow 4s ease-out alternate infinite;
+    border-color: var(--card-color);
+
+    & > tk-text {
+      filter: opacity(1);
+
+    }
 
     @keyframes glow {
 
       50% {
-        box-shadow: inset 0 0 4rem rgba(255,255,255,0.1), inset 0 0 7rem var(--card-color);
+        box-shadow: inset 0 0 4rem rgba(255, 255, 255, 0.1), inset 0 0 7rem var(--card-color);
       }
 
     }
 
-    tk-text {
-      visibility: visible;
-    }
+
 
   }
 
