@@ -1,16 +1,13 @@
 hand-game{
   display: block;
   position: relative;
-  flex-shrink: 0;
   border-top: 2px solid;
-  min-height: 10em;
   border-color: currentColor;
   padding: 1em;
   box-sizing: border-box;
   transition: background-color, transform;
   transition-duration: 0.1s;
   perspective-origin: center center;
-  max-height: 30vh;
   overflow-y: auto;
   //padding-top: 2em;
 

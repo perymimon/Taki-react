@@ -27,5 +27,5 @@ exports.GAME_EVENTS = {
 exports.GAME_STAGE = {
     PLAYER_SIGNIN: 'signin',
     WELCOME: 'welcome',
-    GAME_TABLE: 'game',
+    GAME_TABLE: 'in-game',
 };

@@ -21,7 +21,7 @@ export default connect('stack, deck, mode')(
         });
         return (
             <board-game class={`${classState}  ${get(topCard, 'card.color')}`}>
-                <tk-text class="four-color-background">TAKI</tk-text>
+                <tk-text class="marker">TAKI</tk-text>
                 <tk-card class="stack self-center">
                     {topStackCards.reverse().map(({card, lay}) => {
                         return <Card card={card} lay={lay} key={card.id}/>

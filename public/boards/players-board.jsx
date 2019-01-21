@@ -1,10 +1,9 @@
 import Icon from '../component/icon'
 import Card from '../directives/card';
-import SmallPanelValue from '../directives/small-panel-value';
-
 
 const get = require('lodash/get');
 import './players-board.scss';
+import {SmallPanelValue} from '../link';
 
 import React, {Component, Fragment} from "react";
 import ReactDOM, {render} from 'react-dom';
@@ -45,7 +44,6 @@ function MainPlayer({player, timeLeft}) {
         <div className="player-name dramatic-text">{player.name}</div>
         <div className="player-slogan">{player.slogan}</div>
         <SmallPanelValue className="amount-hand-cards" icon={'icon-gambling'} value={hand}/>
-        <SmallPanelValue className="time-left" icon={'icon-stopwatch'} value={timeLeft}/>
     </tk-player-board>
 }
 
@@ -65,7 +63,6 @@ function Player({player, isActive, timeLeft}) {
         <div className="player-name dramatic-text">{player.name}</div>
         <div className="player-slogan">{player.slogan}</div>
         <SmallPanelValue className="amount-hand-cards" icon='icon-gambling' value={hand}/>
-        <SmallPanelValue className="time-left" icon='icon-stopwatch' value={timeLeft}/>
         <Card/>
     </tk-player-board>
 }

@@ -4,7 +4,7 @@ import {render} from 'react-dom';
 
 import {Provider} from 'unistore/src/combined/react'
 import {store} from './store/store';
-import Game from './game';
+import Game from './game-layout';
 
 
 render(

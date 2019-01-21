@@ -1,7 +1,7 @@
 import React, {Component, useState} from "react";
 import {TransitionGroup} from 'react-transition-group'
 import Transition from 'react-transition-group/Transition';
-import Card from '../directives/card'
+import {Card} from '../link'
 import './hand.scss';
 import './select-color.scss';
 import {connect} from 'unistore/react';
@@ -9,12 +9,9 @@ import {connect} from 'unistore/react';
 import {store, actions} from '../store/store';
 
 import {GAME_MODE} from '../../common/game-consts';
-import {animate, classnames} from '../utils/utils';
-
 
 export default connect('turn, players, player, mode')(
     function Hand({turn, players, player, mode}) {
-
         function handleCardClick(card) {
             return function (event) {
                 actions.playCard(card, event.target);
