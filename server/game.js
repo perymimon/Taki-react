@@ -1,7 +1,10 @@
+const {Timer} = require('../common/Timer');
+
+
 const taki = require('./taki-cards');
 const EventEmitter = require('events');
 const shortId = require('shortid');
-const {GAME_EVENTS, GAME_MODE} = require('../common/game-consts');
+const {GAME_EVENTS, GAME_MODE, GAME_SETTING} = require('../common/game-consts');
 const {Card} = require('./taki-cards');
 const {isCardValid} = require('../common/common-methods');
 const colorCode$ColorName = {
@@ -16,13 +19,17 @@ module.exports = Game;
 
 function Game() {
     const emitter = new EventEmitter();
-    const lastMove = {};
+    const counterDown = new Timer(GAME_SETTING.TURN_COUNTER, function () {
+        notifyPlayers(SENTENCE.timeEnd);
+        drawCards()
+    });
 
     let deck = taki.getNewDeck();
     const stack = [];
     let currentIndex = -1;
     let currentPlayer = null;
     const players = [];
+
     // let allPlayers = players.slice();
     const player$messages = new Map;
 
@@ -48,6 +55,9 @@ function Game() {
         punishmentCounter: 0,
         direction: 1,
         victoryRank: [],
+        get timeLeft() {
+            return (GAME_SETTING.TURN_COUNTER - counterDown.timePass)
+        },
         lastMove: {
             card: null,
             player: null,
@@ -59,8 +69,8 @@ function Game() {
     function notifyPlayers(messageFactory, args) {
         var {code, private, public, meta} = messageFactory(args);
         var id = shortId.generate();
-        var other = {id, code, text: public, meta, private:false};
-        var personal = {id, code, text: private, meta, private:true};
+        var other = {id, code, text: public, meta, private: false};
+        var personal = {id, code, text: private, meta, private: true};
 
         player$messages.get(currentPlayer).push(personal);
         getOtherPlayer().forEach(function (p, i) {
@@ -74,6 +84,44 @@ function Game() {
         return players.filter(p => p !== currentPlayer);
     }
 
+    /*ACTION*/
+
+    function drawCards(amount = 1) {
+        const punishmentMode = (publicState.mode === GAME_MODE.PLUS_TWO);
+        if (punishmentMode) {
+            amount = (publicState.punishmentCounter);
+            publicState.punishmentCounter = 0;
+        }
+
+        let cards = [];
+
+        if (deck.length < amount) {
+            let returnStack = stack.splice(1);
+            deck.push(...returnStack.sort(_ => Math.random() - .5));
+        }
+        cards = deck.splice(0, amount);
+        currentPlayer.hand.push(...cards);
+
+        // publicState.lastMove = {
+        //     cards.length,
+        //     player: publicState.players[currentIndex],
+        //     action:'drawCards'
+        // };
+        if (punishmentMode) {
+            notifyPlayers(SENTENCE.punishmentCards, {amount, cards});
+        } else {
+            notifyPlayers(SENTENCE.drawCards, {amount, cards});
+        }
+
+
+        if ([GAME_MODE.TAKI, GAME_MODE.PLUS_TWO].includes(publicState.mode)) {
+            publicState.mode = GAME_MODE.NATURAL;
+        }
+        moveToNextPlayer();
+        counterDown.restart();
+        emitter.emit(GAME_EVENTS.STATE_UPDATE);
+        return cards;
+    }
 
     /** API **/
     return {
@@ -91,6 +139,7 @@ function Game() {
             // Object.freeze(players);
             publicState.gameInProgress = true;
             moveToNextPlayer();
+            counterDown.restart();
             notifyPlayers(SENTENCE.setup);
             emitter.emit(GAME_EVENTS.STATE_UPDATE);
         },
@@ -119,44 +168,10 @@ function Game() {
         getPlayer(token) {
             return players.find(p => p.token === token)
         },
-        endTurn: function () {
-            this.drawCards(0);
+        endTurn() {
+            drawCards(0);
         },
-        drawCards(amount = 1) {
-            const punishmentMode = (publicState.mode === GAME_MODE.PLUS_TWO);
-            if (punishmentMode) {
-                amount = (publicState.punishmentCounter);
-                publicState.punishmentCounter = 0;
-            }
-
-            let cards = [];
-
-            if (deck.length < amount) {
-                let returnStack = stack.splice(1);
-                deck.push(...returnStack.sort(_ => Math.random() - .5));
-            }
-            cards = deck.splice(0, amount);
-            currentPlayer.hand.push(...cards);
-
-            // publicState.lastMove = {
-            //     cards.length,
-            //     player: publicState.players[currentIndex],
-            //     action:'drawCards'
-            // };
-            if(punishmentMode){
-                notifyPlayers(SENTENCE.punishmentCards, {amount,cards});
-            }else{
-                notifyPlayers(SENTENCE.drawCards, {amount, cards});
-            }
-
-
-            if ([GAME_MODE.TAKI, GAME_MODE.PLUS_TWO].includes(publicState.mode)) {
-                publicState.mode = GAME_MODE.NATURAL;
-            }
-            moveToNextPlayer();
-            // emitter.emit(GAME_EVENTS.STATE_UPDATE);
-            return cards;
-        },
+        drawCards,
         // selectColor(colorSelected) {
         //     if (publicState.mode === GAME_MODE.CHANGE_COLOR) {
         //         stack[0].card.color = colorSelected;

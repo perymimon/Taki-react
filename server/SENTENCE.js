@@ -18,7 +18,7 @@ module.exports.factoryMessages = function (_state) {
                 code: 100,
                 public: `${state.player.toString()} take ${amount > 1 ? `${amount} cards` : 'card'}`,
                 private: `you take ${amount > 1 ? `${amount} cards` : `card ${cards[0].toString()}`}`,
-                meta:{amount, player:state.player.token}
+                meta: {amount, player: state.player.token},
             }
         },
         punishmentCards({amount, cards}) {
@@ -26,7 +26,7 @@ module.exports.factoryMessages = function (_state) {
                 code: 101,
                 public: `${state.player.toString()} punishment with ${amount > 1 ? `${amount} cards` : 'card'}`,
                 private: `you punishment with ${amount > 1 ? `${amount} cards` : `card ${cards[0].toString()}`}`,
-                meta:{amount, player:state.player.token}
+                meta: {amount, player: state.player.token},
             }
         },
         playTaki({color}) {
@@ -91,7 +91,7 @@ module.exports.factoryMessages = function (_state) {
                 code: 10,
                 public: `${state.player.toString()} play ${card.toString()} `,
                 private: `you play ${card.toString()}`,
-                meta:{card, player:state.player.token}
+                meta: {card, player: state.player.token},
             }
         },
         playInvalidCard({card}) {
@@ -99,6 +99,13 @@ module.exports.factoryMessages = function (_state) {
                 code: 500,
                 public: `${state.player.toString()} try to play invalid card ... `,
                 private: `${card.toString()} are invalid to play..`,
+            }
+        },
+        timeEnd() {
+            return {
+                code: 501,
+                public: `${state.player.toString()}, miss is turn`,
+                private: `${state.player.toString()}, time end`,
             }
         },
 

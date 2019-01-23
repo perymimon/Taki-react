@@ -1,8 +1,10 @@
-import {measurementPutCard, measurementTakeCard} from '../utils/measuremens';
+import {Timer} from '../../common/Timer';
+import {measurementPutCard, animeTakeCard} from '../utils/measuremens';
 import {animate, random} from '../utils/utils';
 import {responseToMessage} from './message-listener';
 
-const {GAME_MODE} = require('./../../common/game-consts');
+
+const {GAME_MODE, GAME_SETTING} = require('./../../common/game-consts');
 
 const {isCardValid} = require('../../common/common-methods');
 
@@ -25,8 +27,18 @@ export const state = {
     },
 
 };
+const counterDown = new Timer(GAME_SETTING.TURN_COUNTER);
+
+function toSec(timePass) {
+    return Math.ceil((GAME_SETTING.TURN_COUNTER - timePass) / 1000);
+}
 
 export function storeStateActions(store, socket, actions) {
+
+    counterDown.tick(function () {
+        const timeLeft = toSec(counterDown.timePass);
+        store.setState({timeLeft});
+    }, 1000);
 
     global.$store = store;
 
@@ -35,14 +47,20 @@ export function storeStateActions(store, socket, actions) {
     }), addSeparatorTimeout);
 
     socket.on(SOCKET_EVENTS.UPDATE_GAME_STATE, function (partialState) {
+        if ('timeLeft' in partialState) {
+            counterDown.sync(partialState.timeLeft);
+            delete partialState.timeLeft;
+        }
+
         store.setState(partialState);
         store.run.updateCurrentStage();
     });
 
     socket.on(SOCKET_EVENTS.INCOMING_MESSAGE, function (messages) {
-        responseToMessage(messages, store);
-
+        responseToMessage(messages, store, counterDown);
         var state = store.getState();
+
+
         store.setState({messages: [...messages, ...state.messages]});
         addSeparator()
     });
@@ -89,15 +107,12 @@ export function storeStateActions(store, socket, actions) {
         /* player game action */
         drawCards(state) {
             socket.emit('action:draw-card', {}, function (cards) {
-                const player = Object.assign({},state.player);
+                const player = Object.assign({}, state.player);
                 player.hand.push(...cards);
-                store.setState({player:player});
-                requestAnimationFrame(function () {
-                    for (let cardObj of cards) {
-                        const card = document.getElementById(cardObj.id);
-                        measurementTakeCard(card);
-                    }
-                });
+                store.setState({player});
+                for (let cardObj of cards) {
+                    animeTakeCard(cardObj);
+                }
             })
         },
         playCard(state, card, cardElement) {

@@ -29,3 +29,7 @@ exports.GAME_STAGE = {
     WELCOME: 'welcome',
     GAME_TABLE: 'in-game',
 };
+
+exports.GAME_SETTING = {
+   TURN_COUNTER: 5 * 1000
+} ;
