@@ -108,7 +108,7 @@ function Game() {
         //     action:'drawCards'
         // };
         if (cards.length === 0) {
-            notifyPlayers(SENTENCE.punishmentCards, {amount})
+            notifyPlayers(SENTENCE.deckIsEmpty, {amount})
         } else if (punishmentMode) {
             notifyPlayers(SENTENCE.punishmentCards, {amount, cards});
         } else {

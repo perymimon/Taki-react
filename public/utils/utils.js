@@ -6,35 +6,41 @@ export function classnames(obj) {
     return Object.entries(obj).filter(p => p[1]).map(p => p[0]).join(' ');
 }
 
+export function isPlainObject(candidate) {
+    return candidate && (candidate.toString() === "[object Object]")
+}
+
 export function animate(element, animeName, vars, callback) {
-    const withCustromVars = vars && (vars.toString() === "[object Object]");
-    if (withCustromVars) {
-        Object.entries(vars).forEach(function ([k, v]) {
-            element.style.setProperty(k, v)
-        });
-    }
-    element.classList.add('animated', animeName);
-
-    function animationEndListener(event) {
-        if (event.animationName === animeName) {
-            element.classList.remove('animated', animeName);
-            element.removeEventListener('animationend', animationEndListener);
-
-            if (withCustromVars) {
-                Object.keys(vars).forEach(function (k) {
-                    // element.style.removeProperty(k)
-                });
-            }
-
-            const len = arguments.length - 1;
-            if (typeof arguments[len] === 'function') {
-                callback && callback.call(this, event);
-            }
-
+    return new Promise((resolve) => {
+        const withCustomVars = isPlainObject(vars);
+        if (withCustomVars) {
+            Object.entries(vars).forEach(function ([k, v]) {
+                element.style.setProperty(k, v);
+            });
         }
-    }
+        element.classList.add('animated', animeName);
 
-    element.addEventListener('animationend', animationEndListener)
+        function animationEndListener(event) {
+            if (event.animationName === animeName) {
+                element.classList.remove('animated', animeName);
+                element.removeEventListener('animationend', animationEndListener);
+
+                if (withCustomVars) {
+                    Object.keys(vars).forEach(function (k) {
+                        // element.style.removeProperty(k)
+                    });
+                }
+
+                const len = arguments.length - 1;
+                if (typeof arguments[len] === 'function') {
+                    callback && callback.call(this, event);
+                }
+                resolve();
+            }
+        }
+
+        element.addEventListener('animationend', animationEndListener)
+    })
 }
 
 

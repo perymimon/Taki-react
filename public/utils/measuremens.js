@@ -31,28 +31,31 @@ export function animePutCard(handCard, callback) {
             '--corrX': x + 'px',
             '--corrY': y + 'px',
             '--corrZ': z + 'px',
-        }, callback);
+        }).then(callback);
     })
 }
 
-export function animeTakeCard(card, callback) {
+export function animeTakeCards(cards, callback) {
     requestAnimationFrame(function () {
-        const handCard = document.getElementById(card.id);
-        const deckCard = document.querySelector('.deck');
         const handCards = document.querySelector('hand-game');
         handCards.style.setProperty('overflow', 'visible');
-        const {x, y, z} = measurementPileToCard(deckCard, handCard);
-        animate(handCard, 'take-card', {
-            '--corrX': -1 * x + 'px',
-            '--corrY': -1 * y + 'px',
-            '--corrZ': -1 * z + 'px',
-        }, function () { //todo: convert it to promise
-            handCards.style.removeProperty('overflow');
+        const deckCard = document.querySelector('.deck');
+
+        const animesEnds = cards.map(card => {
+            const handCard = document.getElementById(card.id);
+            const {x, y, z} = measurementPileToCard(deckCard, handCard);
+            return animate(handCard, 'take-card', {
+                '--corrX': -1 * x + 'px',
+                '--corrY': -1 * y + 'px',
+                '--corrZ': -1 * z + 'px',
+            });
         });
-
+        Promise.all(animesEnds).then(function () {
+            handCards.style.removeProperty('overflow');
+        })
     });
+};
 
-}
 
 export function animeOtherTakeCard(card, callback) {
     requestAnimationFrame(function () {
