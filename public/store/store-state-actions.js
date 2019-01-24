@@ -1,5 +1,5 @@
 import {Timer} from '../../common/Timer';
-import {measurementPutCard, animeTakeCard} from '../utils/measuremens';
+import {animePutCard, animeTakeCard} from '../utils/measuremens';
 import {animate, random} from '../utils/utils';
 import {responseToMessage} from './message-listener';
 
@@ -77,7 +77,7 @@ export function storeStateActions(store, socket, actions) {
         store.run.setOn('isOnline');
     });
 
-    console.log('some text');
+    console.log('restarted again');
 
     return {
         /* GENERAL ACTIONS */
@@ -116,21 +116,17 @@ export function storeStateActions(store, socket, actions) {
             })
         },
         playCard(state, card, cardElement) {
-            const lay = {
-                rotate: random(-40, 40),
-                origin: [random(30, 70), random(30, 70)],
-            };
             if (!isCardValid(state, card)) {
                 animate(cardElement, 'shake');
             } else {
+                const lay = {
+                    rotate: random(-40, 40),
+                    origin: [random(30, 70), random(30, 70)],
+                };
                 const stack = state.stack;
                 stack.topCards.unshift({card, lay});
-
                 store.setState({stack: Object.assign({}, stack)});
-
-                requestAnimationFrame(function () {
-                    measurementPutCard(cardElement);
-                })
+                animePutCard(cardElement);
             }
 
             socket.emit('action:play-card', {card, lay}, function (isSuccess) {

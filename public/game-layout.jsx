@@ -22,7 +22,11 @@ function Stage({value,timeLeft}) {
                 <header className="top-header">
                     <PlayerList/>
                     <tk-timer className="time-left">
-                        <i className="icon-stopwatch self-center"/>
+                        <div>
+                            <i className="icon-stopwatch self-center"/>
+                            <i className="icon-stopwatch self-center"/>
+                        </div>
+
                         <tk-text class="self-center">{timeLeft}</tk-text>
                     </tk-timer>
                 </header>

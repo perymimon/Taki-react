@@ -20,17 +20,19 @@ export function measurementPileToCard(pileCards, handCard, throwBottom = true) {
 }
 
 
-export function measurementPutCard(handCard, callback) {
-    const stackCard = document.querySelector('.stack tk-card:last-child');
-    const {x, y, z} = measurementPileToCard(stackCard, handCard);
+export function animePutCard(handCard, callback) {
+    requestAnimationFrame(function () {
+        const stackCard = document.querySelector('.stack tk-card:last-child');
+        const {x, y, z} = measurementPileToCard(stackCard, handCard);
 
-    handCard.style.visibility = 'hidden';
+        handCard.style.visibility = 'hidden';
 
-    animate(stackCard, 'put-card', {
-        '--corrX': x + 'px',
-        '--corrY': y + 'px',
-        '--corrZ': z + 'px',
-    }, callback);
+        animate(stackCard, 'put-card', {
+            '--corrX': x + 'px',
+            '--corrY': y + 'px',
+            '--corrZ': z + 'px',
+        }, callback);
+    })
 }
 
 export function animeTakeCard(card, callback) {
@@ -52,38 +54,43 @@ export function animeTakeCard(card, callback) {
 
 }
 
-export function measurementOtherTakeCard(card, callback) {
-    const deckCard = document.querySelector('.deck');
-    const {x, y, z, top, right} = measurementPileToCard(deckCard, card, false);
-    animate(card, 'other-take-card', {
-        '--corrX': -1 * x + 'px',
-        '--corrY': -1 * y + 'px',
-        '--corrZ': -1 * z + 'px',
-        '--top': top + 'px',
-        '--right': -1 * right + 'px',
-    }, callback);
+export function animeOtherTakeCard(card, callback) {
+    requestAnimationFrame(function () {
+        const deckCard = document.querySelector('.deck');
+        const {x, y, z, top, right} = measurementPileToCard(deckCard, card, false);
+        animate(card, 'other-take-card', {
+            '--corrX': -1 * x + 'px',
+            '--corrY': -1 * y + 'px',
+            '--corrZ': -1 * z + 'px',
+            '--top': top + 'px',
+            '--right': -1 * right + 'px',
+        }, callback);
+    })
 }
 
-export function measurementOtherPutCard(card, callback) {
+export function animeOtherPutCard(card, callback) {
+    requestAnimationFrame(function () {
 
-    const stackCard = document.querySelector('.stack tk-card:last-child');
-    const gameBoard = document.querySelector('board-game');
-    const restores = resetTransforms([stackCard, gameBoard]);
+        const stackCard = document.querySelector('.stack tk-card:last-child');
+        const gameBoard = document.querySelector('board-game');
+        const restores = resetTransforms([stackCard, gameBoard]);
 
-    const {bottom, top} = rectDiff(stackCard, gameBoard);
+        const {bottom, top} = rectDiff(stackCard, gameBoard);
 
-    Object.assign(stackCard.style, {
-        transform: `translateY(${bottom}px) scale(0.4)`,
-        transformOrigin: 'bottom center',
-    });
+        Object.assign(stackCard.style, {
+            transform: `translateY(${bottom}px) scale(0.4)`,
+            transformOrigin: 'bottom center',
+        });
 
-    const {x, y} = rectDiff(stackCard, card);
+        const {x, y} = rectDiff(stackCard, card);
 
-    restores();
+        restores();
 
-    animate(stackCard, 'other-put-card', {
-        '--corrX': 1 * x + 'px',
-        '--corrY': 1 * y + 'px',
-        '--corrZ': 1 * bottom + 'px',
-    }, callback);
+        animate(stackCard, 'other-put-card', {
+            '--corrX': 1 * x + 'px',
+            '--corrY': 1 * y + 'px',
+            '--corrZ': 1 * bottom + 'px',
+        }, callback);
+    })
+
 }

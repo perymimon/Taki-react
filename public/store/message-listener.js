@@ -1,7 +1,7 @@
 import React from "react";
 import {render} from 'react-dom';
 
-import {measurementOtherTakeCard, measurementOtherPutCard} from '../utils/measuremens';
+import {animeOtherTakeCard, animeOtherPutCard} from '../utils/measuremens';
 
 
 export function responseToMessage(messages, store, counterDown) {
@@ -21,23 +21,18 @@ export function responseToMessage(messages, store, counterDown) {
 }
 
 function drawCards(message, store) {
-    if(message.private) return;
+    if (message.private) return;
     const {player, amount} = message.meta;
     const playerBoard = document.getElementById(player);
     const cardElement = playerBoard.querySelector('tk-card');
-    requestAnimationFrame(function () {
-        measurementOtherTakeCard(cardElement)
-    })
-
+    animeOtherTakeCard(cardElement);
 }
 
-function putCard(message,store){
-    if(message.private) return;
+function putCard(message, store) {
+    if (message.private) return;
     const {player, amount} = message.meta;
     const playerBoard = document.getElementById(player);
     const cardElement = playerBoard.querySelector('tk-card');
-    requestAnimationFrame(function () {
-        measurementOtherPutCard(cardElement)
-    })
+    animeOtherPutCard(cardElement)
 
 }
