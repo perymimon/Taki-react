@@ -29,6 +29,15 @@ module.exports.factoryMessages = function (_state) {
                 meta: {amount, player: state.player.token},
             }
         },
+        deckIsEmpty({amount}) {
+            const cards = amount>1? 'cards':'card';
+            return {
+                code: 102,
+                public: `${state.player.toString()} should take a ${amount} ${cards} but the deck is empty,`,
+                private: `you should take a ${amount} ${cards} but the deck is empty,
+                meta: {amount, player: state.player.token},
+            }
+        }
         playTaki({color}) {
             return {
                 code: 2,

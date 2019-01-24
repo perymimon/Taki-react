@@ -107,7 +107,9 @@ function Game() {
         //     player: publicState.players[currentIndex],
         //     action:'drawCards'
         // };
-        if (punishmentMode) {
+        if (cards.length === 0) {
+            notifyPlayers(SENTENCE.punishmentCards, {amount})
+        } else if (punishmentMode) {
             notifyPlayers(SENTENCE.punishmentCards, {amount, cards});
         } else {
             notifyPlayers(SENTENCE.drawCards, {amount, cards});
