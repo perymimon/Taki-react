@@ -1,6 +1,7 @@
 .put-card {
   //animation: put-card 1s cubic-bezier(0.165, 0.84, 0.44, 1);
   animation: put-card 1s ease-out;
+  animation-delay: var(--anim-delay);
 }
 
 @keyframes put-card {
@@ -23,6 +24,8 @@
 
 .take-card {
   animation: take-card 1s ease-out;
+  animation-delay: var(--anim-delay);
+  visibility: hidden;
 }
 
 
@@ -30,16 +33,18 @@
   from {
     transform: translate(var(--corrX), var(--corrY)) rotateX(45deg) translateY(var(--corrZ)) rotateY(-180deg);
     transform-origin: bottom center;
+    visibility: visible;
   }
   20% {
-    transform: translate(var(--corrX), var(--corrY)) rotateX(45deg) translateY(var(--corrZ)) rotateY(-180deg) translateZ(-2em) rotateX(25deg);
+    transform: translateY( var(--corrY))
+               rotateX(45deg) translateY(var(--corrZ)) rotateY(-180deg) translateZ(-2em) rotateX(25deg);
     transform-origin: bottom center;
   }
   70% {
-    transform: translate(var(--corrX), var(--corrY)) translateZ(2em);
+    transform: translateY( var(--corrY))  translateZ(2em);
   }
   85% {
-    transform: translate(var(--corrX), var(--corrY))
+    transform: translateY( var(--corrY))
   }
 
 }
@@ -47,6 +52,8 @@
 
 .other-take-card {
   animation: other-take-card 1s ease-out;
+  animation-delay: var(--anim-delay);
+
 }
 
 
@@ -68,6 +75,7 @@
 .other-put-card {
   //animation: put-card 1s cubic-bezier(0.165, 0.84, 0.44, 1);
   animation: other-put-card 1s ease-out;
+  animation-delay: var(--anim-delay);
 }
 
 @keyframes other-put-card {
