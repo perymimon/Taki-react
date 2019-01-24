@@ -2,11 +2,24 @@ import {createStore} from 'unistore/src/combined/react'
 import devtools from 'unistore/devtools'
 import io from "socket.io-client/dist/socket.io.slim.js"
 
-import {storeStateActions,state} from './store-state-actions';
+import {storeStateActions,initState} from './store-state-actions';
 
-export const store = devtools(createStore(state));
+export const store = devtools(createStore(initState));
 export const actions = {};
 
+/*modified store*/
+const oldSetState = store.setState;
+const subscribe = store.subscribe;
+let orginalState = {};
+store.setState = function(...args){
+    orginalState = store.getState();
+    oldSetState.apply(this,args)
+};
+store.subscribe = function(fn){
+    subscribe(function(state,action){
+        fn.call(this, [state,orginalState],action);
+    })
+};
 
 const token = document.cookie.replace(/.*token=(\w+).*/, '$1');
 console.log('player token:',token);

@@ -20,45 +20,61 @@ export function measurementPileToCard(pileCards, handCard, throwBottom = true) {
 }
 
 
-export function animePutCard(handCard, callback) {
+export function animePutCards(cards, callback) {
+
     requestAnimationFrame(function () {
         const stackCard = document.querySelector('.stack tk-card:last-child');
-        const {x, y, z} = measurementPileToCard(stackCard, handCard);
+        const animeEnds = cards.map((card, i) => {
+            const handCard = document.querySelector(`hand-game [id="${card.id}"]`);
+            (handCard.style.visibility = 'hidden');
+            const {x, y, z} = measurementPileToCard(stackCard, handCard);
+            return animate(stackCard, 'put-card', {
+                '--corrX': x + 'px',
+                '--corrY': y + 'px',
+                '--corrZ': z + 'px',
+                '--anim-delay': (i * 50) + 'ms',
+            })
+        });
 
-        handCard.style.visibility = 'hidden';
+        Promise.all(animeEnds).then(callback)
 
-        animate(stackCard, 'put-card', {
-            '--corrX': x + 'px',
-            '--corrY': y + 'px',
-            '--corrZ': z + 'px',
-        }).then(callback);
+
     })
 }
 
-export function animeTakeCards(cards, callback) {
-    requestAnimationFrame(function () {
-        const handCards = document.querySelector('hand-game');
-        handCards.style.setProperty('overflow', 'visible');
-        const deckCard = document.querySelector('.deck');
+export function animeTakeCards(cards, initialize) {
+    return new Promise(function (resolve) {
+        if (cards.length === 0) return resolve();
+        requestAnimationFrame(function () {
+            const handCards = document.querySelector('hand-game');
+            handCards.style.setProperty('overflow', 'visible');
+            const deckCard = document.querySelector('.deck');
 
-        const animesEnds = cards.map(card => {
-            const handCard = document.getElementById(card.id);
-            const {x, y, z} = measurementPileToCard(deckCard, handCard);
-            return animate(handCard, 'take-card', {
-                '--corrX': -1 * x + 'px',
-                '--corrY': -1 * y + 'px',
-                '--corrZ': -1 * z + 'px',
+            const animesEnds = cards.map((card, i) => {
+                const handCard = document.getElementById(card.id);
+                const {x, y, z} = measurementPileToCard(deckCard, handCard);
+                const animeName = initialize? 'initialize-take-card':'take-card';
+                return animate(handCard, animeName, {
+                    '--corrX': -1 * x + 'px',
+                    '--corrY': -1 * y + 'px',
+                    '--corrZ': -1 * z + 'px',
+                    '--anim-delay': (i * 50) + 'ms',
+                });
             });
+            Promise.all(animesEnds).then(function () {
+                handCards.style.removeProperty('overflow');
+            }).then(resolve)
         });
-        Promise.all(animesEnds).then(function () {
-            handCards.style.removeProperty('overflow');
-        })
-    });
+    })
+
 };
 
 
-export function animeOtherTakeCard(card, callback) {
+export function animeOtherTakeCard(player, callback) {
     requestAnimationFrame(function () {
+        debugger;
+        const playerBoard = document.getElementById(player);
+        const cardElement = playerBoard.querySelector('tk-card');
         const deckCard = document.querySelector('.deck');
         const {x, y, z, top, right} = measurementPileToCard(deckCard, card, false);
         animate(card, 'other-take-card', {
@@ -71,8 +87,10 @@ export function animeOtherTakeCard(card, callback) {
     })
 }
 
-export function animeOtherPutCard(card, callback) {
+export function animeOtherPutCard(player, callback) {
     requestAnimationFrame(function () {
+        const playerBoard = document.getElementById(player);
+        const card = playerBoard.querySelector('tk-card');
 
         const stackCard = document.querySelector('.stack tk-card:last-child');
         const gameBoard = document.querySelector('board-game');

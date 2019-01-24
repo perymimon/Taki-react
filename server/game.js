@@ -64,7 +64,7 @@ function Game() {
         },
 
     };
-    const SENTENCE = require('./SENTENCE').factoryMessages(publicState);
+    const SENTENCE = require('./sentence').factoryMessages(publicState);
 
     function notifyPlayers(messageFactory, args) {
         var {code, private, public, meta} = messageFactory(args);
@@ -120,7 +120,7 @@ function Game() {
             publicState.mode = GAME_MODE.NATURAL;
         }
         moveToNextPlayer();
-        counterDown.restart();
+
         emitter.emit(GAME_EVENTS.STATE_UPDATE);
         return cards;
     }
@@ -141,7 +141,6 @@ function Game() {
             // Object.freeze(players);
             publicState.gameInProgress = true;
             moveToNextPlayer();
-            counterDown.restart();
             notifyPlayers(SENTENCE.setup);
             emitter.emit(GAME_EVENTS.STATE_UPDATE);
         },
@@ -241,6 +240,7 @@ function Game() {
                         case "D": {
                             publicState.direction = publicState.direction > 0 ? -1 : +1;
                             notifyPlayers(SENTENCE.playChangeDirection)
+                            moveToNextPlayer();
                         }
 
                         default: {
@@ -272,6 +272,7 @@ function Game() {
         currentIndex = (players.length + currentIndex + publicState.direction) % players.length;
         currentPlayer = players[currentIndex];
         // emitMessage( `put or draw card` );
+        counterDown.restart();
         return currentPlayer;
     }
 

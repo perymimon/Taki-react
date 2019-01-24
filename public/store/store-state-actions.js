@@ -1,19 +1,16 @@
 import {Timer} from '../../common/Timer';
-import {animePutCard, animeTakeCards} from '../utils/measuremens';
-import {animate, random} from '../utils/utils';
+import {animePutCards, animeTakeCards} from '../utils/measuremens';
+import {animate, arrayDiff2, random} from '../utils/utils';
 import {responseToMessage} from './message-listener';
+import get from 'lodash/get';
 
-
-const {GAME_MODE, GAME_SETTING} = require('./../../common/game-consts');
 
 const {isCardValid} = require('../../common/common-methods');
 
-const {GAME_STAGE, SOCKET_EVENTS} = require('../../common/game-consts');
+const {GAME_MODE, GAME_STAGE, SOCKET_EVENTS, GAME_SETTING} = require('../../common/game-consts');
 const debounce = require('lodash/debounce');
 
-const addSeparatorTimeout = 1000;
-
-export const state = {
+export const initState = {
     isOnline: false,
     gameInProgress: false,
     player: {itHisTurn: false, hand: []},
@@ -34,17 +31,29 @@ function toSec(timePass) {
 }
 
 export function storeStateActions(store, socket, actions) {
+    let itInitializeState = true;
 
-    counterDown.tick(function () {
-        const timeLeft = toSec(counterDown.timePass);
-        store.setState({timeLeft});
-    }, 1000);
+    store.subscribe(function stateToAction([newState, state], action) {
+        const newHand = get(state, 'player.hand', []),
+            oldHand = get(newState, 'player.hand', []);
+        const {added, deleted} = arrayDiff2(newHand, oldHand, 'id');
+        animeTakeCards(added, itInitializeState);
+        /* can't be dane because card element is already gone
+         animePutCards(deleted);*/
+    });
+
+    // counterDown.tick(function () {
+    //     const timeLeft = toSec(counterDown.timePass);
+    //     store.setState({timeLeft});
+    // }, 1000);
 
     global.$store = store;
 
+    let separatorCounter = 1;
+
     const addSeparator = debounce(store.action(function (state) {
-        return {messages: ['separator', ...state.messages]}
-    }), addSeparatorTimeout);
+        return {messages: [{code: 'separator', id: separatorCounter++}, ...state.messages]}
+    }), GAME_SETTING.ADD_SEPARATOR_TIMEOUT);
 
     socket.on(SOCKET_EVENTS.UPDATE_GAME_STATE, function (partialState) {
         if ('timeLeft' in partialState) {
@@ -52,36 +61,42 @@ export function storeStateActions(store, socket, actions) {
             delete partialState.timeLeft;
         }
 
+
         store.setState(partialState);
         store.run.updateCurrentStage();
+
     });
 
     socket.on(SOCKET_EVENTS.INCOMING_MESSAGE, function (messages) {
         responseToMessage(messages, store, counterDown);
         var state = store.getState();
-
-
         store.setState({messages: [...messages, ...state.messages]});
         addSeparator()
     });
 
     socket.on('disconnect', function () {
+        console.log('disconnect');
         store.run.setOff('isOnline');
     });
 
     socket.on('reconnect', function () {
+        console.log('reconnect');
         store.run.setOn('isOnline');
     });
 
     socket.on('connect', function () {
+        console.log('connect');
+        itInitializeState = true;
         store.run.setOn('isOnline');
     });
 
     console.log('restarted again');
 
     return {
+
         /* GENERAL ACTIONS */
         initialize(state, newState) {
+            console.log('initialize state');
             store.setState(newState, true/*replace state*/)
         },
         setOn(state, keyName) {
@@ -107,10 +122,10 @@ export function storeStateActions(store, socket, actions) {
         /* player game action */
         drawCards(state) {
             socket.emit('action:draw-card', {}, function (cards) {
-                const player = Object.assign({}, state.player);
-                player.hand.push(...cards);
-                store.setState({player});
-                animeTakeCards(cards);
+                // const player = Object.assign({}, state.player);
+                // player.hand.push(...cards);
+                // store.setState({player});
+                // animeTakeCards(cards, itInitializeState);
             })
         },
         playCard(state, card, cardElement) {
@@ -121,11 +136,10 @@ export function storeStateActions(store, socket, actions) {
             if (!isCardValid(state, card)) {
                 animate(cardElement, 'shake');
             } else {
-
-                const stack = state.stack;
+                const stack = Object.assign({}, state.stack);
                 stack.topCards.unshift({card, lay});
-                store.setState({stack: Object.assign({}, stack)});
-                animePutCard(cardElement);
+                store.setState({stack});
+                animePutCards([card]);
             }
             socket.emit('action:play-card', {card, lay}, function (isSuccess) {
 

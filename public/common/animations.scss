@@ -22,6 +22,32 @@
 
 }
 
+.initialize-take-card{
+  animation: initialize-take-card 1s ease-out;
+  animation-delay: var(--anim-delay);
+  visibility: hidden;
+}
+
+@keyframes initialize-take-card {
+  from {
+    transform: translate(var(--corrX), var(--corrY)) rotateX(45deg) translateY(var(--corrZ)) rotateY(-180deg);
+    transform-origin: bottom center;
+    visibility: visible;
+  }
+  20% {
+    transform:
+    rotateX(45deg) translateY(var(--corrZ)) rotateY(-180deg) translateZ(-4em) rotateX(25deg);
+    transform-origin: bottom center;
+  }
+  80% {
+    transform:  translateZ(4em);
+  }
+  //85% {
+  //  transform:
+  //}
+
+}
+
 .take-card {
   animation: take-card 1s ease-out;
   animation-delay: var(--anim-delay);

@@ -13,26 +13,22 @@ export function responseToMessage(messages, store, counterDown) {
             case 100:
             case 101:
                 counterDown.restart();
-                return drawCards(message, store);
+                return otherDrawCards(message, store);
             case 10:
-                return putCard(message, store);
+                return otherPutCard(message, store);
         }
     }
 }
 
-function drawCards(message, store) {
+function otherDrawCards(message, store) {
     if (message.private) return;
     const {player, amount} = message.meta;
-    const playerBoard = document.getElementById(player);
-    const cardElement = playerBoard.querySelector('tk-card');
-    animeOtherTakeCard(cardElement);
+    animeOtherTakeCard(player);
 }
 
-function putCard(message, store) {
+function otherPutCard(message, store) {
     if (message.private) return;
     const {player, amount} = message.meta;
-    const playerBoard = document.getElementById(player);
-    const cardElement = playerBoard.querySelector('tk-card');
-    animeOtherPutCard(cardElement)
+    animeOtherPutCard(player)
 
 }

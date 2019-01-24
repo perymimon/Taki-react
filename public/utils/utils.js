@@ -1,3 +1,6 @@
+import get from 'lodash/get';
+
+
 export function random(from, to) {
     return ((Math.random() * (to - from)) + from) | 1;
 }
@@ -87,4 +90,39 @@ export function rectDiff(from, to) {
         right: r2.right - r1.right,
         left: r2.left - r1.left,
     };
+}
+
+// export function arrayDiff(prev=[], next=[], keyExp) {
+//     const add = [], deleted = [];
+//     debugger;
+//     const prevMap = new Map(prev.map((v) => [get(v, keyExp), v]));
+//     const nextMap = new Map(next.map((v) => [get(v, keyExp), v]));
+//     prevMap.forEach(function (value, key) {
+//         if (!nextMap.has(key)) {
+//             deleted.push(value)
+//         }
+//     });
+//     nextMap.forEach(function (value, key) {
+//         if (!prevMap.has(key)) {
+//             add.push(value)
+//         }
+//     });
+//
+//     return {add, deleted}
+// }
+
+export function arrayDiff2(prev = [], next = [], keyExp) {
+    const prevMap = new Map(prev.map((v) => [v[keyExp], v]));
+    const nextMap = new Map(next.map((v) => [v[keyExp], v]));
+    prevMap.forEach(function (value, key) {
+        if (nextMap.has(key)) {
+            prevMap.delete(key);
+            nextMap.delete(key);
+        }
+    });
+
+    return {
+        added: [...nextMap.values()],
+        deleted: [...prevMap.values()],
+    }
 }
