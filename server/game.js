@@ -20,8 +20,8 @@ module.exports = Game;
 function Game() {
     const emitter = new EventEmitter();
     const counterDown = new Timer(GAME_SETTING.TURN_COUNTER, function () {
-        notifyPlayers(SENTENCE.timeEnd);
-        drawCards()
+        // notifyPlayers(SENTENCE.timeEnd);
+        // drawCards()
     });
 
     let deck = taki.getNewDeck();
@@ -50,6 +50,9 @@ function Game() {
         },
         get turn() {
             return currentIndex;
+        },
+        get prevTurn() {
+            return getPrevTurnBefore(currentIndex);
         },
         mode: GAME_MODE.NATURAL,
         punishmentCounter: 0,
@@ -85,34 +88,34 @@ function Game() {
     }
 
     /*ACTION*/
+    function dealCards(amount, player) {
+        if (deck.length < amount) {
+            let returnStack = stack.splice(1);
+            deck.push(...returnStack.sort(_ => Math.random() - .5));
+        }
+        const cards = deck.splice(0, amount);
+        player.hand.push(...cards);
+        return cards;
+    }
 
-    function drawCards(amount = 1) {
+    function drawCards(amount = 1, player = currentPlayer) {
+
+
         const punishmentMode = (publicState.mode === GAME_MODE.PLUS_TWO);
         if (punishmentMode) {
             amount = (publicState.punishmentCounter);
             publicState.punishmentCounter = 0;
         }
 
-        let cards = [];
+        const cards = dealCards(amount, player);
 
-        if (deck.length < amount) {
-            let returnStack = stack.splice(1);
-            deck.push(...returnStack.sort(_ => Math.random() - .5));
-        }
-        cards = deck.splice(0, amount);
-        currentPlayer.hand.push(...cards);
-
-        // publicState.lastMove = {
-        //     cards.length,
-        //     player: publicState.players[currentIndex],
-        //     action:'drawCards'
-        // };
         if (cards.length === 0) {
-            notifyPlayers(SENTENCE.deckIsEmpty, {amount})
+            notifyPlayers(SENTENCE.deckIsEmpty, {amount, player})
         } else if (punishmentMode) {
-            notifyPlayers(SENTENCE.punishmentCards, {amount, cards});
+            notifyPlayers(SENTENCE.punishmentCards, {amount, cards, player});
         } else {
-            notifyPlayers(SENTENCE.drawCards, {amount, cards});
+            /*todo: fix private message when player is not the current player*/
+            notifyPlayers(SENTENCE.drawCards, {amount, cards, player});
         }
 
 
@@ -125,18 +128,100 @@ function Game() {
         return cards;
     }
 
+    function playCard(token, card, lay) {
+
+        if (isPlayerInvalid(token)) return false;
+
+        card = Card.toCard(card);
+
+        if (isCardValid(publicState, card)) {
+            stack.unshift({card, lay});
+
+            /*remove card from player hand*/
+            currentPlayer.hand = currentPlayer.hand
+                .filter(handCard => handCard.id !== card.id);
+
+            const colorName = colorCode$ColorName[card.color];
+
+            publicState.lastMove = {
+                cards: [card],
+                player: publicState.players[currentIndex],
+                action: 'playCard',
+            };
+
+            notifyPlayers(SENTENCE.playCard, {card});
+
+            if (publicState.mode !== GAME_MODE.TAKI) {
+                switch (card.symbol) {
+                    case "T": {
+                        notifyPlayers(SENTENCE.playTaki, {color: colorName});
+                        publicState.mode = GAME_MODE.TAKI;
+                        break;
+                    }
+
+                    case "S": {
+                        let blockedPlayer = moveToNextPlayer();
+                        moveToNextPlayer();
+                        notifyPlayers(SENTENCE.playStop, {blockedPlayer});
+                        break;
+                    }
+
+                    case "C": {
+                        publicState.mode = GAME_MODE.CHANGE_COLOR;
+                        notifyPlayers(SENTENCE.playColor, {color: colorName});
+                        break;
+                    }
+
+                    case "W": {
+                        publicState.mode = GAME_MODE.PLUS_TWO;
+                        publicState.punishmentCounter += 2;
+                        let nextPlayer = moveToNextPlayer();
+                        //todo: should be error here currentPlayer == nextPlayer
+                        notifyPlayers(SENTENCE.playPlus2, {nextPlayer});
+                        break;
+                    }
+
+                    case "P": {
+                        notifyPlayers(SENTENCE.playPlus, {color: colorName});
+                        break;
+                    }
+
+                    case "D": {
+                        publicState.direction = publicState.direction > 0 ? -1 : +1;
+                        notifyPlayers(SENTENCE.playChangeDirection)
+                        moveToNextPlayer();
+                    }
+
+                    default: {
+                        publicState.mode = GAME_MODE.NATURAL;
+                        moveToNextPlayer();
+                        notifyPlayers(SENTENCE.playRegular);
+
+                    }
+                }
+
+            }
+
+            if (checkVictoryCondition()) {
+                publicState.victoryRank.push(currentPlayer.id);
+                players.splice(currentIndex, 1);
+            }
+
+            emitter.emit(GAME_EVENTS.STATE_UPDATE);
+            return true
+        } else {
+            notifyPlayers(SENTENCE.playInvalidCard, {card});
+            return false;
+        }
+    }
+
     /** API **/
     return {
         on: emitter.on.bind(emitter),
         setup() {
-            players.sort(_ => Math.random() - .5);
-            players.forEach((p, i) => {
-                p.hand = deck.splice(0, 8);
-                p.index = i;
-                p.__defineGetter__('itHisTurn', function () {
-                    return this.index === currentIndex
-                });
-                player$messages.set(p, []);
+            players.sort(_ => Math.random() - .5).forEach((player, i) => {
+                dealCards(GAME_SETTING.INIT_CARD_EACH_PLAYER, player);
+                player.index = i;
             });
             // Object.freeze(players);
             publicState.gameInProgress = true;
@@ -146,7 +231,15 @@ function Game() {
         },
         joinPlayer(player) {
             if (this.isPlayerInGame(player.token)) return false;
+            player.index = players.length;
+            player.__defineGetter__('itHisTurn', function () {
+                return this.index === currentIndex
+            });
             players.push(player);
+            if (publicState.gameInProgress) {
+                dealCards(GAME_SETTING.INIT_CARD_EACH_PLAYER, player);
+            }
+            player$messages.set(player, []);
             emitter.emit(GAME_EVENTS.STATE_UPDATE);
             return true;
         },
@@ -166,13 +259,14 @@ function Game() {
             player$messages.clear();
             players.forEach(p => player$messages.set(p, []));
         },
-        getPlayer(token) {
-            return players.find(p => p.token === token)
-        },
+        getPlayer,
         endTurn() {
             drawCards(0);
         },
-        drawCards,
+        drawCards(token, amount, player) {
+            if (isPlayerInvalid(token)) return;
+            drawCards(amount, player);
+        },
         // selectColor(colorSelected) {
         //     if (publicState.mode === GAME_MODE.CHANGE_COLOR) {
         //         stack[0].card.color = colorSelected;
@@ -182,100 +276,42 @@ function Game() {
         //         emitter.emit(GAME_EVENTS.STATE_UPDATE);
         //     }
         // },
-        playCard(card, lay) {
-            card = Card.toCard(card);
-
-            if (isCardValid(publicState, card)) {
-                stack.unshift({card, lay});
-
-                /*remove card from player hand*/
-                currentPlayer.hand = currentPlayer.hand
-                    .filter(handCard => handCard.id !== card.id);
-
-                const colorName = colorCode$ColorName[card.color];
-
-                publicState.lastMove = {
-                    cards: [card],
-                    player: publicState.players[currentIndex],
-                    action: 'playCard',
-                };
-
-                notifyPlayers(SENTENCE.playCard, {card});
-
-                if (publicState.mode !== GAME_MODE.TAKI) {
-                    switch (card.symbol) {
-                        case "T": {
-                            notifyPlayers(SENTENCE.playTaki, {color: colorName});
-                            publicState.mode = GAME_MODE.TAKI;
-                            break;
-                        }
-
-                        case "S": {
-                            let blockedPlayer = moveToNextPlayer();
-                            moveToNextPlayer();
-                            notifyPlayers(SENTENCE.playStop, {blockedPlayer});
-                            break;
-                        }
-
-                        case "C": {
-                            publicState.mode = GAME_MODE.CHANGE_COLOR;
-                            notifyPlayers(SENTENCE.playColor, {color: colorName});
-                            break;
-                        }
-
-                        case "W": {
-                            publicState.mode = GAME_MODE.PLUS_TWO;
-                            publicState.punishmentCounter += 2;
-                            let nextPlayer = moveToNextPlayer();
-                            //todo: should be error here currentPlayer == nextPlayer
-                            notifyPlayers(SENTENCE.playPlus2, {nextPlayer});
-                            break;
-                        }
-
-                        case "P": {
-                            notifyPlayers(SENTENCE.playPlus, {color: colorName});
-                            break;
-                        }
-
-                        case "D": {
-                            publicState.direction = publicState.direction > 0 ? -1 : +1;
-                            notifyPlayers(SENTENCE.playChangeDirection)
-                            moveToNextPlayer();
-                        }
-
-                        default: {
-                            publicState.mode = GAME_MODE.NATURAL;
-                            moveToNextPlayer();
-                            notifyPlayers(SENTENCE.playRegular);
-
-                        }
-                    }
-
-                }
-
-                if (checkVictoryCondition()) {
-                    publicState.victoryRank.push(currentPlayer.id);
-                    players.splice(currentIndex, 1);
-                }
-
-                emitter.emit(GAME_EVENTS.STATE_UPDATE);
-                return true
-            } else {
-                notifyPlayers(SENTENCE.playInvalidCard, {card});
-                return false;
-            }
+        playCard(token, card, lay) {
+            if (isPlayerInvalid(token)) return false;
+            playCard(card, lay);
         },
 
     };
 
+    function getPlayer(token) {
+        return players.find(p => p.token === token)
+    }
+
+    function isPlayerInvalid(token) {
+        const player = getPlayer(token);
+        if (player === currentPlayer) {
+            return true;
+        }
+        /*fix: add referer so player get his message*/
+        notifyPlayers(SENTENCE.notYourTurn, {player});
+        return false;
+    }
+
     function moveToNextPlayer() {
-        currentIndex = (players.length + currentIndex + publicState.direction) % players.length;
+        currentIndex = getNextTurnAfter(currentIndex);
         currentPlayer = players[currentIndex];
         // emitMessage( `put or draw card` );
         counterDown.restart();
         return currentPlayer;
     }
 
+    function getNextTurnAfter(turn) {
+        return (players.length + turn + publicState.direction) % players.length;
+    }
+
+    function getPrevTurnBefore(turn) {
+        return (players.length + turn + -1 * publicState.direction) % players.length;
+    }
 
     function checkVictoryCondition() {
         return currentPlayer.hand.length === 0;

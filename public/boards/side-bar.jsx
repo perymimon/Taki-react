@@ -10,7 +10,7 @@ const tokensExp = /({\w:\w})|(\[\w+?])/;
 const userExp = /\[(\w+?)]/;
 
 function Messages({message}) {
-    if (message === 'separator') {
+    if (message.code === 'separator') {
         return <tk-separator/>
     } else {
         const text = message.text;
@@ -23,12 +23,12 @@ function Messages({message}) {
                     if (match) {
                         const [, symbol, color] = match;
                         const card = {symbol, color};
-                        return <Card card={card}/>;
+                        return <Card card={card} key={card.id}/>;
                     }
                     match = token.match(userExp);
                     if (match) {
                         const [, playerName] = match;
-                        return <PlayerName name={playerName}/>;
+                        return <PlayerName name={playerName} key={playerName}/>;
                     }
                     return token;
                 })
@@ -36,15 +36,14 @@ function Messages({message}) {
         );
     }
 }
-let separatorCounter = 0;
 
 export default connect('messages')(
-    function ({messages}) {
+    function SideBar({messages}) {
         return (
             <side-bar>
                 {
                     messages.map(message => {
-                      return <Messages key={message.id || separatorCounter++} message={message}/>;
+                      return <Messages key={message.id } message={message}/>;
                     })
                 }
             </side-bar>

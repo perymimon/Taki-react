@@ -22,7 +22,7 @@ export default connect('player, players, turn, timeLeft')(
 
                 {players.map((p) => (
                     <Player player={p}
-                            isActive={(player.index === turn)}
+                            isActive={p.itHisTurn}
                             key={player.token}
                             timeLeft={timeLeft}/>
                 ))}

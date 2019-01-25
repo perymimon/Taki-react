@@ -7,7 +7,7 @@ const {SOCKET_EVENTS,GAME_EVENTS} = require('../common/game-consts');
 /* start logic */
 module.exports = function (io) {
     let messages = [];
-    const game = /*new */Game();
+    const game = /* new */Game();
     function sockets(){
         return Object.values(io.socket.clients().sockets);
     }
@@ -62,12 +62,12 @@ module.exports = function (io) {
     });
 
     io.on('action:play-card', (ctx, {card, lay}) => {
-        const isSuccess = game.playCard(card, lay);
+        const isSuccess = game.playCard(ctx.token, card, lay );
         ctx.acknowledge(isSuccess);
     });
 
     io.on('action:draw-card', (ctx, {amount} = {}) => {
-        const cards = game.drawCards(amount);
+        const cards = game.drawCards(amount, ctx.token);
         ctx.acknowledge(cards);
     });
 

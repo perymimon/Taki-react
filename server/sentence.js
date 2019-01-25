@@ -13,23 +13,23 @@ module.exports.factoryMessages = function (_state) {
                 private: `new game, ${state.player.toString()} you begin by playing any card`,
             }
         },
-        drawCards({amount, cards}) {
+        drawCards({amount, cards, player}) {
             return {
                 code: 100,
-                public: `${state.player.toString()} take ${amount > 1 ? `${amount} cards` : 'card'}`,
+                public: `${player.toString()} take ${amount > 1 ? `${amount} cards` : 'card'}`,
                 private: `you take ${amount > 1 ? `${amount} cards` : `card ${cards[0].toString()}`}`,
-                meta: {amount, player: state.player.token},
+                meta: {amount, player: player.token},
             }
         },
-        punishmentCards({amount, cards}) {
+        punishmentCards({amount, cards, player}) {
             return {
                 code: 101,
-                public: `${state.player.toString()} punishment with ${amount > 1 ? `${amount} cards` : 'card'}`,
+                public: `${player.toString()} punishment with ${amount > 1 ? `${amount} cards` : 'card'}`,
                 private: `you punishment with ${amount > 1 ? `${amount} cards` : `card ${cards[0].toString()}`}`,
-                meta: {amount, player: state.player.token},
+                meta: {amount, player: player.token},
             }
         },
-        deckIsEmpty({amount}) {
+        deckIsEmpty({amount,player}) {
             const cards = amount>1? 'cards':'card';
             return {
                 code: 102,
@@ -117,6 +117,13 @@ module.exports.factoryMessages = function (_state) {
                 private: `${state.player.toString()}, time end`,
             }
         },
+        notYourTurn({player}){
+            return {
+                code: 502,
+                public: ``,
+                private: `${player.toString()} not your turn to play`,
+            }
+        }
 
     }
 };

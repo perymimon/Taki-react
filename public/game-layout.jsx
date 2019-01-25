@@ -23,8 +23,8 @@ function Stage({value,timeLeft}) {
                     <PlayerList/>
                     <tk-timer className="time-left">
                         <div>
-                            <i className="icon-stopwatch self-center"/>
-                            <i className="icon-stopwatch self-center"/>
+                            <i className="icon-stopwatch"/>
+                            <i className="icon-stopwatch"/>
                         </div>
 
                         <tk-text class="self-center">{timeLeft}</tk-text>
@@ -40,11 +40,12 @@ function Stage({value,timeLeft}) {
 }
 
 
-export default connect('isOnline, player, gameInProgress, stage, timeLeft, players, turn')(
-    function Game({isOnline, player, gameInProgress, stage, timeLeft, players,turn}) {
+export default connect('isOnline, player, gameInProgress, stage, timeLeft, players, turn, prevTurn')(
+    function Game({isOnline, player, gameInProgress, stage, timeLeft, players,turn, prevTurn}) {
         const customProperties = {
             '--player-color': get(player,'color'),
-            '--current-player-color':get(players,`[${turn}].color`)
+            '--current-player-color':get(players,`[${turn}].color`),
+            '--prev-player-color':get(players,`[${prevTurn}].color`)
         };
         if (!isOnline)
             return <Loading/>;

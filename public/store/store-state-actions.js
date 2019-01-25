@@ -64,6 +64,7 @@ export function storeStateActions(store, socket, actions) {
 
         store.setState(partialState);
         store.run.updateCurrentStage();
+        itInitializeState = false;
 
     });
 
