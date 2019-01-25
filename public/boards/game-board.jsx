@@ -12,24 +12,31 @@ import {store, actions} from '../store/store';
 import {classnames} from '../utils/utils';
 
 
-export default connect('stack, deck, mode')(
-    function GameBoard({stack, deck, mode}) {
+export default connect('stack, deck, mode, punishment')(
+    function GameBoard({stack, deck, mode, punishment}) {
         var topStackCards = [...stack.topCards];
         var topCard = stack.topCards[0];
         const classState = classnames({
             'taki-mode': (mode === GAME_MODE.TAKI),
+            'plus-2-mode': (mode === GAME_MODE.PLUS_TWO),
+            'change-color-mode': (mode === GAME_MODE.CHANGE_COLOR),
         });
+        const markerText = {
+            [GAME_MODE.TAKI]: 'TAKI',
+            [GAME_MODE.PLUS_TWO]: '+' + punishment,
+            [GAME_MODE.CHANGE_COLOR]: 'COLOR',
+        }
         return (
             <board-game class={`${classState}  ${get(topCard, 'card.color')}`}>
-                <tk-text class="marker">TAKI</tk-text>
+                <tk-text class="marker">{markerText[mode]}</tk-text>
                 <tk-card class="stack self-center">
                     {topStackCards.reverse().map(({card, lay}) => {
                         return <Card card={card} lay={lay} key={card.id}/>
                     })}
                 </tk-card>
 
-                <tk-card class="deck flip-transform" onClick={store.run.drawCards}>
-                    <tk-text class="flip-transform">{deck.length}</tk-text>
+                <tk-card class="deck" onClick={store.run.drawCards}>
+                    <tk-text class="">{deck.length}</tk-text>
                 </tk-card>
 
             </board-game>
