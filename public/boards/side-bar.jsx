@@ -22,7 +22,7 @@ function Messages({message}) {
                     match = token.match(cardPropsExp);
                     if (match) {
                         const [, symbol, color] = match;
-                        const card = {symbol, color};
+                        const card = {symbol, color, id:[symbol,color].join('')};
                         return <Card card={card} key={card.id}/>;
                     }
                     match = token.match(userExp);
