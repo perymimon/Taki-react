@@ -57,7 +57,7 @@ tk-card {
   &[data-symbol="3"]{ --row:0; --colum:2;  }
   &[data-symbol="4"]{ --row:0; --colum:3;  }
   &[data-symbol="5"]{ --row:0; --colum:4;  }
-  &[data-symbol="6"]{ --row:0; --colum:0;  }
+  &[data-symbol="6"]{ --row:1; --colum:0;  }
   &[data-symbol="7"]{ --row:1; --colum:1;  }
   &[data-symbol="8"]{ --row:1; --colum:2;  }
   &[data-symbol="9"]{ --row:1; --colum:3;  }
@@ -65,6 +65,7 @@ tk-card {
   &[data-symbol="P"]{ --row:2; --colum:0;  }
   &[data-symbol="D"]{ --row:2; --colum:1;  }
   &[data-symbol="T"]{ --row:2; --colum:2;  }
+  /*global card only*/
   &[data-symbol="C"]{ --row:0; --colum:1;  }
 
 
