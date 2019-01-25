@@ -70,14 +70,13 @@ export function animeTakeCards(cards, initialize) {
 };
 
 
-export function animeOtherTakeCard(player, callback) {
+export function animeOtherTakeCard(playerToken, callback) {
     requestAnimationFrame(function () {
-        debugger;
-        const playerBoard = document.getElementById(player);
+        const playerBoard = document.getElementById(playerToken);
         const cardElement = playerBoard.querySelector('tk-card');
         const deckCard = document.querySelector('.deck');
-        const {x, y, z, top, right} = measurementPileToCard(deckCard, card, false);
-        animate(card, 'other-take-card', {
+        const {x, y, z, top, right} = measurementPileToCard(deckCard, cardElement, false);
+        animate(cardElement, 'other-take-card', {
             '--corrX': -1 * x + 'px',
             '--corrY': -1 * y + 'px',
             '--corrZ': -1 * z + 'px',
@@ -90,7 +89,7 @@ export function animeOtherTakeCard(player, callback) {
 export function animeOtherPutCard(player, callback) {
     requestAnimationFrame(function () {
         const playerBoard = document.getElementById(player);
-        const card = playerBoard.querySelector('tk-card');
+        const cardElement = playerBoard.querySelector('tk-card');
 
         const stackCard = document.querySelector('.stack tk-card:last-child');
         const gameBoard = document.querySelector('board-game');
@@ -103,7 +102,7 @@ export function animeOtherPutCard(player, callback) {
             transformOrigin: 'bottom center',
         });
 
-        const {x, y} = rectDiff(stackCard, card);
+        const {x, y} = rectDiff(stackCard, cardElement);
 
         restores();
 
