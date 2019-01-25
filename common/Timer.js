@@ -7,15 +7,25 @@ const COOL_NOTIFY_TIMER = Symbol('cool notify timer');
 
 
 class Timer {
-    constructor(time, callback, autostart = false) {
+    constructor(time, autostart = false, infinity, callback) {
         this.setTime(time);
-        this.callback = callback;
+        const lastArg = arguments[arguments.length -1];
+        if(typeof lastArg ==='function'){
+            this.callback = callback;
+        }
         this.timer = null;
         this[thenQueue] = [];
         this[tickQueue] = [];
         this[COOL_NOTIFY_TIMER] = [];
         this.finishedCounter = 0;
-        autostart && this.restart();
+
+        if(typeof arguments[2] === 'boolean'){
+            this.infinity = infinity || false;
+        }
+
+        if(typeof arguments[1] === 'boolean'){
+            autostart && this.restart();
+        }
     }
 
     stop() {
@@ -34,9 +44,10 @@ class Timer {
         const now = this.timer ? Date.now() : this.endTime;
         return now - this.startTime;
     }
+
     sync(timeLeft){
         clearTimeout(this.timer);
-
+        this.startTime = Date.now() - (this.resetTime-timeLeft);
         if( this.timeLeft > 0 ){
             this.timer = setTimeout(() => {
                 handleTimeEnd.call(this);
@@ -99,6 +110,9 @@ function handleTimeEnd(){
     this.timeLeft = this.resetTime;
     lastTimeNotify.call(this);
     runThenQueue.call(this);
+    if( this.infinity){
+        this.restart();
+    }
 }
 
 function runThenQueue() {
