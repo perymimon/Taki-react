@@ -2,7 +2,7 @@ exports.GAME_MODE = {
     NATURAL: 'natural',
     PLUS_TWO: '+2',
     TAKI: 'taki',
-    CHANGE_COLOR: 'ch',
+    CHANGE_COLOR: 'change color',
 };
 
 exports.SOCKET_EVENTS = {

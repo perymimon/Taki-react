@@ -77,20 +77,20 @@
 }
 
 .self-center {
-  position: relative;
+  //position: relative;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
 }
 
 .self-v-center {
-  position: relative;
+  //position: relative;
   top: 50%;
   transform: translateY(-50%);
 }
 
 .self-h-center {
-  position: relative;
+  //position: relative;
   left: 50%;
   transform: translateX(-50%);
 }

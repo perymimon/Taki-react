@@ -19,11 +19,18 @@ player-list {
 
 tk-player-board{
   color: white;
+  background-blend-mode: lighten;
 
   .time-left {
     &[value="0"] {
       opacity: 0.2;
     }
+  }
+  &.active{
+    background-color: var(--player-color);
+    background-image: radial-gradient(#888888b3 ,#888888a1 91%, #88888873 );
+    //border-bottom: none;
+    border-bottom: 3px solid var(--player-color);
   }
   tk-card{
     position: absolute;
@@ -38,7 +45,8 @@ tk-player-board{
 tk-player-board.main-player {
   display: grid;
   //width: 27em;
-  margin-right: 1em;
+  margin-right: .5em;
+  padding-right: .5em;
   flex-flow: wrap;
   height: 100%;
   margin-left: 0;
@@ -107,14 +115,8 @@ tk-player-board.small-player-panel {
   margin-left: 1rem;
   border-bottom: 3px solid rgba(97, 93, 89, 0.75);
   padding-bottom:0.3em;
-  background-blend-mode: lighten;
 
-  &.active{
-    background-color: var(--player-color);
-    background-image: radial-gradient(#888888b3 ,#888888a1 91%, #88888873 );
-    //border-bottom: none;
-    border-bottom: 3px solid var(--player-color);
-  }
+
 
   .icon.avatar{
     grid-column: 1;

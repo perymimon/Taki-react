@@ -14,6 +14,9 @@ export function isPlainObject(candidate) {
 }
 
 export function animate(element, animeName, vars, callback) {
+    if(!(element instanceof Element)){
+        throw Error('try to animate none element');
+    }
     return new Promise((resolve) => {
         const withCustomVars = isPlainObject(vars);
         if (withCustomVars) {

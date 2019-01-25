@@ -50,36 +50,7 @@ tk-game.in-game {
     }
   }
 
-  tk-timer {
-    grid-column: 2;
-    //border: 3px var(--player-color) solid;
-    color: var(--current-player-color);
-    color:transparent;
-    //background-color: rgba(131, 131, 131, 0.49);
-    //background-image: radial-gradient(var(--player-color) 0, transparent 1em, var(--player-color));
-    font-size: 3em;
-    border-radius: 50%;
-    width: 4em;
-    height: 4em;
-    justify-self: center;
 
-    i{
-      position: absolute;
-      font-size: 4em;
-      filter: opacity(0.8);
-      margin-left: 0.03em;
-      margin-top: 0.01em;
-      -webkit-text-stroke: 3px var(--current-player-color);
-    }
-
-    tk-text{
-      position: absolute;
-      color: white;
-      margin-top: 1em;
-
-
-    }
-  }
 
   board-game {
     grid-row: 2;

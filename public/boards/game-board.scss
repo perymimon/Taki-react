@@ -35,6 +35,9 @@ board-game {
   &.R {
     --card-color: #e44520;
   }
+  &.M {
+    --card-color: #d1e4e4;
+  }
 
   tk-text.marker {
     position: absolute;
@@ -67,9 +70,47 @@ board-game {
 
     }
 
+  }
 
+  &.plus-2-mode {
+    box-shadow: inset 0 0 5rem var(--card-color);
+    animation: glow 4s ease-out alternate infinite;
+    border-color: var(--card-color);
+
+    tk-text.marker {
+      filter: opacity(1);/*for anime*/
+      -webkit-text-stroke: 2px var(--card-color);
+    }
+
+    @keyframes glow {
+
+      50% {
+        box-shadow: inset 0 0 4rem rgba(255, 255, 255, 0.1), inset 0 0 7rem var(--card-color);
+      }
+
+    }
 
   }
+
+  &.change-color-mode{
+    box-shadow: inset 0 0 5rem var(--card-color);
+    animation: glow 4s ease-out alternate infinite;
+    border-color: var(--card-color);
+
+    tk-text.marker {
+      filter: opacity(1);/*for anime*/
+      -webkit-text-stroke: 2px var(--card-color);
+    }
+
+    @keyframes glow {
+
+      50% {
+        box-shadow: inset 0 0 4rem rgba(255, 255, 255, 0.1), inset 0 0 7rem var(--card-color);
+      }
+
+    }
+  }
+
 
   .deck, .stack {
     position: absolute;
@@ -87,25 +128,20 @@ board-game {
   }
 
   .deck {
-    //position: relative;
-    //align-self: start;
-    //text-align: center;
     display: flex;
     justify-content: center;
     left: 1em;
     bottom: 1em;
 
-    //font-size: 40px;
     overflow: hidden;
     box-sizing: border-box;
-    xbackground-color: #66339985;
     align-items: flex-end;
     padding-bottom: 0.4em;
     text-shadow: 1px 2px 5px grey;
-    transform: translateZ(1px) rotateY(.5turn);
 
-    &.flip-transform:after {
+    &:after {
       backface-visibility: visible;
+      transform: none;
     }
 
     tk-text {

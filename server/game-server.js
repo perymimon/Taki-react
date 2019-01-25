@@ -26,7 +26,8 @@ module.exports = function (io) {
             const token = socket.handshake.query.token;
             const player = game.getPlayer(token);
             messages = player$messages.get(player);
-            socket.emit(SOCKET_EVENTS.INCOMING_MESSAGE, messages);
+            if(messages && messages.length)
+                socket.emit(SOCKET_EVENTS.INCOMING_MESSAGE, messages);
         });
         game.flushMessages();
     },10);
@@ -67,12 +68,12 @@ module.exports = function (io) {
     });
 
     io.on('action:draw-card', (ctx, {amount} = {}) => {
-        const cards = game.drawCards(amount, ctx.token);
+        const cards = game.drawCards(ctx.token, amount);
         ctx.acknowledge(cards);
     });
 
     io.on('action:end-turn', (ctx) => {
-        game.endTurn();
+        game.endTurn(ctx.token);
     });
 
     io.on('action:select-color', (ctx, {color: colorSelected}) => {

@@ -19,9 +19,9 @@ module.exports = Game;
 
 function Game() {
     const emitter = new EventEmitter();
-    const counterDown = new Timer(GAME_SETTING.TURN_COUNTER, function () {
-        // notifyPlayers(SENTENCE.timeEnd);
-        // drawCards()
+    const counterDown = new Timer(GAME_SETTING.TURN_COUNTER,false, true, function () {
+        notifyPlayers(SENTENCE.timeEnd);
+        drawCards()
     });
 
     let deck = taki.getNewDeck();
@@ -55,7 +55,7 @@ function Game() {
             return getPrevTurnBefore(currentIndex);
         },
         mode: GAME_MODE.NATURAL,
-        punishmentCounter: 0,
+        punishment: 0,
         direction: 1,
         victoryRank: [],
         get timeLeft() {
@@ -69,21 +69,29 @@ function Game() {
     };
     const SENTENCE = require('./sentence').factoryMessages(publicState);
 
-    function notifyPlayers(messageFactory, args) {
+    function notifyPlayers(messageFactory, args={}, referrer) {
+        referrer = referrer || currentPlayer;
+        args.player = args.player || referrer;
         var {code, private, public, meta} = messageFactory(args);
         var id = shortId.generate();
-        var other = {id, code, text: public, meta, private: false};
-        var personal = {id, code, text: private, meta, private: true};
 
-        player$messages.get(currentPlayer).push(personal);
-        getOtherPlayer().forEach(function (p, i) {
-            player$messages.get(p).push(other)
-        });
+        if(private){
+            var personal = {id, code, text: private, meta, private: true};
+            player$messages.get(referrer).push(personal);
+        }
+
+        if(public){
+            var other = {id, code, text: public, meta, private: false};
+            getOtherPlayer(referrer).forEach(function (p, i) {
+                player$messages.get(p).push(other)
+            });
+        }
+
 
         emitter.emit(GAME_EVENTS.OUTGOING_MESSAGE, player$messages);
     }
 
-    function getOtherPlayer() {
+    function getOtherPlayer(currentPlayer) {
         return players.filter(p => p !== currentPlayer);
     }
 
@@ -99,23 +107,21 @@ function Game() {
     }
 
     function drawCards(amount = 1, player = currentPlayer) {
-
-
         const punishmentMode = (publicState.mode === GAME_MODE.PLUS_TWO);
         if (punishmentMode) {
-            amount = (publicState.punishmentCounter);
-            publicState.punishmentCounter = 0;
+            amount = (publicState.punishment);
+            publicState.punishment = 0;
         }
 
         const cards = dealCards(amount, player);
 
         if (cards.length === 0) {
-            notifyPlayers(SENTENCE.deckIsEmpty, {amount, player})
+            notifyPlayers(SENTENCE.deckIsEmpty, {amount}, player)
         } else if (punishmentMode) {
-            notifyPlayers(SENTENCE.punishmentCards, {amount, cards, player});
+            notifyPlayers(SENTENCE.punishmentCards, {amount, cards}, player);
         } else {
             /*todo: fix private message when player is not the current player*/
-            notifyPlayers(SENTENCE.drawCards, {amount, cards, player});
+            notifyPlayers(SENTENCE.drawCards, {amount, cards}, player);
         }
 
 
@@ -128,9 +134,7 @@ function Game() {
         return cards;
     }
 
-    function playCard(token, card, lay) {
-
-        if (isPlayerInvalid(token)) return false;
+    function playCard(card, lay) {
 
         card = Card.toCard(card);
 
@@ -174,7 +178,7 @@ function Game() {
 
                     case "W": {
                         publicState.mode = GAME_MODE.PLUS_TWO;
-                        publicState.punishmentCounter += 2;
+                        publicState.punishment += 2;
                         let nextPlayer = moveToNextPlayer();
                         //todo: should be error here currentPlayer == nextPlayer
                         notifyPlayers(SENTENCE.playPlus2, {nextPlayer});
@@ -265,7 +269,7 @@ function Game() {
         },
         drawCards(token, amount, player) {
             if (isPlayerInvalid(token)) return;
-            drawCards(amount, player);
+            return drawCards(amount, player);
         },
         // selectColor(colorSelected) {
         //     if (publicState.mode === GAME_MODE.CHANGE_COLOR) {
@@ -290,11 +294,11 @@ function Game() {
     function isPlayerInvalid(token) {
         const player = getPlayer(token);
         if (player === currentPlayer) {
-            return true;
+            return false;
         }
         /*fix: add referer so player get his message*/
-        notifyPlayers(SENTENCE.notYourTurn, {player});
-        return false;
+        notifyPlayers(SENTENCE.notYourTurn, {player}, player);
+        return true;
     }
 
     function moveToNextPlayer() {

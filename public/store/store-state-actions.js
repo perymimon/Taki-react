@@ -24,11 +24,8 @@ export const initState = {
     },
 
 };
-const counterDown = new Timer(GAME_SETTING.TURN_COUNTER);
 
-function toSec(timePass) {
-    return Math.ceil((GAME_SETTING.TURN_COUNTER - timePass) / 1000);
-}
+
 
 export function storeStateActions(store, socket, actions) {
     let itInitializeState = true;
@@ -42,11 +39,6 @@ export function storeStateActions(store, socket, actions) {
          animePutCards(deleted);*/
     });
 
-    // counterDown.tick(function () {
-    //     const timeLeft = toSec(counterDown.timePass);
-    //     store.setState({timeLeft});
-    // }, 1000);
-
     global.$store = store;
 
     let separatorCounter = 1;
@@ -56,12 +48,6 @@ export function storeStateActions(store, socket, actions) {
     }), GAME_SETTING.ADD_SEPARATOR_TIMEOUT);
 
     socket.on(SOCKET_EVENTS.UPDATE_GAME_STATE, function (partialState) {
-        if ('timeLeft' in partialState) {
-            counterDown.sync(partialState.timeLeft);
-            delete partialState.timeLeft;
-        }
-
-
         store.setState(partialState);
         store.run.updateCurrentStage();
         itInitializeState = false;
@@ -69,7 +55,7 @@ export function storeStateActions(store, socket, actions) {
     });
 
     socket.on(SOCKET_EVENTS.INCOMING_MESSAGE, function (messages) {
-        responseToMessage(messages, store, counterDown);
+        responseToMessage(messages, store);
         var state = store.getState();
         store.setState({messages: [...messages, ...state.messages]});
         addSeparator()
@@ -127,6 +113,10 @@ export function storeStateActions(store, socket, actions) {
                 // player.hand.push(...cards);
                 // store.setState({player});
                 // animeTakeCards(cards, itInitializeState);
+                if(!cards || cards.length === 0) {
+                    const deckCard = document.querySelector('.deck');
+                    animate(deckCard, 'shake');
+                }
             })
         },
         playCard(state, card, cardElement) {

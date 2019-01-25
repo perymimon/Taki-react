@@ -1,0 +1,60 @@
+tk-timer {
+  grid-column: 2;
+  //border: 3px var(--player-color) solid;
+
+  //background-color: rgba(131, 131, 131, 0.49);
+  //background-image: radial-gradient(var(--player-color) 0, transparent 1em, var(--player-color));
+  font-size: 3em;
+  width: 4em;
+  height: 4em;
+  justify-self: center;
+  perspective-origin: center;
+
+  i {
+    position: absolute;
+    font-size: 4em;
+    filter: opacity(0.8);
+    //margin-left: 0.03em;
+    //margin-top: 0.01em;
+    color: var(--current-player-color);
+    transition: none;
+    //-webkit-text-stroke: 3px var(--current-player-color);
+    //background-color: darkred;
+    //transform-origin: 46.9% center;
+    &:before{
+      margin-right: -0.065em;
+    }
+
+    tk-text {
+      position: absolute;
+      color: white;
+      margin-top: .8em;
+      font-size: 0.3em;
+    }
+
+  }
+
+  i:nth-child(2) {
+    color: var(--prev-player-color);
+    transform: rotateY(0.25turn);
+    visibility: hidden;
+  }
+
+
+
+  &.rotate {
+    animation: rotate 300ms ease-out;
+    //i:nth-child(1) {
+    //  color: var(--prev-player-color);
+    //}
+    i:nth-child(2) {
+      visibility: visible;
+    }
+  }
+
+  @keyframes rotate {
+    from {
+      transform: rotateY(-.25turn);
+    }
+  }
+}

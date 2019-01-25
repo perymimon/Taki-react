@@ -1,6 +1,7 @@
 import Icon from '../component/icon'
 import Card from '../directives/card';
 
+
 const get = require('lodash/get');
 import './players-board.scss';
 import {SmallPanelValue} from '../link';
@@ -9,22 +10,23 @@ import React, {Component, Fragment} from "react";
 import ReactDOM, {render} from 'react-dom';
 
 import {connect} from 'unistore/react'
+import {classnames} from '../utils/utils';
 
 
-export default connect('player, players, turn, timeLeft')(
-    function PlayersBoard({player, players, turn, timeLeft}) {
+export default connect('player, players, turn')(
+    function PlayersBoard({player, players, turn}) {
         if (!player) return null;
         // players = players.filter( p => p.token != player.token);
 
         return (
             <player-list>
-                <MainPlayer player={player} timeLeft={timeLeft}/>
+                <MainPlayer player={player} isActive={player.itHisTurn}/>
 
                 {players.map((p) => (
                     <Player player={p}
                             isActive={p.itHisTurn}
-                            key={player.token}
-                            timeLeft={timeLeft}/>
+                            key={p.token}
+                    />
                 ))}
 
             </player-list>
@@ -32,14 +34,19 @@ export default connect('player, players, turn, timeLeft')(
     },
 );
 
-function MainPlayer({player, timeLeft}) {
+function MainPlayer({player, isActive}) {
     const customProperties = {
         '--player-color': player.color,
     };
 
+    const className = classnames({
+        'main-player': true,
+        'active': isActive,
+    });
+
     var hand = player.hand.length;
 
-    return <tk-player-board class="main-player" style={customProperties}>
+    return <tk-player-board class={className} style={customProperties}>
         <Icon className={`${player.avatar} avatar`}/>
         <div className="player-name dramatic-text">{player.name}</div>
         <div className="player-slogan">{player.slogan}</div>
@@ -47,23 +54,25 @@ function MainPlayer({player, timeLeft}) {
     </tk-player-board>
 }
 
-function Player({player, isActive, timeLeft}) {
+function Player({player, isActive}) {
 
     const customProperties = {
         '--player-color': player.color,
     };
-    const className = ['small-player-panel'];
-    if (isActive) className.push('active');
+    const className = classnames({
+        'small-player-panel': true,
+        'active': isActive,
+    });
+    var hand = player.hand;
 
-    var hand =  player.hand;
-
-
-    return <tk-player-board class={className.join(' ')} style={customProperties} id={player.token}>
+    return <tk-player-board class={className} style={customProperties} id={player.token}>
         <Icon className={`${player.avatar} avatar`}/>
         <div className="player-name dramatic-text">{player.name}</div>
         <div className="player-slogan">{player.slogan}</div>
-        <SmallPanelValue className="amount-hand-cards" icon='icon-gambling' value={hand}/>
-        <Card/>
+        <SmallPanelValue className="amount-hand-cards" icon='icon-gambling' value={hand}>
+            <Card/>
+        </SmallPanelValue>
+
     </tk-player-board>
 }
 

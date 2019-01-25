@@ -1,9 +1,7 @@
 module.exports.factoryMessages = function (_state) {
     const state = Object.create(_state);
 
-    state.__defineGetter__('playerName', () => state.players[state.turn].name);
     state.__defineGetter__('player', () => state.players[state.turn]);
-
 
     return {
         setup() {
@@ -62,8 +60,8 @@ module.exports.factoryMessages = function (_state) {
         playPlus2({nextPlayer}) {
             return {
                 code: 5,
-                public: `${nextPlayer.toString()} punishment, must play +2 card or get ${state.punishmentCounter} cards`,
-                private: `${nextPlayer.toString()} punishment, must play +2 card or get ${state.punishmentCounter} cards`,
+                public: `${nextPlayer.toString()} punishment, must play +2 card or get ${state.punishment} cards`,
+                private: `${nextPlayer.toString()} punishment, must play +2 card or get ${state.punishment} cards`,
             }
         },
 

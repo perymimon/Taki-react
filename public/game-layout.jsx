@@ -8,6 +8,7 @@ import PlayerList from './boards/players-board';
 import BoardGame from './boards/game-board';
 import Hand from './component/hand';
 import Sidebar from './boards/side-bar';
+import CounterDown from './boards/counter-down';
 
 import {connect} from 'unistore/src/combined/react'
 import {SmallPanelValue} from './link';
@@ -21,14 +22,7 @@ function Stage({value,timeLeft}) {
             <Fragment>
                 <header className="top-header">
                     <PlayerList/>
-                    <tk-timer className="time-left">
-                        <div>
-                            <i className="icon-stopwatch"/>
-                            <i className="icon-stopwatch"/>
-                        </div>
-
-                        <tk-text class="self-center">{timeLeft}</tk-text>
-                    </tk-timer>
+                    <CounterDown/>
                 </header>
                 <Sidebar/>
 
