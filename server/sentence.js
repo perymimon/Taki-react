@@ -31,7 +31,7 @@ module.exports.factoryMessages = function (_state) {
             const cards = amount>1? 'cards':'card';
             return {
                 code: 102,
-                public: `${state.player.toString()} should take a ${amount} ${cards} but the deck is empty,`,
+                public: `${state.player.toString()} should take a ${amount} ${cards} but the deck is empty`,
                 private: `you should take a ${amount} ${cards} but the deck is empty`,
                 meta: {amount, player: state.player.token},
             }
@@ -111,7 +111,7 @@ module.exports.factoryMessages = function (_state) {
         timeEnd() {
             return {
                 code: 501,
-                public: `${state.player.toString()}, miss is turn`,
+                public: `${state.player.toString()} miss is turn`,
                 private: `${state.player.toString()}, time end`,
             }
         },

@@ -150,4 +150,9 @@ board-game {
 
   }
 
+  &.deck-empty{
+     .deck{
+       mix-blend-mode: multiply;
+     }
+  }
 }

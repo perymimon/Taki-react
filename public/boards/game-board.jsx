@@ -20,6 +20,7 @@ export default connect('stack, deck, mode, punishment')(
             'taki-mode': (mode === GAME_MODE.TAKI),
             'plus-2-mode': (mode === GAME_MODE.PLUS_TWO),
             'change-color-mode': (mode === GAME_MODE.CHANGE_COLOR),
+            'deck-empty':!deck.length
         });
         const markerText = {
             [GAME_MODE.TAKI]: 'TAKI',
