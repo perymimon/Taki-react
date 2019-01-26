@@ -60,11 +60,13 @@
     transform: translate(var(--corrX), var(--corrY)) rotateX(45deg) translateY(var(--corrZ)) rotateY(-180deg);
     transform-origin: bottom center;
     visibility: visible;
+    margin-right: -5rem;
   }
   20% {
     transform: translateY( var(--corrY))
                rotateX(45deg) translateY(var(--corrZ)) rotateY(-180deg) translateZ(-2em) rotateX(25deg);
     transform-origin: bottom center;
+    margin-right: 0;
   }
   70% {
     transform: translateY( var(--corrY))  translateZ(2em);
