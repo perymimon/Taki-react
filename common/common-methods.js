@@ -2,7 +2,6 @@ const {GAME_MODE} = require('./game-consts');
 
 exports.isCardValid = isCardValid;
 
-
 function isCardValid(state, card) {
     /*if this is first card any card valid*/
     if (state.stack.topCards[0]){

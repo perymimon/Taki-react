@@ -39,6 +39,10 @@ export function storeStateActions(store, socket, actions) {
          animePutCards(deleted);*/
     });
 
+    function itIsYourTurn(){
+        const state = store.getState();
+        return state.turn === state.player.index;
+    }
     global.$store = store;
 
     let separatorCounter = 1;
@@ -121,7 +125,7 @@ export function storeStateActions(store, socket, actions) {
         },
         playCard(state, card, cardElement) {
 
-            if (!isCardValid(state, card)) {
+            if (!isCardValid(state, card) || !itIsYourTurn()) {
                 animate(cardElement, 'shake');
             } else {
                 card.layRotate = random(-40, 40);

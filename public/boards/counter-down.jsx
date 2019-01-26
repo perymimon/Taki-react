@@ -19,20 +19,25 @@ counterDown.tick(function () {
     const textEl = document.querySelector('tk-timer tk-text');
     lastTimeLeft = timeLeft;
     textEl && (textEl.innerText = timeLeft);
+    const progress = counterDown.progress;
+    ticksCallback.forEach( cb => cb(progress));
 }, 200);
-//
+
 let lastTurn = -1;
 let lastTimeLeft = 0;
+const ticksCallback = new Set();
+
 export default connect('timeLeft, turn')(
-    function CounterDown({timeLeft, turn}) {
+    function CounterDown({timeLeft, turn, onTick}) {
         // const classState = classnames({});
+        onTick && ticksCallback.add(onTick);
         const turnMove = (lastTurn !== turn) || (lastTimeLeft < timeLeft);
         console.log(timeLeft);
         counterDown.sync(timeLeft);
         if (turnMove) {
             const tkTimer = document.querySelector('tk-timer');
             tkTimer && animate(tkTimer, 'rotate');
-            requestAnimationFrame( _=> {
+            requestAnimationFrame(_ => {
                 const textEl = document.querySelector('tk-timer tk-text:nth-child(2)');
                 textEl && (textEl.innerText = lastTimeLeft);
             })

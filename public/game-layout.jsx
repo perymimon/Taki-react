@@ -14,7 +14,7 @@ import {connect} from 'unistore/src/combined/react'
 import {SmallPanelValue} from './link';
 
 
-function Stage({value,timeLeft}) {
+function Stage({value,timeLeft, onTick}) {
     const stages ={
         [GAME_STAGE.PLAYER_SIGNIN]:<SignInBoard/>,
         [GAME_STAGE.WELCOME]:<WelcomeBoard path="/welcome"/>,
@@ -22,7 +22,7 @@ function Stage({value,timeLeft}) {
             <Fragment>
                 <header className="top-header">
                     <PlayerList/>
-                    <CounterDown/>
+                    <CounterDown onTick={onTick}/>
                 </header>
                 <Sidebar/>
 
@@ -32,14 +32,17 @@ function Stage({value,timeLeft}) {
     };
     return stages[value];
 }
-
+// var timeLeftProgress = 100;
+// function updateLeftTimeVar(leftTimeProgress){
+//     timeLeftProgress = leftTimeProgress;
+// }
 
 export default connect('isOnline, player, gameInProgress, stage, timeLeft, players, turn, prevTurn')(
     function Game({isOnline, player, gameInProgress, stage, timeLeft, players,turn, prevTurn}) {
         const customProperties = {
             '--player-color': get(player,'color'),
             '--current-player-color':get(players,`[${turn}].color`),
-            '--prev-player-color':get(players,`[${prevTurn}].color`)
+            '--prev-player-color':get(players,`[${prevTurn}].color`),
         };
         if (!isOnline)
             return <Loading/>;
@@ -49,7 +52,7 @@ export default connect('isOnline, player, gameInProgress, stage, timeLeft, playe
                  myturn={ get(player,'itHisTurn') + ''}
                  style={customProperties}
             >
-                <Stage value={stage} timeLeft={timeLeft}/>
+                <Stage value={stage} timeLeft={timeLeft} />
             </tk-game>
         )
     }

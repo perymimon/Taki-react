@@ -5,9 +5,7 @@ import {classnames} from '../utils/utils';
 
 
 export default function Card({card, onClick, className, children}) {
-    if(!card) return null;
-
-    const {layRotate,layOrigin} = card;
+    const {layRotate,layOrigin} = card || {};
     const style = layRotate && layOrigin && {
         transform: `rotate(${layRotate}deg)`,
         transformOrigin: `${layOrigin[0]}% ${layOrigin[1]}%`,

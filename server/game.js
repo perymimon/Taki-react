@@ -94,9 +94,14 @@ function Game() {
     function dealCards(amount, player) {
         if (deck.length < amount) {
             let returnStack = stack.splice(1);
-            deck.push(...returnStack.sort(_ => Math.random() - .5));
+            deck.push(...returnStack.sort( _ => Math.random() - .5));
         }
         const cards = deck.splice(0, amount);
+        cards.forEach(c =>{
+            delete c.layOrigin;
+            delete c.layRotate;
+        });
+
         player.hand.push(...cards);
         return cards;
     }

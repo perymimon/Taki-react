@@ -94,8 +94,11 @@ board-game {
 
   &.change-color-mode{
     box-shadow: inset 0 0 5rem var(--card-color);
-    animation: glow 4s ease-out alternate infinite;
+    animation: glow 4s ease-in-out alternate infinite;
     border-color: var(--card-color);
+
+    background-image: conic-gradient(#f008, #ff08, #0f08, #0ff8, #f008), radial-gradient(#0008, #fff8);
+    background-blend-mode: multiply;
 
     tk-text.marker {
       filter: opacity(1);/*for anime*/

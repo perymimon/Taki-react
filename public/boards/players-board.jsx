@@ -17,12 +17,12 @@ export default connect('player, players, turn')(
     function PlayersBoard({player, players, turn}) {
         if (!player) return null;
         // players = players.filter( p => p.token != player.token);
-
+        const otherPlayer = players.filter( p=> p.token !== player.token);
         return (
             <player-list>
                 <MainPlayer player={player} isActive={player.itHisTurn}/>
 
-                {players.map((p) => (
+                {otherPlayer.map((p) => (
                     <Player player={p}
                             isActive={p.itHisTurn}
                             key={p.token}
@@ -42,6 +42,7 @@ function MainPlayer({player, isActive}) {
     const className = classnames({
         'main-player': true,
         'active': isActive,
+        // 'drop-shadow':isActive,
     });
 
     var hand = player.hand.length;
@@ -50,7 +51,9 @@ function MainPlayer({player, isActive}) {
         <Icon className={`${player.avatar} avatar`}/>
         <div className="player-name dramatic-text">{player.name}</div>
         <div className="player-slogan">{player.slogan}</div>
-        <SmallPanelValue className="amount-hand-cards" icon={'icon-gambling'} value={hand}/>
+        <SmallPanelValue className="amount-hand-cards" icon={'icon-gambling'} value={hand}>
+            <Card/>
+        </SmallPanelValue>
     </tk-player-board>
 }
 
@@ -62,6 +65,7 @@ function Player({player, isActive}) {
     const className = classnames({
         'small-player-panel': true,
         'active': isActive,
+        // 'drop-shadow':isActive,
     });
     var hand = player.hand;
 
