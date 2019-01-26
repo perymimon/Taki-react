@@ -20,7 +20,8 @@ export default connect('stack, deck, mode, punishment')(
             'taki-mode': (mode === GAME_MODE.TAKI),
             'plus-2-mode': (mode === GAME_MODE.PLUS_TWO),
             'change-color-mode': (mode === GAME_MODE.CHANGE_COLOR),
-            'deck-empty':!deck.length
+            'deck-empty':!deck.length,
+            [get(topCard, 'color')]:get(topCard, 'color')
         });
         const markerText = {
             [GAME_MODE.TAKI]: 'TAKI',
@@ -28,11 +29,11 @@ export default connect('stack, deck, mode, punishment')(
             [GAME_MODE.CHANGE_COLOR]: 'COLOR',
         }
         return (
-            <board-game class={`${classState}  ${get(topCard, 'card.color')}`}>
+            <board-game class={classState}>
                 <tk-text class="marker">{markerText[mode]}</tk-text>
                 <tk-card class="stack self-center">
-                    {topStackCards.reverse().map(({card, lay}) => {
-                        return <Card card={card} lay={lay} key={card.id}/>
+                    {topStackCards.reverse().map((card) => {
+                        return <Card card={card} key={card.id}/>
                     })}
                 </tk-card>
 

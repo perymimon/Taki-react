@@ -27,7 +27,7 @@ export function animate(element, animeName, vars, callback) {
         element.classList.add('animated', animeName);
 
         function animationEndListener(event) {
-            if (event.animationName === animeName) {
+            if (event.animationName === animeName && event.target === element) {
                 element.classList.remove('animated', animeName);
                 element.removeEventListener('animationend', animationEndListener);
 

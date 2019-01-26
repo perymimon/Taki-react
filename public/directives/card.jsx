@@ -4,10 +4,13 @@ import get from 'lodash/get'
 import {classnames} from '../utils/utils';
 
 
-export default function Card({card, onClick, className, children, lay}) {
-    const style = lay && {
-        transform: `rotate(${lay.rotate}deg)`,
-        transformOrigin: `${lay.origin[0]}% ${lay.origin[1]}%`,
+export default function Card({card, onClick, className, children}) {
+    if(!card) return null;
+
+    const {layRotate,layOrigin} = card;
+    const style = layRotate && layOrigin && {
+        transform: `rotate(${layRotate}deg)`,
+        transformOrigin: `${layOrigin[0]}% ${layOrigin[1]}%`,
     };
     // const [anime, setAnime] = useState('');
     const state = {

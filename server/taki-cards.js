@@ -21,8 +21,11 @@ class Card {
         return `{${this.symbol}:${this.color}}`
     }
 
-    static toCard({symbol, color, set}) {
-        return new Card(symbol, color, set)
+    static toCard({symbol, color, set, layRotate, layOrigin}) {
+        const card = new Card(symbol, color, set);
+        card.layRotate = layRotate;
+        card.layOrigin = layOrigin;
+        return card;
     }
 }
 

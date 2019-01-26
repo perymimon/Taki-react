@@ -11,6 +11,16 @@ hand-game{
   overflow-y: auto;
   margin-top: 2em;
   //padding-top: 2em;
+  //scroll-snap-type: y proximity;
+  scroll-behavior: smooth;
+
+  //tk-card{
+  //  scroll-snap-align: start;
+  //}
+
+  .sorting{
+    float: right;
+  }
 
   .title{
     color: white;

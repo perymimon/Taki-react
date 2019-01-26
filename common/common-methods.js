@@ -6,7 +6,7 @@ exports.isCardValid = isCardValid;
 function isCardValid(state, card) {
     /*if this is first card any card valid*/
     if (state.stack.topCards[0]){
-        const lastCard = state.stack.topCards[0].card;
+        const lastCard = state.stack.topCards[0];
 
         switch (state.mode) {
             case GAME_MODE.NATURAL:

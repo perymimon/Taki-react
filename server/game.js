@@ -60,12 +60,7 @@ function Game() {
         victoryRank: [],
         get timeLeft() {
             return (GAME_SETTING.TURN_COUNTER - counterDown.timePass)
-        },
-        lastMove: {
-            card: null,
-            player: null,
-        },
-
+        }
     };
     const SENTENCE = require('./sentence').factoryMessages(publicState);
 
@@ -134,12 +129,12 @@ function Game() {
         return cards;
     }
 
-    function playCard(card, lay) {
+    function playCard(card) {
 
         card = Card.toCard(card);
 
         if (isCardValid(publicState, card)) {
-            stack.unshift({card, lay});
+            stack.unshift(card);
 
             /*remove card from player hand*/
             currentPlayer.hand = currentPlayer.hand
@@ -280,9 +275,9 @@ function Game() {
         //         emitter.emit(GAME_EVENTS.STATE_UPDATE);
         //     }
         // },
-        playCard(token, card, lay) {
+        playCard(token, card) {
             if (isPlayerInvalid(token)) return false;
-            playCard(card, lay);
+            playCard(card);
         },
 
     };

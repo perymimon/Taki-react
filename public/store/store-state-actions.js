@@ -120,19 +120,18 @@ export function storeStateActions(store, socket, actions) {
             })
         },
         playCard(state, card, cardElement) {
-            const lay = {
-                rotate: random(-40, 40),
-                origin: [random(30, 70), random(30, 70)],
-            };
+
             if (!isCardValid(state, card)) {
                 animate(cardElement, 'shake');
             } else {
+                card.layRotate = random(-40, 40);
+                card.layOrigin = [random(30, 70), random(30, 70)];
                 const stack = Object.assign({}, state.stack);
-                stack.topCards.unshift({card, lay});
+                stack.topCards.unshift(card);
                 store.setState({stack});
                 animePutCards([card]);
             }
-            socket.emit('action:play-card', {card, lay}, function (isSuccess) {
+            socket.emit('action:play-card', {card}, function (isSuccess) {
 
             });
         }

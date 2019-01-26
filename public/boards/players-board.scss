@@ -19,7 +19,8 @@ player-list {
 
 tk-player-board{
   color: white;
-  background-blend-mode: lighten;
+  background-blend-mode: color;
+
 
   .time-left {
     &[value="0"] {
@@ -27,8 +28,12 @@ tk-player-board{
     }
   }
   &.active{
-    background-color: var(--player-color);
-    background-image: radial-gradient(#888888b3 ,#888888a1 91%, #88888873 );
+    //background-color: var(--player-color);
+    background-image:
+            radial-gradient(green, green),
+            //radial-gradient( transparent, var(--player-color)),
+            radial-gradient(transparent, rgba(255,255, 255, 0)),
+  ;
     //border-bottom: none;
     border-bottom: 3px solid var(--player-color);
   }
