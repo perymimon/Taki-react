@@ -10,7 +10,7 @@
     transform-origin: bottom center;
   }
   20% {
-    transform: translateY(var(--corrZ)) rotateX(-45deg) translate(var(--corrX), var(--corrY)) translateZ(1em);
+    transform: translateY(var(--corrZ)) rotateX(-45deg) translateX(var(--corrX)) translateZ(1em);
     transform-origin: bottom center;
   }
   70% {
