@@ -1,4 +1,4 @@
-import {connect} from 'unistore/react';
+import {connect} from '../link';
 import React, {Component} from "react";
 import './side-bar.scss'
 import Card from '../directives/card'

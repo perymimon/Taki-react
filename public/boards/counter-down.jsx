@@ -1,4 +1,4 @@
-import {connect} from 'unistore/react';
+import {connect} from '../link';
 import React, {Component} from "react";
 import './counter-down.scss';
 import {Timer} from '../../common/Timer';
@@ -32,7 +32,6 @@ export default connect('timeLeft, turn')(
         // const classState = classnames({});
         onTick && ticksCallback.add(onTick);
         const turnMove = (lastTurn !== turn) || (lastTimeLeft < timeLeft);
-        console.log(timeLeft);
         counterDown.sync(timeLeft);
         if (turnMove) {
             const tkTimer = document.querySelector('tk-timer');

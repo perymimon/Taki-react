@@ -9,7 +9,7 @@ import {SmallPanelValue} from '../link';
 import React, {Component, Fragment} from "react";
 import ReactDOM, {render} from 'react-dom';
 
-import {connect} from 'unistore/react'
+import {connect} from '../link'
 import {classnames} from '../utils/utils';
 
 

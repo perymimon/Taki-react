@@ -123,3 +123,22 @@
   }
 
 }
+
+.sort-hand-cards{
+  animation: sort-hand-cards 1s ease-out;
+  //animation-delay: var(--anim-delay);
+
+  @keyframes sort-hand-cards {
+
+    from {
+      transform:  translate(var(--corrX), var(--corrY));
+      transform-origin: bottom center;
+    }
+
+    50% {
+      transform:  translateX(var(--corrX));
+      transform-origin: bottom center;
+    }
+
+  }
+}

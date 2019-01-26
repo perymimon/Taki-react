@@ -5,7 +5,7 @@ import {store, actions} from '../store/store'
 import Icon from '../component/icon'
 import get from 'lodash/get';
 
-import {connect} from 'unistore/react';
+import {connect} from '../link';
 
 
 export default connect('player, gameInProgress')(

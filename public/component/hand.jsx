@@ -1,32 +1,33 @@
 import React, {Component, useState} from "react";
-import {TransitionGroup} from 'react-transition-group'
-import Transition from 'react-transition-group/Transition';
-import {Card} from '../link'
+import {Card, connect} from '../link'
 import './hand.scss';
 import './select-color.scss';
-import {connect} from 'unistore/react';
 
 import {store, actions} from '../store/store';
 
 import {GAME_MODE} from '../../common/game-consts';
+import {animeSortHandCard} from '../utils/measuremens';
 
 
-function updateSortFn(event) {
-    const sortKey = event.target.value;
-    const [key, inv] = sortKey.split(' ');
+const sortOrder = new Set();
 
-    if (!inv) {
-        sortFn = function (a, b) {
-            return a[key] > b[key] ? 1 : -1;
-        }
-    } else {
-        sortFn = function (a, b) {
-            return b[key] > a[key] ? 1 : -1;
-        }
-    }
+function addToSort(key) {
+    sortOrder.delete(key);
+    sortOrder.add(key);
 }
 
-let sortFn = (a, b) => a;
+function sort(objects) {
+    sortOrder.forEach(function (sortKey) {
+        const [key, inv] = sortKey.split(' ');
+        if(inv)
+            objects.sort((a, b) => b[key] > a[key] ? 1 : -1);
+        else
+            objects.sort((a, b) => a[key] > b[key] ? 1 : -1);
+    });
+    return objects;
+}
+
+// let sortFn = (a, b) => a;
 
 function handleCardClick(card) {
     return function (event) {
@@ -35,9 +36,16 @@ function handleCardClick(card) {
 }
 
 export default connect('turn, players, player, mode')(
-    function Hand({turn, players, player, mode}) {
+    function Hand({turn, players, player, mode, forceUpdate}) {
 
-        const playerCardHandSorted = player.hand.slice().sort(sortFn);
+        const playerCardHandSorted = sort(player.hand.slice());
+
+        function updateSort(event) {
+            const sortKey = event.target.value;
+            addToSort(sortKey);
+            forceUpdate();
+            animeSortHandCard(playerCardHandSorted);
+        }
 
         return (
             <hand-game style={{color: player.color}}>
@@ -51,9 +59,9 @@ export default connect('turn, players, player, mode')(
                     {player.hand.length} cards
                     <div className="sorting">
                         <tk-text>sort:</tk-text>
-                        <button value="symbol" onClick={updateSortFn}>by number</button>
-                        <button value="color" onClick={updateSortFn}>by color</button>
-                        <button value="symbol inv" onClick={updateSortFn}>by number descending</button>
+                        <button value="symbol" onClick={updateSort}>by symbol</button>
+                        <button value="color" onClick={updateSort}>by color</button>
+                        <button value="symbol inv" onClick={updateSort}>by symbol descending</button>
                     </div>
                 </div>
                 {

@@ -1,4 +1,4 @@
-import {connect} from 'unistore/react';
+import {connect} from '../link';
 import React, {Component} from "react";
 import './player-name.scss'
 

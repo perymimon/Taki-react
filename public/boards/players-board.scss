@@ -21,6 +21,7 @@ player-list {
 tk-player-board {
   color: white;
   --time-left: 10%;
+  filter: grayscale(.7);
 
 
   .time-left {
@@ -41,14 +42,14 @@ tk-player-board {
     //linear-gradient(to bottom, transparent 95%, var(--player-color)),
     //linear-gradient(to bottom, transparent 90%,  var(--player-color))
   ;
-    box-shadow: 0 0 .3em var(--player-color), 0 .3em 0.4em 2px #ccc8;
-    transform: translate3d(0em,1em,1em) scale(1.4);
+    //box-shadow: 0 0 .3em var(--player-color), 0 .3em 0.4em 2px #ccc8;
+    //transform: translate3d(0em,1em,1em) scale(1.4);
     transform-origin: left top;
     //conic-gradient(#0000 30 %, var(--player-color) 40 % 10 %),
     //radial-gradient( to top, var(--player-color), var(--player-color)),
     //radial-gradient(rgba(0, 0, 0, 0.8), rgba(255, 255, 255, 0.5)),
-  ;
-
+  //;
+    filter: grayscale(0);
     //border-bottom: none;
     border-bottom: 3px solid var(--player-color);
   }

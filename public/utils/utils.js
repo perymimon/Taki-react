@@ -49,7 +49,6 @@ export function animate(element, animeName, vars, callback) {
     })
 }
 
-
 export function resetTransform(element, overwrite = {}) {
     var {transform, transformOrigin, transition} = element.style;
 
@@ -82,9 +81,13 @@ export function resetTransforms(elements, overwrite) {
     }
 }
 
-export function rectDiff(from, to) {
+export function elementRectDiff(from, to) {
     var r1 = from.getBoundingClientRect();
     var r2 = to.getBoundingClientRect();
+    return rectDiff(r1, r2);
+}
+
+export function rectDiff(r1, r2){
     return {
         x: r2.x - r1.x,
         y: r2.y - r1.y,
@@ -93,6 +96,7 @@ export function rectDiff(from, to) {
         right: r2.right - r1.right,
         left: r2.left - r1.left,
     };
+
 }
 
 // export function arrayDiff(prev=[], next=[], keyExp) {

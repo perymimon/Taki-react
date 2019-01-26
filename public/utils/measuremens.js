@@ -1,18 +1,18 @@
-import {animate, rectDiff, resetTransform, resetTransforms} from './utils';
+import {animate, elementRectDiff, rectDiff, resetTransform, resetTransforms} from './utils';
 
 
 export function measurementPileToCard(pileCards, handCard, throwBottom = true) {
     const gameBoard = document.querySelector('board-game');
     const restores = resetTransforms([pileCards, handCard, gameBoard]);
 
-    const {bottom, top} = rectDiff(pileCards, gameBoard);
+    const {bottom, top} = elementRectDiff(pileCards, gameBoard);
 
     Object.assign(pileCards.style, {
         transform: `translateY(${bottom}px)`,
     });
 
 
-    const {x, y, right} = rectDiff(pileCards, handCard);
+    const {x, y, right} = elementRectDiff(pileCards, handCard);
 
     restores();
 
@@ -61,13 +61,14 @@ export function animeTakeCards(cards, initialize) {
                     '--anim-delay': (i * 50) + 'ms',
                 });
             });
+
             Promise.all(animesEnds).then(function () {
                 handCards.style.removeProperty('overflow');
             }).then(resolve)
         });
     })
 
-};
+}
 
 
 export function animeOtherTakeCard(playerToken, callback) {
@@ -95,14 +96,14 @@ export function animeOtherPutCard(player, callback) {
         const gameBoard = document.querySelector('board-game');
         const restores = resetTransforms([stackCard, gameBoard]);
 
-        const {bottom, top} = rectDiff(stackCard, gameBoard);
+        const {bottom, top} = elementRectDiff(stackCard, gameBoard);
 
         Object.assign(stackCard.style, {
             transform: `translateY(${bottom}px) scale(0.4)`,
             transformOrigin: 'bottom center',
         });
 
-        const {x, y} = rectDiff(stackCard, cardElement);
+        const {x, y} = elementRectDiff(stackCard, cardElement);
 
         restores();
 
@@ -113,4 +114,29 @@ export function animeOtherPutCard(player, callback) {
         }, callback);
     })
 
+}
+
+export function animeSortHandCard(cards){
+    return new Promise(function (resolve) {
+        const originalRects = cards.map( card =>{
+            const handCard = document.querySelector(`hand-game [id="${card.id}"]`);
+            return handCard.getBoundingClientRect();
+        });
+
+        requestAnimationFrame( _=>{
+            const animusEnds = cards.map( (card,i) =>{
+                const handCard = document.querySelector(`hand-game [id="${card.id}"]`);
+                const rect = handCard.getBoundingClientRect();
+                const {x,y} = rectDiff(originalRects[i], rect);
+                return animate(handCard,'sort-hand-cards',{
+                    '--corrX': 1 * x + 'px',
+                    '--corrY': 1 * y + 'px',
+                    '--anim-delay': (i * 50) + 'ms',
+                })
+            });
+
+            Promise.all(animusEnds).then(resolve);
+
+        })
+    })
 }
