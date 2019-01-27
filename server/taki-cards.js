@@ -1,3 +1,4 @@
+const {GAME_SETTING} = require('../common/game-consts');
 /*
 T - Taki
 S - Stop
@@ -13,6 +14,7 @@ class Card {
             symbol,
             color,
             set,
+            value: isNaN(symbol)? GAME_SETTING.VALUE_OF_SPECIAL_CARDS: +symbol,
             id: [symbol, color, set].join(''),
         })
     }

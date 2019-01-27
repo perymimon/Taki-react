@@ -1,9 +1,7 @@
-import {connect} from '../link';
+import {connect, PlayerName} from '../link';
 import React, {Component} from "react";
 import './side-bar.scss'
 import Card from '../directives/card'
-import PlayerName from '../directives/player-name'
-
 
 const cardPropsExp = /{(\w):(\w)}/;
 const tokensExp = /({\w:\w})|(\[\w+?])/;

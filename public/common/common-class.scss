@@ -59,6 +59,7 @@
   filter: drop-shadow(1em 4em 1em #272b2b);
 }
 
+
 .board {
   display: flex;
   flex-direction: column;
@@ -110,6 +111,27 @@
   * {
     transform-style: preserve-3d;
   }
+}
+
+.blend-mode-multiply {
+  mix-blend-mode: multiply;
+
+  * {
+    mix-blend-mode: multiply;
+  }
+}
+
+.blend-mode-screen {
+
+  //mix-blend-mode: saturation;
+  mix-blend-mode: lighten;
+  //mix-blend-mode: multiply;
+
+  //* {
+  ////  //mix-blend-mode: luminosity;
+  //  mix-blend-mode: lighten;
+  ////  //background-blend-mode: lighten;
+  //}
 }
 
 .rotateY75{

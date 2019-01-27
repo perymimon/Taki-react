@@ -19,7 +19,7 @@ module.exports = Game;
 
 function Game() {
     const emitter = new EventEmitter();
-    const counterDown = new Timer(GAME_SETTING.TURN_COUNTER,false, true, function () {
+    const counterDown = new Timer(GAME_SETTING.TURN_COUNTER, false, true, function () {
         notifyPlayers(SENTENCE.timeEnd);
         drawCards()
     });
@@ -35,6 +35,7 @@ function Game() {
 
     const publicState = {
         gameInProgress: false,
+        gameEnd:false,
         get players() {/*return public player info*/
             /*todo:change player to inerihete from common object*/
             return players.map(p => p.public);
@@ -57,25 +58,26 @@ function Game() {
         mode: GAME_MODE.NATURAL,
         punishment: 0,
         direction: 1,
+        round: 0,
         victoryRank: [],
         get timeLeft() {
             return (GAME_SETTING.TURN_COUNTER - counterDown.timePass)
-        }
+        },
     };
     const SENTENCE = require('./sentence').factoryMessages(publicState);
 
-    function notifyPlayers(messageFactory, args={}, referrer) {
+    function notifyPlayers(messageFactory, args = {}, referrer) {
         referrer = referrer || currentPlayer;
         args.player = args.player || referrer;
         var {code, private, public, meta} = messageFactory(args);
         var id = shortId.generate();
 
-        if(private){
+        if (private) {
             var personal = {id, code, text: private, meta, private: true};
             player$messages.get(referrer).push(personal);
         }
 
-        if(public){
+        if (public) {
             var other = {id, code, text: public, meta, private: false};
             getOtherPlayer(referrer).forEach(function (p, i) {
                 player$messages.get(p).push(other)
@@ -94,10 +96,10 @@ function Game() {
     function dealCards(amount, player) {
         if (deck.length < amount) {
             let returnStack = stack.splice(1);
-            deck.push(...returnStack.sort( _ => Math.random() - .5));
+            deck.push(...returnStack.sort(_ => Math.random() - .5));
         }
         const cards = deck.splice(0, amount);
-        cards.forEach(c =>{
+        cards.forEach(c => {
             delete c.layOrigin;
             delete c.layRotate;
         });
@@ -192,8 +194,9 @@ function Game() {
 
                     case "D": {
                         publicState.direction = publicState.direction > 0 ? -1 : +1;
-                        notifyPlayers(SENTENCE.playChangeDirection)
+                        notifyPlayers(SENTENCE.playChangeDirection);
                         moveToNextPlayer();
+                        break;
                     }
 
                     default: {
@@ -207,8 +210,11 @@ function Game() {
             }
 
             if (checkVictoryCondition()) {
-                publicState.victoryRank.push(currentPlayer.id);
-                players.splice(currentIndex, 1);
+                // publicState.victoryRank.push(currentPlayer.token);
+                calcualtePlayersRanks();
+                if(publicState.round >= GAME_SETTING.NUMBER_OF_ROUND){
+                    endGame()
+                }
             }
 
             emitter.emit(GAME_EVENTS.STATE_UPDATE);
@@ -218,24 +224,47 @@ function Game() {
             return false;
         }
     }
+    function calcualtePlayersRanks(){
+        currentPlayer.rank += GAME_SETTING.VICTORY_VALUE;
+        players.forEach(player => {
+            player.rank += getPlayerRank(player);
+        });
+    }
+
+    function getPlayerRank(player) {
+        return player.hand.reduce(function (acc, card) {
+            return acc + card.value;
+        }, 0)
+    }
+
+    function endGame(){
+        publicState.gameInProgress = false;
+        publicState.gameEnd = true;
+    }
 
     /** API **/
     return {
         on: emitter.on.bind(emitter),
-        setup() {
+        setup(isNewRound) {
+            deck = taki.getNewDeck();
+            stack.length = 0;
             players.sort(_ => Math.random() - .5).forEach((player, i) => {
+                player.hand.length = 0;
                 dealCards(GAME_SETTING.INIT_CARD_EACH_PLAYER, player);
                 player.index = i;
             });
             // Object.freeze(players);
+            publicState.round++;
             publicState.gameInProgress = true;
             moveToNextPlayer();
-            notifyPlayers(SENTENCE.setup);
+            notifyPlayers(isNewRound ? SENTENCE.newRound : SENTENCE.setup);
+
             emitter.emit(GAME_EVENTS.STATE_UPDATE);
         },
         joinPlayer(player) {
             if (this.isPlayerInGame(player.token)) return false;
             player.index = players.length;
+            player.rank = 0;
             player.__defineGetter__('itHisTurn', function () {
                 return this.index === currentIndex
             });
@@ -267,9 +296,13 @@ function Game() {
         endTurn() {
             drawCards(0);
         },
-        drawCards(token, amount, player) {
+        drawCards(token, amount) {
             if (isPlayerInvalid(token)) return;
-            return drawCards(amount, player);
+            if(publicState.mode === GAME_MODE.TAKI) {
+                notifyPlayers(SENTENCE.drawCardInTakiMode);
+                return false;
+            }
+            return drawCards(amount);
         },
         // selectColor(colorSelected) {
         //     if (publicState.mode === GAME_MODE.CHANGE_COLOR) {

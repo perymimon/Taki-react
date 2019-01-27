@@ -7,7 +7,7 @@ exports.GAME_MODE = {
 
 exports.SOCKET_EVENTS = {
     UPDATE_GAME_STATE: 'update-game-state',
-    INCOMING_MESSAGE:'incoming-message',
+    INCOMING_MESSAGE: 'incoming-message',
     CONNECTION: 'connection',
     LOGIN: 'login',
     LOGGED_IN: 'logged-in',
@@ -28,10 +28,14 @@ exports.GAME_STAGE = {
     PLAYER_SIGNIN: 'signin',
     WELCOME: 'welcome',
     GAME_TABLE: 'in-game',
+    VICTORY:'victory'
 };
 
 exports.GAME_SETTING = {
-   TURN_COUNTER: 60 * 1000,
-   ADD_SEPARATOR_TIMEOUT:1000,
-   INIT_CARD_EACH_PLAYER:8
-} ;
+    TURN_COUNTER: 60 * 1000,
+    ADD_SEPARATOR_TIMEOUT: 1000,
+    INIT_CARD_EACH_PLAYER: 8,
+    NUMBER_OF_ROUND: 6,
+    VALUE_OF_SPECIAL_CARDS: 10,
+    VICTORY_VALUE: -100,
+};

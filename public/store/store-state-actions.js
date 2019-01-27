@@ -150,11 +150,14 @@ export function storeStateActions(store, socket, actions) {
         ,
 
         updateCurrentStage(state) {
-            if (state.playerInGame) {
+            if(state.gameEnd){
+                store.setState({stage: GAME_STAGE.VICTORY})
+            }else if (state.playerInGame) {
                 if (state.gameInProgress) {
-                    store.setState({stage: GAME_STAGE.GAME_TABLE})
+                    store.setState({stage: GAME_STAGE.GAME_TABLE});
+                    // store.setState({stage: GAME_STAGE.VICTORY});
                 } else {
-                    store.setState({stage: GAME_STAGE.WELCOME})
+                    store.setState({stage: GAME_STAGE.WELCOME});
                 }
             } else {
                 store.setState({stage: GAME_STAGE.PLAYER_SIGNIN});

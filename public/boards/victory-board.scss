@@ -1,0 +1,39 @@
+.victory-board{
+  display: flex;
+  flex-direction: column;
+  justify-items: center;
+  align-items: center;
+  height: 100vh;
+  //background-image: url("../assets/etc/background2.png");
+
+  transform-style: flat;
+
+  *{
+    transform-style:flat;
+  }
+  table tr{
+
+  }
+  table tr td{
+    font-size: 2rem;
+    &:nth-child(1){
+      color: #01bef1;
+    }
+    &:nth-child(3){
+      color: #9d5c4d;
+    }
+
+  }
+
+  canvas{
+    position: absolute;
+    isolation: auto;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+    opacity: 0.8;
+  }
+
+}

@@ -11,6 +11,13 @@ module.exports.factoryMessages = function (_state) {
                 private: `new game, ${state.player.toString()} you begin by playing any card`,
             }
         },
+        newRound(){
+            return {
+                code: 1,
+                public: `new round, ${state.player.toString()} begin by playing card`,
+                private: `new round, ${state.player.toString()} you begin by playing any card`,
+            }
+        },
         drawCards({amount, cards, player}) {
             return {
                 code: 100,
@@ -120,6 +127,13 @@ module.exports.factoryMessages = function (_state) {
                 code: 502,
                 public: ``,
                 private: `${player.toString()} not your turn to play`,
+            }
+        },
+        drawCardInTakiMode({player}){
+            return {
+                code: 503,
+                public: ``,
+                private: `${player.toString()} you play TAKI. end your turn by click "End Turn" `,
             }
         }
 
