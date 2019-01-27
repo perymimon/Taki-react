@@ -1,4 +1,3 @@
-const PORT = 8080;
 /*basic*/
 const path = require('path');
 const http = require('http');
@@ -48,7 +47,9 @@ lobbyIO.on('connection', function (sock, data) {
 
 require('./game-server')(lobbyIO,app);
 
-app.listen(process.env.PORT || PORT, function () {
+const PORT = process.env.PORT || 8080;
+
+app.listen(PORT, function () {
     console.log('Server listening at port %d', PORT);
 });
 

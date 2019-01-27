@@ -24,7 +24,7 @@ store.subscribe = function(fn){
 const token = document.cookie.replace(/.*token=(\w+).*/, '$1');
 console.log('player token:',token);
 
-const socket = io('localhost:8080', {query: {token: token, autoConnect: false}});
+const socket = io('', {query: {token: token, autoConnect: false}});
 
 /* bind storeStateActions to store's state */
 const boundActions = storeStateActions(store, socket, actions);
