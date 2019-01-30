@@ -1,6 +1,7 @@
 /*basic*/
 const path = require('path');
 const http = require('http');
+require('dotenv').config();
 /*build client*/
 // require('./parcel');
 /*extra*/

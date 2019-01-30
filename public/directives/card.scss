@@ -20,7 +20,7 @@ tk-card {
 
   &:after{
     content:'';
-    background-image: url("../assets/cards/card0068.png");
+    background-image: url("../assets/cards/card0068-mid.png");
     position: absolute;
     top:0;
     left: 0;right: 0;
@@ -31,22 +31,22 @@ tk-card {
     backface-visibility: hidden;
   }
   &.R{
-    background-image: url("../assets/redCards.png");
+    background-image: url("../assets/redCards-mid.png");
   }
 
   &.B{
-    background-image: url("../assets/blueCards.png");
+    background-image: url("../assets/blueCards-mid.png");
   }
 
   &.G{
-    background-image: url("../assets/greenCards.png");
+    background-image: url("../assets/greenCards-mid.png");
   }
 
   &.Y{
-    background-image: url("../assets/yellowCards.png");
+    background-image: url("../assets/yellowCards-mid.png");
   }
   &.M{
-    background-image: url("../assets/globalCards.png");
+    background-image: url("../assets/globalCards-mid.png");
     background-size: 200% 200%;
     background-position: calc( var(--colum) * 100% / 1) calc(var(--row) * 100% / 1);
   }
