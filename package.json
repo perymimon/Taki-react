@@ -35,7 +35,8 @@
     "socket.io": "^2.0.4",
     "socket.io-client": "^2.1.0",
     "unistore": "^3.2.1",
-    "nodemon": "1.18.9"
+    "nodemon": "1.18.9",
+    "parcel": "^1.11.0"
   },
   "devDependencies": {
     "@svgr/parcel-plugin-svgr": "^4.1.0",
