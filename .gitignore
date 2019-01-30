@@ -5,7 +5,7 @@ coverage/
 build/
 package-lock.json
 public/.cache/
-public/dist/
 .cache/
 public/.dist/
 public/deprecete/
+
