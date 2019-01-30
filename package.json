@@ -9,9 +9,9 @@
     "parcel:watch": "parcel watch --out-dir public/.dist --public-url . public/index.html",
     "build": "parcel build --out-dir ,public/.dist --public-url . public/index.html",
     "webpack": "webpack --env=qa3 --progress --watch --colors --config .config/webpack.config.js",
-    "server": "parcel build --out-dir ,public/.dist --public-url . public/index.html && nodemon --inspect",
+    "server": "nodemon --inspect",
     "server:debug": "nodemon --inspect-brk",
-    "start": " npm run server"
+    "start": "npm run build && npm run server"
   },
   "author": "",
   "license": "ISC",
