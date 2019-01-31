@@ -11,7 +11,7 @@
     "webpack": "webpack --env=qa3 --progress --watch --colors --config .config/webpack.config.js",
     "server": "nodemon --inspect",
     "server:debug": "nodemon --inspect-brk",
-    "start": "npm run build && npm run server"
+    "start": "npm run server"
   },
   "author": "",
   "license": "ISC",
@@ -35,19 +35,13 @@
     "socket.io": "^2.0.4",
     "socket.io-client": "^2.1.0",
     "unistore": "^3.2.1",
-
     "nodemon": "1.18.9"
   },
   "devDependencies": {
-    "parcel": "^1.11.0",
-    "@svgr/parcel-plugin-svgr": "^4.1.0",
     "babel-plugin-transform-react-jsx": "^6.24.1",
     "node-sass": "^4.9.0",
-    "parcel-bundler": "^1.6.2",
-    "parcel-plugin-bundle-visualiser": "^1.2.0",
-    "parcel-plugin-purifycss": "^1.0.2",
-    "parcel-plugin-url-loader": "^1.2.6",
-    "nodemon": "1.18.9"
+    "parcel-bundler": "^1.11.0",
+    "parcel-plugin-bundle-visualiser": "^1.2.0"
   },
   "engines": {
     "node": "10.x"
