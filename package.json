@@ -5,12 +5,12 @@
   "main": "server/server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "parcel:serve": "parcel serve --out-dir public/.dist --public-url . public/index.html",
-    "parcel:watch": "parcel watch --out-dir public/.dist --public-url . public/index.html",
+    "parcel:serve": "./node_modules/.bin/parcel serve --out-dir public/.dist --public-url . public/index.html",
+    "parcel:watch": "./node_modules/.bin/parcel watch --out-dir public/.dist --public-url . public/index.html",
     "build": "./node_modules/.bin/parcel build --out-dir public/.dist --public-url . public/index.html",
     "webpack": "webpack --env=qa3 --progress --watch --colors --config .config/webpack.config.js",
     "server": "nodemon --inspect",
-    "postinstall": "npm run build",
+    "postinstall": "npm link && npm run build",
     "server:debug": "nodemon --inspect-brk",
     "start": "npm run server"
   },
