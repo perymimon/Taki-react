@@ -10,8 +10,8 @@
     "build": "./node_modules/.bin/parcel build --out-dir public/.dist --public-url . public/index.html",
     "webpack": "webpack --env=qa3 --progress --watch --colors --config .config/webpack.config.js",
     "server": "nodemon --inspect",
-    "postinstall": "npm run build",
     "server:debug": "nodemon --inspect-brk",
+    "prestart":"npm run build",
     "start": "npm run server"
   },
   "author": "",
