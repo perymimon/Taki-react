@@ -11,7 +11,6 @@
     "webpack": "webpack --env=qa3 --progress --watch --colors --config .config/webpack.config.js",
     "server": "nodemon --inspect",
     "server:debug": "nodemon --inspect-brk",
-    "prestart":"npm run build",
     "start": "npm run server"
   },
   "author": "",
