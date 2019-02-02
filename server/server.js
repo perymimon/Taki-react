@@ -30,9 +30,18 @@ app.use(require('koa-static')(path.resolve('public/.dist'), {extensions: ['html'
 app.use(require('koa-static')(path.resolve('public'), {extensions: ['html']}));
 app.use(require('koa-static')(path.resolve('bower_components')));
 app.use(require('koa-static')(path.resolve('node_modules')));
+app.use(function (ctx) {
+
+    console.log(ctx.url);
+
+    if(ctx.url === '/ping'){
+        ctx.body  = 'pong';
+    }
+});
+
 app.use(async function (ctx) {
     const send = require('koa-send');
-    await send(ctx, 'public/dist/index.html');
+    await send(ctx, 'public/.dist/index.html');
 });
 // app.use(require('koa-bodyparser')());
 // app.use(require('koa-session')({secret: 'keyboard cat',resave:true,saveUninitialized: true}, app));
