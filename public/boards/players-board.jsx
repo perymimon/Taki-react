@@ -48,7 +48,7 @@ function MainPlayer({player, isActive}) {
     var hand = player.hand.length;
 
     return <tk-player-board class={className} style={customProperties}>
-        <Icon className={`${player.avatar} avatar`}/>
+        <Icon className={`avatar`} iconName={player.avatar}/>
         <div className="player-name dramatic-text">{player.name}</div>
         <div className="player-slogan">{player.slogan}</div>
         <SmallPanelValue className="amount-hand-cards" icon={'icon-gambling'} value={hand}>
@@ -70,7 +70,7 @@ function Player({player, isActive}) {
     var hand = player.hand;
 
     return <tk-player-board class={className} style={customProperties} id={player.token}>
-        <Icon className={`${player.avatar} avatar`}/>
+        <Icon className={`avatar`} iconName={player.avatar}/>
         <div className="player-name dramatic-text">{player.name}</div>
         <div className="player-slogan">{player.slogan}</div>
         <SmallPanelValue className="amount-hand-cards" icon='icon-gambling' value={hand}>

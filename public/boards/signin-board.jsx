@@ -4,9 +4,8 @@ import Icon,{Icon2} from '../component/icon'
 import {store,actions} from '../store/store'
 
 const avatars = [
-    'icon-snail', 'icon-monkey', 'icon-bee', 'icon-student', 'icon-girl-1', 'icon-penguin',
-    'icon-chicken', 'icon-dog-1', 'icon-dog', 'icon-fox', 'icon-boy', 'icon-girl-2', 'icon-cat',
-    'icon-bird', 'icon-bee-1',
+    'snail', 'dog', 'monkey','fox', 'bee', 'boy',  'student','girl-2',
+    'cat', 'penguin', 'bird',  'chicken', 'bee-1', 'dog-1',  'girl-1'
 ];
 
 export default function SignInBoard(props) {
@@ -18,7 +17,7 @@ export default function SignInBoard(props) {
                 {avatars.map(iconName => (
                     <label key={iconName}>
                         <input name="avatar" type="radio" value={iconName} tabIndex="true"/>
-                        <Icon className={iconName}/>
+                        <Icon iconName={iconName}/>
                     </label>
                 ))}
             </avatar-select>

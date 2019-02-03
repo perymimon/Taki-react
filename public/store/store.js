@@ -23,8 +23,8 @@ store.subscribe = function(fn){
 
 const token = document.cookie.replace(/.*token=(\w+).*/, '$1');
 console.log('player token:',token);
-
-const socket = io('//taki-game.herokuapp.com', {query: {token: token, autoConnect: false}});
+console.log('server domain:',process.env.SERVER_DOMAIN);
+const socket = io(process.env.SERVER_DOMAIN, {query: {token: token, autoConnect: false}});
 
 /* bind storeStateActions to store's state */
 const boundActions = storeStateActions(store, socket, actions);
