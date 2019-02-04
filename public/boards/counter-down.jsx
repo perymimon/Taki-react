@@ -1,3 +1,4 @@
+import Icon from '../directives/icon';
 import {connect} from '../link';
 import React, {Component} from "react";
 import './counter-down.scss';
@@ -45,12 +46,12 @@ export default connect('timeLeft, turn')(
 
         return (
             <tk-timer className="time-left">
-                <i className="icon-stopwatch">
+                <Icon iconName="stopwatch">
                     <tk-text class="self-center">0</tk-text>
-                </i>
-                <i className="icon-stopwatch">
+                </Icon>
+                <Icon iconName="stopwatch">
                     <tk-text class="self-center">60</tk-text>
-                </i>
+                </Icon>
             </tk-timer>
         )
     },

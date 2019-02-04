@@ -1,6 +1,6 @@
 import './small-panel-value.scss';
 import React from 'react';
-import Icon from '../component/icon';
+import Icon from './icon';
 
 export default function SmallPanelValue({icon, value,className,children}) {
     return (

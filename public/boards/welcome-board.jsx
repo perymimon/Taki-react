@@ -2,7 +2,7 @@ import "./welcome-board.scss"
 import React, {Component} from "react";
 
 import {store, actions} from '../store/store'
-import Icon from '../component/icon'
+import Icon from '../directives/icon'
 import get from 'lodash/get';
 
 import {connect} from '../link';

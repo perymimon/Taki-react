@@ -1,6 +1,6 @@
 import './signin-board.scss'
 import React from 'react';
-import Icon,{Icon2} from '../component/icon'
+import Icon,{Icon2} from '../directives/icon'
 import {store,actions} from '../store/store'
 
 const avatars = [

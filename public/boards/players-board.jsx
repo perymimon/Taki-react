@@ -1,4 +1,4 @@
-import Icon from '../component/icon'
+import Icon from '../directives/icon'
 import Card from '../directives/card';
 
 
