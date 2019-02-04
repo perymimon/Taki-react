@@ -35,6 +35,10 @@ exports.letUser = function (token, {name, slogan, avatar}) {
 
     return users[token];
 };
+exports.removeUser = function( token ){
+    delete users[token];
+};
+
 exports.getUsers = () => users;
 
 var colorPool = [...color];

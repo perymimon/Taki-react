@@ -59,7 +59,8 @@ module.exports = function (io) {
     });
 
     io.on(SOCKET_EVENTS.LOGOUT, (ctx, data) => {
-        game.exitPlayer(ctx.token)
+        game.exitPlayer(ctx.token);
+        Users.removeUser(ctx.token);
     });
 
     io.on(SOCKET_EVENTS.START_GAME, (ctx, data) => {
