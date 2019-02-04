@@ -1,5 +1,5 @@
 import React, {Component, useState} from "react";
-import {Card, connect} from '../link'
+import {Card, connect, get} from '../link'
 import './hand.scss';
 import './select-color.scss';
 
@@ -19,7 +19,7 @@ function addToSort(key) {
 function sort(objects) {
     sortOrder.forEach(function (sortKey) {
         const [key, inv] = sortKey.split(' ');
-        if(inv)
+        if (inv)
             objects.sort((a, b) => b[key] > a[key] ? 1 : -1);
         else
             objects.sort((a, b) => a[key] > b[key] ? 1 : -1);
@@ -37,8 +37,8 @@ function handleCardClick(card) {
 
 export default connect('turn, players, player, mode')(
     function Hand({turn, players, player, mode, forceUpdate}) {
-
-        const playerCardHandSorted = sort(player.hand.slice());
+        const playerHand = get(player, 'hand', []);
+        const playerCardHandSorted = sort(playerHand.slice());
 
         function updateSort(event) {
             const sortKey = event.target.value;
@@ -48,7 +48,7 @@ export default connect('turn, players, player, mode')(
         }
 
         return (
-            <hand-game style={{color: player.color}}>
+            <hand-game>
 
                 <div className={'title dramatic-text'}>
                     {
@@ -56,7 +56,7 @@ export default connect('turn, players, player, mode')(
                             <button className={'btn-end-turn'}
                                     onClick={actions.endTurn}>end turn</button> : null
                     }
-                    {player.hand.length} cards
+                    {playerHand.length} cards
                     <div className="sorting">
                         <tk-text>sort:</tk-text>
                         <button value="symbol" onClick={updateSort}>by symbol</button>

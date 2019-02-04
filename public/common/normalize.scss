@@ -1,5 +1,15 @@
 @import "variables";
 
+@media only screen and (max-width: 900px){
+  html{
+    font-size: 2vw;
+  }
+}
+@media only screen and (min-width: 901px){
+  html{
+    font-size: 1.4vw;
+  }
+}
 body {
   padding: 0;
   height: 100vh;

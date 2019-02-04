@@ -1,6 +1,7 @@
 import './game-layout.scss';
 import React, {Component, Fragment} from "react";
 import get from 'lodash/get';
+import ControlBoard from './boards/control-board';
 
 
 const {GAME_STAGE} = require('../common/game-consts');
@@ -11,7 +12,6 @@ import PlayerList from './boards/players-board';
 import BoardGame from './boards/game-board';
 import Hand from './component/hand';
 import Sidebar from './boards/side-bar';
-import CounterDown from './boards/counter-down';
 
 import {connect} from 'unistore/src/combined/react'
 import {SmallPanelValue} from './link';
@@ -25,10 +25,9 @@ function Stage({value, timeLeft, players}) {
             <Fragment>
                 <header className="top-header">
                     <PlayerList/>
-                    <CounterDown />
+                    <ControlBoard/>
                 </header>
                 <Sidebar/>
-
                 <BoardGame/>
                 <Hand/>
             </Fragment>

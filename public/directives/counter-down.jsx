@@ -1,4 +1,4 @@
-import Icon from '../directives/icon';
+import Icon from './icon';
 import {connect} from '../link';
 import React, {Component} from "react";
 import './counter-down.scss';

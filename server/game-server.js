@@ -1,14 +1,14 @@
 const debounce = require('lodash/debounce');
 const Game = require('./game');
 const Users = require('./user');
-const {SOCKET_EVENTS,GAME_EVENTS} = require('../common/game-consts');
-
+const {SOCKET_EVENTS, GAME_EVENTS} = require('../common/game-consts');
 
 /* start logic */
 module.exports = function (io) {
     let messages = [];
     const game = /* new */Game();
-    function sockets(){
+
+    function sockets() {
         return Object.values(io.socket.clients().sockets);
     }
 
@@ -21,16 +21,16 @@ module.exports = function (io) {
         sockets().forEach(updatingGameState);
     }, 200);
 
-    const emitGameMessages = debounce(function(player$messages){
+    const emitGameMessages = debounce(function (player$messages) {
         sockets().forEach(function (socket) {
             const token = socket.handshake.query.token;
             const player = game.getPlayer(token);
             messages = player$messages.get(player);
-            if(messages && messages.length)
+            if (messages && messages.length)
                 socket.emit(SOCKET_EVENTS.INCOMING_MESSAGE, messages);
         });
         game.flushMessages();
-    },10);
+    }, 10);
 
     game.on(GAME_EVENTS.STATE_UPDATE, emitGameState);
 
@@ -46,7 +46,7 @@ module.exports = function (io) {
         ctx.token = ctx.socket.handshake.query.token;
         const player = game.getPlayer(ctx.token) || {};
         console.log(
-            `${ctx.token}: ${ player.name || '\b'} connected`
+            `${ctx.token}: ${player.name || '\b'} connected`,
         );
 
         updatingGameState(ctx.socket);
@@ -58,12 +58,21 @@ module.exports = function (io) {
         ctx.socket.emit(SOCKET_EVENTS.LOGGED_IN);
     });
 
+    io.on(SOCKET_EVENTS.LOGOUT, (ctx, data) => {
+        game.exitPlayer(ctx.token)
+    });
+
     io.on(SOCKET_EVENTS.START_GAME, (ctx, data) => {
         game.setup();
     });
 
+    io.on(SOCKET_EVENTS.RESET_GAME, (ctx, data) => {
+        game.reset();
+    });
+
+
     io.on('action:play-card', (ctx, {card}) => {
-        const isSuccess = game.playCard(ctx.token, card );
+        const isSuccess = game.playCard(ctx.token, card);
         ctx.acknowledge(isSuccess);
     });
 

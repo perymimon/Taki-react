@@ -26,7 +26,6 @@ export const initState = {
 };
 
 
-
 export function storeStateActions(store, socket, actions) {
     let itInitializeState = true;
 
@@ -34,15 +33,17 @@ export function storeStateActions(store, socket, actions) {
         const newHand = get(state, 'player.hand', []),
             oldHand = get(newState, 'player.hand', []);
         const {added, deleted} = arrayDiff2(newHand, oldHand, 'id');
-        animeTakeCards(added, itInitializeState);
+        if (state.stage === GAME_STAGE.GAME_TABLE)
+            animeTakeCards(added, itInitializeState);
         /* can't be dane because card element is already gone
          animePutCards(deleted);*/
     });
 
-    function itIsYourTurn(){
+    function itIsYourTurn() {
         const state = store.getState();
         return state.turn === state.player.index;
     }
+
     global.$store = store;
 
     let separatorCounter = 1;
@@ -103,13 +104,19 @@ export function storeStateActions(store, socket, actions) {
         login(state, data) {
             socket.emit('login', data);
         },
+        logout(state, data) {
+            socket.emit('logout');
+        },
         startGame(state) {
             socket.emit('start-game');
         },
         readyToPlay() {
 
         },
-
+        /*meta action */
+        resetGame(state) {
+            socket.emit('reset-game');
+        },
         /* player game action */
         drawCards(state) {
             socket.emit('action:draw-card', {}, function (cards) {
@@ -117,7 +124,7 @@ export function storeStateActions(store, socket, actions) {
                 // player.hand.push(...cards);
                 // store.setState({player});
                 // animeTakeCards(cards, itInitializeState);
-                if(!cards || cards.length === 0) {
+                if (!cards || cards.length === 0) {
                     const deckCard = document.querySelector('.deck');
                     animate(deckCard, 'shake');
                 }
@@ -150,9 +157,9 @@ export function storeStateActions(store, socket, actions) {
         ,
 
         updateCurrentStage(state) {
-            if(state.gameEnd){
+            if (state.gameEnd) {
                 store.setState({stage: GAME_STAGE.VICTORY})
-            }else if (state.playerInGame) {
+            } else if (state.playerInGame) {
                 if (state.gameInProgress) {
                     store.setState({stage: GAME_STAGE.GAME_TABLE});
                     // store.setState({stage: GAME_STAGE.VICTORY});

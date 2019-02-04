@@ -35,7 +35,7 @@ function Game() {
 
     const publicState = {
         gameInProgress: false,
-        gameEnd:false,
+        gameEnd: false,
         get players() {/*return public player info*/
             /*todo:change player to inerihete from common object*/
             return players.map(p => p.public);
@@ -212,7 +212,7 @@ function Game() {
             if (checkVictoryCondition()) {
                 // publicState.victoryRank.push(currentPlayer.token);
                 calcualtePlayersRanks();
-                if(publicState.round >= GAME_SETTING.NUMBER_OF_ROUND){
+                if (publicState.round >= GAME_SETTING.NUMBER_OF_ROUND) {
                     endGame()
                 }
             }
@@ -224,7 +224,8 @@ function Game() {
             return false;
         }
     }
-    function calcualtePlayersRanks(){
+
+    function calcualtePlayersRanks() {
         currentPlayer.rank += GAME_SETTING.VICTORY_VALUE;
         players.forEach(player => {
             player.rank += getPlayerRank(player);
@@ -237,14 +238,30 @@ function Game() {
         }, 0)
     }
 
-    function endGame(){
+    function endGame() {
         publicState.gameInProgress = false;
         publicState.gameEnd = true;
+        counterDown.stop();
     }
 
     /** API **/
     return {
         on: emitter.on.bind(emitter),
+        reset() {
+            endGame();
+            publicState.round = 0;
+            currentIndex = -1;
+            publicState.gameEnd = false;
+            publicState.gameInProgress = false;
+
+
+            if(players.length === 0 ){
+                emitter.emit(GAME_EVENTS.STATE_UPDATE);
+
+            }else{
+                this.setup(false);
+            }
+        },
         setup(isNewRound) {
             deck = taki.getNewDeck();
             stack.length = 0;
@@ -276,6 +293,19 @@ function Game() {
             emitter.emit(GAME_EVENTS.STATE_UPDATE);
             return true;
         },
+        exitPlayer(playerToken) {
+            if (!this.isPlayerInGame(playerToken)) return false;
+            const player = getPlayer(playerToken);
+            const i = players.indexOf(player);
+            players.splice(i, 1);
+            player$messages.delete(player);
+            if(players.length === 0){
+                endGame();
+            }
+            emitter.emit(GAME_EVENTS.STATE_UPDATE);
+
+            return true;
+        },
 
         isPlayerInGame(token) {
             return this.getPlayer(token);
@@ -298,7 +328,7 @@ function Game() {
         },
         drawCards(token, amount) {
             if (isPlayerInvalid(token)) return;
-            if(publicState.mode === GAME_MODE.TAKI) {
+            if (publicState.mode === GAME_MODE.TAKI) {
                 notifyPlayers(SENTENCE.drawCardInTakiMode);
                 return false;
             }

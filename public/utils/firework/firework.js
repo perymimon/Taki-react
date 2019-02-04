@@ -19,7 +19,7 @@ export function Fireworks() {
      * Create DOM elements and get your game on
      */
     function initialize(canvasId) {
-        return new Promise(function (resolve) {
+        return new Promise(function (resolve, reject) {
 
 
             // start by measuring the viewport
@@ -27,6 +27,7 @@ export function Fireworks() {
 
             // create a canvas for the fireworks
             mainCanvas = document.getElementById(canvasId);
+            if(!mainCanvas) return reject('no canvas: ' + canvasId );
             mainContext = mainCanvas.getContext('2d');
 
             // and another one for, like,ז
