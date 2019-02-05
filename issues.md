@@ -12,3 +12,6 @@
 * build counter for the round number
 * in begin play put option for number of round
 * add score to player
+* create project with the name Ampoule for usful micro lib
+  that  nice if was embeded in js system . but they not
+   

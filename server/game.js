@@ -1,5 +1,5 @@
 const {Timer} = require('../common/Timer');
-
+const {CycleIndexTracker} = require('../common/IndexTracker');
 
 const taki = require('./taki-cards');
 const EventEmitter = require('events');
@@ -26,11 +26,9 @@ function Game() {
 
     let deck = taki.getNewDeck();
     const stack = [];
-    let currentIndex = -1;
-    let currentPlayer = null;
     const players = [];
+    const turnTracker = new CycleIndexTracker(players, -1);
 
-    // let allPlayers = players.slice();
     const player$messages = new Map;
 
     const publicState = {
@@ -50,10 +48,10 @@ function Game() {
             return {length: deck.length}
         },
         get turn() {
-            return currentIndex;
+            return turnTracker.whatIndex();
         },
         get prevTurn() {
-            return getPrevTurnBefore(currentIndex);
+            return turnTracker.whatPrev();
         },
         mode: GAME_MODE.NATURAL,
         punishment: 0,
@@ -67,7 +65,7 @@ function Game() {
     const SENTENCE = require('./sentence').factoryMessages(publicState);
 
     function notifyPlayers(messageFactory, args = {}, referrer) {
-        referrer = referrer || currentPlayer;
+        referrer = referrer || turnTracker.getCurrent();
         args.player = args.player || referrer;
         var {code, private, public, meta} = messageFactory(args);
         var id = shortId.generate();
@@ -108,7 +106,7 @@ function Game() {
         return cards;
     }
 
-    function drawCards(amount = 1, player = currentPlayer) {
+    function drawCards(amount = 1, player = turnTracker.getCurrent() ) {
         const punishmentMode = (publicState.mode === GAME_MODE.PLUS_TWO);
         if (punishmentMode) {
             amount = (publicState.punishment);
@@ -144,16 +142,10 @@ function Game() {
             stack.unshift(card);
 
             /*remove card from player hand*/
-            currentPlayer.hand = currentPlayer.hand
-                .filter(handCard => handCard.id !== card.id);
+            const player = turnTracker.getCurrent();
+            player.hand = player.hand.filter(handCard => handCard.id !== card.id);
 
             const colorName = colorCode$ColorName[card.color];
-
-            publicState.lastMove = {
-                cards: [card],
-                player: publicState.players[currentIndex],
-                action: 'playCard',
-            };
 
             notifyPlayers(SENTENCE.playCard, {card});
 
@@ -210,7 +202,6 @@ function Game() {
             }
 
             if (checkVictoryCondition()) {
-                // publicState.victoryRank.push(currentPlayer.token);
                 calcualtePlayersRanks();
                 if (publicState.round >= GAME_SETTING.NUMBER_OF_ROUND) {
                     endGame()
@@ -226,7 +217,7 @@ function Game() {
     }
 
     function calcualtePlayersRanks() {
-        currentPlayer.rank += GAME_SETTING.VICTORY_VALUE;
+        turnTracker.getCurrent().rank += GAME_SETTING.VICTORY_VALUE;
         players.forEach(player => {
             player.rank += getPlayerRank(player);
         });
@@ -250,7 +241,7 @@ function Game() {
         reset() {
             endGame();
             publicState.round = 0;
-            currentIndex = -1;
+            turnTracker.reset();
             publicState.gameEnd = false;
             publicState.gameInProgress = false;
 
@@ -284,7 +275,7 @@ function Game() {
             player.index = players.length;
             player.rank = 0;
             player.__defineGetter__('itHisTurn', function () {
-                return this.index === currentIndex
+                return this.index === turnTracker.whatIndex();
             });
             player.__defineGetter__('inGame', function () {
                 return !! getPlayer(this.token) || null;
@@ -317,7 +308,6 @@ function Game() {
         },
         getPlayerState(token) {
             const player = this.getPlayer(token) || null;
-            // const itHisTurn = (player.index === currentIndex);
             const extra = {
                 playerInGame: !!player,
             };
@@ -339,15 +329,7 @@ function Game() {
             }
             return drawCards(amount);
         },
-        // selectColor(colorSelected) {
-        //     if (publicState.mode === GAME_MODE.CHANGE_COLOR) {
-        //         stack[0].card.color = colorSelected;
-        //         publicState.mode = GAME_MODE.NATURAL;
-        //         notifyPlayers(SENTENCE.SelectColor);
-        //         moveToNextPlayer();
-        //         emitter.emit(GAME_EVENTS.STATE_UPDATE);
-        //     }
-        // },
+
         playCard(token, card) {
             if (isPlayerInvalid(token)) return false;
             playCard(card);
@@ -361,7 +343,7 @@ function Game() {
 
     function isPlayerInvalid(token) {
         const player = getPlayer(token);
-        if (player === currentPlayer) {
+        if (player === turnTracker.getCurrent()) {
             return false;
         }
         /*fix: add referer so player get his message*/
@@ -370,32 +352,12 @@ function Game() {
     }
 
     function moveToNextPlayer() {
-        const index = getNextTurnAfter(currentIndex);
-        moveTurnToPlayer(index)
-    }
-
-    function moveTurnToPlayer(index){
-        currentIndex = normalizeTurnIndex(index);
-        currentPlayer = players[currentIndex];
-        // emitMessage( `put or draw card` );
         counterDown.restart();
-        return currentPlayer;
-    }
-
-    function normalizeTurnIndex(turn){
-        return (players.length + turn ) % players.length;
-    }
-
-    function getNextTurnAfter(turn) {
-        return (players.length + turn + publicState.direction) % players.length;
-    }
-
-    function getPrevTurnBefore(turn) {
-        return (players.length + turn + -1 * publicState.direction) % players.length;
+        return turnTracker.moveNext();
     }
 
     function checkVictoryCondition() {
-        return currentPlayer.hand.length === 0;
+        return turnTracker.getCurrent().hand.length === 0;
     }
 
 }
