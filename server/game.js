@@ -279,11 +279,15 @@ function Game() {
             emitter.emit(GAME_EVENTS.STATE_UPDATE);
         },
         joinPlayer(player) {
+            const getPlayer = this.getPlayer;
             if (this.isPlayerInGame(player.token)) return false;
             player.index = players.length;
             player.rank = 0;
             player.__defineGetter__('itHisTurn', function () {
                 return this.index === currentIndex
+            });
+            player.__defineGetter__('inGame', function () {
+                return !! getPlayer(this.token) || null;
             });
             players.push(player);
             if (publicState.gameInProgress) {
@@ -298,6 +302,7 @@ function Game() {
             const player = getPlayer(playerToken);
             const i = players.indexOf(player);
             players.splice(i, 1);
+            deck.splice(0,0, ... player.hand);
             player$messages.delete(player);
             if(players.length === 0){
                 endGame();
@@ -365,11 +370,20 @@ function Game() {
     }
 
     function moveToNextPlayer() {
-        currentIndex = getNextTurnAfter(currentIndex);
+        const index = getNextTurnAfter(currentIndex);
+        moveTurnToPlayer(index)
+    }
+
+    function moveTurnToPlayer(index){
+        currentIndex = normalizeTurnIndex(index);
         currentPlayer = players[currentIndex];
         // emitMessage( `put or draw card` );
         counterDown.restart();
         return currentPlayer;
+    }
+
+    function normalizeTurnIndex(turn){
+        return (players.length + turn ) % players.length;
     }
 
     function getNextTurnAfter(turn) {
