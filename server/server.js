@@ -34,10 +34,19 @@ app.use(require('koa-static')(path.resolve('public/.dist'), {extensions: ['html'
 app.use(require('koa-static')(path.resolve('public'), {extensions: ['html']}));
 app.use(require('koa-static')(path.resolve('bower_components')));
 app.use(require('koa-static')(path.resolve('node_modules')));
+
+app.use(function(ctx, next) {
+    ctx.response.set("Access-Control-Allow-Origin", '*');
+    ctx.response.set("Access-Control-Allow-Credentials", true);
+    ctx.response.set('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+    ctx.response.set("Access-Control-Allow-Headers", 'Origin,X-Requested-With,Content-Type,Accept,content-type,application/json');
+    next();
+});
 app.use(function (ctx, next) {
     console.log(ctx.url);
     next();
 });
+
 app.use(route.get('/ping', function (ctx) {
     ctx.body = 'pong';
 }));
@@ -73,8 +82,11 @@ lobbyIO.use((ctx, next) => {
 });
 
 lobbyIO.on('connection', function (ctx, data) {
-    ctx.data.token = socketCookies(ctx.socket).get('token');
-    ctx.socket.token = ctx.data.token;
+    const tokenName = 'game-token';
+    const cookie = socketCookies(ctx.socket);
+    const token = cookie.get(tokenName) ;
+    // cookie.set(tokenName, token, 10 * 365 /*10 years*/);
+    ctx.socket.token = ctx.data.token = token;
 });
 
 require('./game-server')(lobbyIO, app);

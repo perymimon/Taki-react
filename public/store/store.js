@@ -25,14 +25,17 @@ store.subscribe = function (fn) {
 const SERVER_DOMAIN = process.env.SERVER_DOMAIN;
 const socket = io(SERVER_DOMAIN, {autoConnect: false});
 
-fetch(SERVER_DOMAIN + '/register').then(function (response) {
+socket.on('connect', function () {
     const token = document.cookie.replace(/.*token=(\w+).*/, '$1');
-    if (response.ok) {
-        console.log('player token:', token);
-        console.log('server domain:', process.env.SERVER_DOMAIN);
-        socket.open();
-    }
+    console.log('player token:', token);
+    console.log('server domain:', process.env.SERVER_DOMAIN);
 });
+// fetch(SERVER_DOMAIN + '/register').then(function (response) {
+
+    // if (response.ok) {
+        socket.open();
+    // }
+// });
 
 /* bind storeStateActions to store's state */
 const boundActions = storeStateActions(store, socket, actions);
