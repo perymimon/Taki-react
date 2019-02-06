@@ -23,7 +23,7 @@ module.exports = function (io) {
 
     const emitGameMessages = debounce(function (player$messages) {
         sockets().forEach(function (socket) {
-            const token = socket.handshake.query.token;
+            const token = socket.token;
             const player = game.getPlayer(token);
             messages = player$messages.get(player);
             if (messages && messages.length)
@@ -37,16 +37,17 @@ module.exports = function (io) {
     game.on(GAME_EVENTS.OUTGOING_MESSAGE, emitGameMessages);
 
     function updatingGameState(socket) {
-        const token = socket.handshake.query.token;
+        const token = socket.token;
         const playerState = game.getPlayerState(token);
         socket.emit(SOCKET_EVENTS.UPDATE_GAME_STATE, playerState);
     }
 
     io.on(SOCKET_EVENTS.CONNECTION, (ctx, data) => {
-        ctx.token = ctx.socket.handshake.query.token;
-        const player = game.getPlayer(ctx.token) || {};
+        // ctx.token = ctx.socket.handshake.query.token;//todo: open issue for un consist
+        const token = ctx.socket.token;
+        const player = game.getPlayer(token) || {};
         console.log(
-            `${ctx.token}: ${player.name || '\b'} connected`,
+            `${token}: ${player.name || '\b'} connected`,
         );
 
         updatingGameState(ctx.socket);
@@ -55,7 +56,7 @@ module.exports = function (io) {
     io.on(SOCKET_EVENTS.LOGIN, (ctx, data) => {
         const player = Users.letUser(ctx.token, data);
         game.joinPlayer(player);
-        ctx.socket.emit(SOCKET_EVENTS.LOGGED_IN);
+        // ctx.socket.emit(SOCKET_EVENTS.LOGGED_IN);
     });
 
     io.on(SOCKET_EVENTS.LOGOUT, (ctx, data) => {
