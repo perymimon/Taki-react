@@ -11,7 +11,7 @@ make sure you have nodemon installed
 `npm i -g nodemon`
 
 ## Run
-``npm run start`` - for wakeup the game sever   
+``npm run server`` - for wakeup the game sever   
 ``npm run parcel:watch`` in another console, to run the client builder  
 
 Go To `localhost:8080` to see the game
