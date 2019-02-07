@@ -297,6 +297,7 @@ function Game() {
             const i = players.indexOf(player);
             players.splice(i, 1);
             deck.splice(0,0, ... player.hand);
+            player.hand.length = 0;
             player$messages.delete(player);
             if(players.length === 0){
                 endGame();
