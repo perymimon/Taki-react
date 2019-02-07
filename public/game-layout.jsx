@@ -25,8 +25,8 @@ function Stage({value, timeLeft, players}) {
             <Fragment>
                 <header className="top-header">
                     <PlayerList/>
-                    <ControlBoard/>
                 </header>
+                <ControlBoard/>
                 <Sidebar/>
                 <BoardGame/>
                 <Hand/>
@@ -55,12 +55,12 @@ export default connect('isOnline, player, gameInProgress, stage, timeLeft, playe
             return <Loading/>;
 
         return (
-            <tk-game class={stage}
+            <tk-stage class={stage}
                      myturn={get(player, 'itHisTurn') + ''}
                      style={customProperties}
             >
                 <Stage value={stage} timeLeft={timeLeft} players={players}/>
-            </tk-game>
+            </tk-stage>
         )
     },
 );

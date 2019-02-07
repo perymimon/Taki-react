@@ -11,13 +11,13 @@ board-game {
   align-items: center;
   align-content: center;
   justify-content: space-evenly;
-  transform: rotateX(45deg) translateZ(0em);
+  transform: translateZ(8em) rotateX(45deg) translateZ(0em);
   transform-origin: bottom;
   border: 3px solid var(--border-color);
   background-color: rgba(43, 43, 43, 0.25);
   //transform-style: preserve-3d;
   overflow: visible;
-
+  pointer-events: none;
   min-height: 131px;
 
   &.Y {
@@ -141,6 +141,7 @@ board-game {
     align-items: flex-end;
     padding-bottom: 0.4em;
     text-shadow: 1px 2px 5px grey;
+    pointer-events: all;
 
     &:after {
       backface-visibility: visible;

@@ -12,3 +12,8 @@ $shadow-green: #316144;
 $shadow-yellow: hsla(60, 5%, 50%, 1);
 $shadow-red: #bf6659;
 $shadow-blue: #584775;
+
+
+$on-medium-screen: only screen and (max-width: 50em);
+$on-small-screen: only screen and (max-width: 30em);
+$on-large-screen: only screen and (min-width: 100em);

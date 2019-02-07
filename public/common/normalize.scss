@@ -1,15 +1,5 @@
 @import "variables";
 
-@media only screen and (max-width: 900px){
-  html{
-    font-size: 2vw;
-  }
-}
-@media only screen and (min-width: 901px){
-  html{
-    font-size: 1.4vw;
-  }
-}
 body {
   padding: 0;
   height: 100vh;
@@ -22,12 +12,14 @@ body {
   perspective-origin: bottom center;
   perspective: 260em;
   //transform-style: preserve-3d;
-  overflow: hidden;
+
+  background-image: url("../public/assets/etc/background2.png");
 }
 
 * {
   transition-duration: 0.1s;
   border-radius: 0.5em;
+  box-sizing: border-box;
 
   :focus {
     outline: none;
@@ -62,6 +54,12 @@ h3 {
   margin: 0.5em;
 }
 
+h1,h2,h3{
+  tk-icon{
+    color: black;
+  }
+}
+
 ::-webkit-scrollbar {
   height: 16px;
   overflow: visible;
@@ -91,19 +89,19 @@ h3 {
 }
 
 /*button*/
-button{
-  /* background-color: #616BA9; */
-  border-color: #ffffff4f;
-  box-shadow: inset 0 0 0.2em hsl(0, 0%, 50%), 0 0.1em 0em #616BA9, 0 0.2em 0em #2D3132;
-  border-width: 1px;
-  line-height: 2em;
-  vertical-align: middle;
-  margin: 0.1em;
-
-  text-transform: capitalize;
-  pointer-events: all;
-
-  &:active{
-    box-shadow: inset 0 0 0.2em hsl(0, 0%, 50%), 0 0.1em 0.1em #616BA9;
-  }
-}
+//button{
+//  /* background-color: #616BA9; */
+//  border-color: #ffffff4f;
+//  box-shadow: inset 0 0 0.2em hsl(0, 0%, 50%), 0 0.1em 0em #616BA9, 0 0.2em 0em #2D3132;
+//  border-width: 1px;
+//  line-height: 2em;
+//  vertical-align: middle;
+//  margin: 0.1em;
+//
+//  text-transform: capitalize;
+//  pointer-events: all;
+//
+//  &:active{
+//    box-shadow: inset 0 0 0.2em hsl(0, 0%, 50%), 0 0.1em 0.1em #616BA9;
+//  }
+//}
