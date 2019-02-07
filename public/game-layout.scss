@@ -14,9 +14,12 @@ tk-stage {
   height: 100vh;
   flex-direction: column;
   justify-content: center;
-  @media #{$on-medium-screen} {
-    height: auto;
+  &.in-game{
+    @media #{$on-medium-screen} {
+      height: auto;
+    }
   }
+
 }
 
 tk-stage.in-game {
