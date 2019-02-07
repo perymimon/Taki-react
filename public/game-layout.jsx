@@ -15,6 +15,7 @@ import Sidebar from './boards/side-bar';
 
 import {connect} from 'unistore/src/combined/react'
 import {SmallPanelValue} from './link';
+import {classnames} from './utils/utils';
 
 
 function Stage({value, timeLeft, players}) {
@@ -54,8 +55,12 @@ export default connect('isOnline, player, gameInProgress, stage, timeLeft, playe
         if (!isOnline)
             return <Loading/>;
 
+        const classes = classnames({
+            [stage]:true,
+        });
+
         return (
-            <tk-stage class={stage}
+            <tk-stage class={classes}
                      myturn={get(player, 'itHisTurn') + ''}
                      style={customProperties}
             >

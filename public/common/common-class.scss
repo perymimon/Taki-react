@@ -143,3 +143,20 @@
 .rotateY75{
   transform: rotateY(75deg);
 }
+
+.background-inherit{
+  background: inherit;
+  background-attachment: fixed;
+}
+
+.unvisible-scrollbar{
+
+  &::-webkit-scrollbar,
+  &::-webkit-scrollbar-button,
+  &::-webkit-scrollbar-corner,
+  &::-webkit-scrollbar-thumb,
+  &::-webkit-scrollbar-track{
+   display: none !important;
+  }
+
+}

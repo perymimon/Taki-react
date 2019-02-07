@@ -116,9 +116,21 @@ tk-stage.in-game {
 
     player-list {
       flex: 1;
-      overflow: hidden;
+      overflow-x: overlay;
+      overflow-y: hidden;
+
+      tk-player-board.main-player{
+        position: sticky;
+        left: 0;
+      }
     }
   }
 
 
+}
+
+
+game,tk-game,tk-stage,header,player-list,tk-player-board{
+  background: inherit;
+  background-attachment: fixed;
 }

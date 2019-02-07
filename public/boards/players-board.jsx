@@ -18,8 +18,13 @@ export default connect('player, players, turn')(
         if (!player) return null;
         // players = players.filter( p => p.token != player.token);
         const otherPlayer = players.filter( p=> p.token !== player.token);
+
+        requestAnimationFrame(function () {
+            document.querySelector('tk-player-board.active').scrollIntoViewIfNeeded();
+        });
+
         return (
-            <player-list>
+            <player-list class="unvisible-scrollbar">
                 <MainPlayer player={player} isActive={player.itHisTurn}/>
 
                 {otherPlayer.map((p) => (
