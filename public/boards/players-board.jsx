@@ -17,22 +17,28 @@ export default connect('player, players, turn')(
     function PlayersBoard({player, players, turn}) {
         if (!player) return null;
         // players = players.filter( p => p.token != player.token);
-        const otherPlayer = players.filter( p=> p.token !== player.token);
+        // const otherPlayer = players.filter(p => p.token !== player.token);
+        setTimeout(function () {
+            requestAnimationFrame(function () {
+                const playerBoard = document.querySelector('tk-player-board.active');
+                playerBoard && playerBoard.scrollIntoView({block:'start',inline:'end'});
+            });
+        },50);
 
-        requestAnimationFrame(function () {
-            document.querySelector('tk-player-board.active').scrollIntoViewIfNeeded();
-        });
 
         return (
             <player-list class="unvisible-scrollbar">
-                <MainPlayer player={player} isActive={player.itHisTurn}/>
 
-                {otherPlayer.map((p) => (
-                    <Player player={p}
-                            isActive={p.itHisTurn}
-                            key={p.token}
+
+                {players.map((p) => {
+                    if(p.token === player.token){
+                        return   <MainPlayer player={player} isActive={player.itHisTurn} key={p.token}/>
+                    }
+                    return <Player player={p}
+                                   isActive={p.itHisTurn}
+                                   key={p.token}
                     />
-                ))}
+                })}
 
             </player-list>
         )

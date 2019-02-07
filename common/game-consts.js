@@ -9,6 +9,7 @@ exports.SOCKET_EVENTS = {
     UPDATE_GAME_STATE: 'update-game-state',
     INCOMING_MESSAGE: 'incoming-message',
     CONNECTION: 'connection',
+    DISCONNECT: 'disconnect',
     LOGIN: 'login',
     LOGOUT:'logout',
     LOGGED_IN: 'logged-in',

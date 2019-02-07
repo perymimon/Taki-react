@@ -118,10 +118,21 @@ tk-stage.in-game {
       flex: 1;
       overflow-x: overlay;
       overflow-y: hidden;
+      display: grid;
+      grid-auto-flow: column;
+
+      tk-player-board.small-player-panel{
+        @media #{$on-small-screen}{
+          small-panel-value{
+            grid-row: 3;
+            grid-column: 1;
+          }
+        }
+      }
 
       tk-player-board.main-player{
-        position: sticky;
-        left: 0;
+        //position: sticky;
+        //left: 0;
       }
     }
   }
