@@ -64,6 +64,10 @@ module.exports = function (io) {
         Users.removeUser(ctx.token);
     });
 
+    io.on(SOCKET_EVENTS.DISCONNECT, (ctx) =>{
+        game.exitPlayer(ctx.token);
+    });
+
     io.on(SOCKET_EVENTS.START_GAME, (ctx, data) => {
         game.setup();
     });

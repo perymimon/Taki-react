@@ -291,6 +291,9 @@ function Game() {
         exitPlayer(playerToken) {
             if (!this.isPlayerInGame(playerToken)) return false;
             const player = getPlayer(playerToken);
+            if(player.index === turnTracker.whatIndex()){
+                moveToNextPlayer();
+            }
             const i = players.indexOf(player);
             players.splice(i, 1);
             deck.splice(0,0, ... player.hand);
