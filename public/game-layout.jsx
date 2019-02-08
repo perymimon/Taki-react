@@ -14,6 +14,7 @@ import Hand from './component/hand';
 import Sidebar from './boards/side-bar';
 
 import {connect} from 'unistore/src/combined/react'
+import {Preload} from './directives/preload';
 import {SmallPanelValue} from './link';
 import {classnames} from './utils/utils';
 
@@ -65,6 +66,7 @@ export default connect('isOnline, player, gameInProgress, stage, timeLeft, playe
                      style={customProperties}
             >
                 <Stage value={stage} timeLeft={timeLeft} players={players}/>
+                <Preload/>
             </tk-stage>
         )
     },
