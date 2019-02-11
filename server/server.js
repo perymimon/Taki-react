@@ -56,7 +56,7 @@ app.use(route.get('/register', function (ctx) {
     const token = ctx.cookies.get(tokenName) || createToken();
     ctx.cookies.set(tokenName, token, {
         maxAge: 10 * 365 * 24 * 60 * 60 * 1000, /*10 years*/
-        // httpOnly: false,
+        httpOnly: false,
         overwrite: true,
         // domain:'netlify.com',
         // sameSite:'Lax'
