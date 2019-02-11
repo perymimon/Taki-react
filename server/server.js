@@ -59,7 +59,7 @@ app.use(route.get('/register', function (ctx) {
         httpOnly: false,
         overwrite: true,
         domain:'netlify.com',
-        SameSite:'Lax'
+        sameSite:'Lax'
         // secure:false
     });
     ctx.body = token;
@@ -70,7 +70,7 @@ app.use(async function (ctx) {
     await send(ctx, 'public/.dist/index.html');
 });
 // app.use(require('koa-bodyparser')());
-// app.use(require('koa-session')({secret: 'keyboard cat',resave:true,saveUninitialized: true}, app));
+app.use(require('koa-session')({secret: 'keyboard cat',resave:true,saveUninitialized: true}, app));
 
 lobbyIO.use((ctx, next) => {
     // ctx.token = ctx.socket.socket.handshake.query.token;
