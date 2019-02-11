@@ -69,6 +69,7 @@ app.use(route.get('/register', function (ctx) {
     ctx.set('Cache-Control', 'no-cache');
     ctx.set('Set-Cookie', `game-token=${token}; path=/; expires=${expires.toUTCString()}`);
     ctx.body = token;
+    console.log('ctx.origin', ctx.origin);
     console.log('register', ctx);
 }));
 
