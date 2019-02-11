@@ -64,6 +64,7 @@ app.use(route.get('/register', function (ctx) {
     //     // sameSite:'Lax'
     //     // secure:false
     // });
+    ctx.set("Access-Control-Allow-Origin", process.env.ORIGIN_CLIENT );
     ctx.set('Cache-Control', 'no-cache');
     ctx.set('Set-Cookie', `game-token=${token}; path=/; expires=${expires.toUTCString()}`);
     ctx.body = token;

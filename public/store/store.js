@@ -4,6 +4,7 @@ import io from "socket.io-client/dist/socket.io.slim.js"
 
 import {storeStateActions, initState} from './store-state-actions';
 
+
 export const store = process.env.NODE_ENV === 'production' ?
     createStore(initState) : devtools(createStore(initState));
 // export const store = devtools(createStore(initState));
@@ -31,7 +32,11 @@ socket.on('connect', function () {
     console.log('server domain:', process.env.SERVER_DOMAIN);
 });
 
-fetch(SERVER_DOMAIN + '/register?' + Date.now() ).then(function (response) {
+fetch(SERVER_DOMAIN + '/register?' + Date.now(), {
+    mode: "cors",
+    cache: "no-cache",
+    credentials: 'include'
+}).then(function (response) {
     if (response.ok) {
         socket.open();
     }
