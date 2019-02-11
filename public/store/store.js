@@ -30,7 +30,8 @@ socket.on('connect', function () {
     console.log('player token:', token);
     console.log('server domain:', process.env.SERVER_DOMAIN);
 });
-fetch(SERVER_DOMAIN + '/register').then(function (response) {
+
+fetch(SERVER_DOMAIN + '/register?' + Date.now() ).then(function (response) {
     if (response.ok) {
         socket.open();
     }
