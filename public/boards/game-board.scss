@@ -11,7 +11,7 @@ board-game {
   align-items: center;
   align-content: center;
   justify-content: space-evenly;
-  transform: translateZ(13em) rotateX(45deg) translateZ(0em);
+  transform: rotateX(45deg) translateZ(0em);
   transform-origin: bottom;
   border: 3px solid var(--border-color);
   background-color: rgba(43, 43, 43, 0.25);
