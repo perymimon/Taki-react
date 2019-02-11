@@ -60,7 +60,7 @@ app.use(route.get('/register', function (ctx) {
         overwrite: true,
         domain:'taki.netlify.com'
     });
-    ctx.body = 'registered'
+    ctx.body = token;
 }));
 
 app.use(async function (ctx) {
