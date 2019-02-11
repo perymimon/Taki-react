@@ -39,7 +39,7 @@ app.use(function (ctx, next) {
     ctx.response.set("Access-Control-Allow-Origin", '*');
     ctx.response.set("Access-Control-Allow-Credentials", true);
     ctx.response.set('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
-    ctx.response.set("Access-Control-Allow-Headers", 'Origin,X-Requested-With,Content-Type,Accept,content-type,application/json,Set-Cookie');
+    ctx.response.set("Access-Control-Allow-Headers", 'Origin,X-Requested-With,Content-Type,Accept,content-type,application/json,Set-Cookie,cookie');
     next();
 });
 app.use(function (ctx, next) {
@@ -56,18 +56,18 @@ app.use(route.get('/register', function (ctx) {
     const token = ctx.cookies.get(tokenName) || createToken();
     const maxAge = 10 * 365 * 24 * 60 * 60 * 1000 /*10 years*/;
     const expires = new Date(Date.now() + maxAge);
-    // ctx.cookies.set(tokenName, token, {
-    //     maxAge: 10 * 365 * 24 * 60 * 60 * 1000, /*10 years*/
-    //     httpOnly: false,
-    //     overwrite: true,
-    //     // domain:'netlify.com',
-    //     // sameSite:'Lax'
-    //     // secure:false
-    // });
-    // ctx.set("Access-Control-Allow-Origin", ctx.origin );
-    ctx.set("Access-Control-Allow-Origin", 'https://taki.netlify.com/' );
+    ctx.cookies.set(tokenName, token, {
+        maxAge: 10 * 365 * 24 * 60 * 60 * 1000, /*10 years*/
+        httpOnly: false,
+        overwrite: true,
+        // domain:'netlify.com',
+        // sameSite:'Lax'
+        // secure:false
+    });
+    ctx.set("Access-Control-Allow-Origin", ctx.headers.origin );
+    // ctx.set("Access-Control-Allow-Origin", 'https://taki.netlify.com/' );
     ctx.set('Cache-Control', 'no-cache');
-    ctx.set('Set-Cookie', `game-token=${token}; path=/; expires=${expires.toUTCString()}`);
+    // ctx.set('Set-Cookie', `game-token=${token}; path=/; expires=${expires.toUTCString()}`);
     ctx.body = token;
     console.log('ctx.origin', ctx.origin);
     console.log('ctx.headers', Object.keys(ctx.headers));
@@ -103,6 +103,9 @@ lobbyIO.on('connection', function (ctx, data) {
 
 require('./game-server')(lobbyIO, app);
 
+if(!process.env.PORT){
+    console.log('use default port')
+}
 const PORT = process.env.PORT || 8080;
 
 app.listen(PORT, function () {
