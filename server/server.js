@@ -35,7 +35,7 @@ app.use(require('koa-static')(path.resolve('public'), {extensions: ['html']}));
 app.use(require('koa-static')(path.resolve('bower_components')));
 app.use(require('koa-static')(path.resolve('node_modules')));
 
-app.use(function(ctx, next) {
+app.use(function (ctx, next) {
     ctx.response.set("Access-Control-Allow-Origin", '*');
     ctx.response.set("Access-Control-Allow-Credentials", true);
     ctx.response.set('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
@@ -54,14 +54,18 @@ app.use(route.get('/ping', function (ctx) {
 app.use(route.get('/register', function (ctx) {
     const tokenName = 'game-token';
     const token = ctx.cookies.get(tokenName) || createToken();
-    ctx.cookies.set(tokenName, token, {
-        maxAge: 10 * 365 * 24 * 60 * 60 * 1000, /*10 years*/
-        httpOnly: false,
-        overwrite: true,
-        // domain:'netlify.com',
-        // sameSite:'Lax'
-        // secure:false
-    });
+    const maxAge = 10 * 365 * 24 * 60 * 60 * 1000 /*10 years*/;
+    const expires = new Date(Date.now() + maxAge);
+    // ctx.cookies.set(tokenName, token, {
+    //     maxAge: 10 * 365 * 24 * 60 * 60 * 1000, /*10 years*/
+    //     httpOnly: false,
+    //     overwrite: true,
+    //     // domain:'netlify.com',
+    //     // sameSite:'Lax'
+    //     // secure:false
+    // });
+    ctx.set('Cache-Control', 'no-cache');
+    ctx.set('Set-Cookie', `game-token=${token}; path=/; expires=${expires.toUTCString()}`);
     ctx.body = token;
 }));
 
@@ -70,7 +74,7 @@ app.use(async function (ctx) {
     await send(ctx, 'public/.dist/index.html');
 });
 // app.use(require('koa-bodyparser')());
-app.use(require('koa-session')({secret: 'keyboard cat',resave:true,saveUninitialized: true}, app));
+app.use(require('koa-session')({secret: 'keyboard cat', resave: true, saveUninitialized: true}, app));
 
 lobbyIO.use((ctx, next) => {
     // ctx.token = ctx.socket.socket.handshake.query.token;
@@ -87,7 +91,7 @@ lobbyIO.use((ctx, next) => {
 lobbyIO.on('connection', function (ctx, data) {
     const tokenName = 'game-token';
     const cookie = socketCookies(ctx.socket);
-    const token = cookie.get(tokenName) ;
+    const token = cookie.get(tokenName);
     // cookie.set(tokenName, token, 10 * 365 /*10 years*/);
     ctx.socket.token = ctx.data.token = token;
 });
