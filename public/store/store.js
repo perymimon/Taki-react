@@ -33,7 +33,7 @@ socket.on('connect', function () {
 });
 
 fetch(SERVER_DOMAIN + '/register?' + Date.now(), {
-    mode: "cors",
+    // mode: "cors",
     cache: "no-cache",
     credentials: 'include'
 }).then(function (response) {
