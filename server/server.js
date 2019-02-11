@@ -39,7 +39,7 @@ app.use(function (ctx, next) {
     ctx.response.set("Access-Control-Allow-Origin", '*');
     ctx.response.set("Access-Control-Allow-Credentials", true);
     ctx.response.set('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
-    ctx.response.set("Access-Control-Allow-Headers", 'Origin,X-Requested-With,Content-Type,Accept,content-type,application/json');
+    ctx.response.set("Access-Control-Allow-Headers", 'Origin,X-Requested-With,Content-Type,Accept,content-type,application/json,Set-Cookie');
     next();
 });
 app.use(function (ctx, next) {
@@ -70,7 +70,8 @@ app.use(route.get('/register', function (ctx) {
     ctx.set('Set-Cookie', `game-token=${token}; path=/; expires=${expires.toUTCString()}`);
     ctx.body = token;
     console.log('ctx.origin', ctx.origin);
-    console.log('register', ctx);
+    console.log('ctx.headers', Object.keys(ctx.headers));
+    // console.log('register', ctx);
 }));
 
 app.use(async function (ctx) {
