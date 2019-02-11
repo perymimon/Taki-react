@@ -40,9 +40,7 @@
     "node-sass": "^4.9.0",
     "parcel-bundler": "^1.11.0",
     "parcel-plugin-bundle-visualiser": "^1.2.0",
-    "parcel-plugin-sw-precache": "^1.0.3",
-    "parcel-plugin-url-loader": "^1.2.6",
-    "parcel-plugin-inlinesvg": "^0.1.0"
+    "parcel-plugin-sw-precache": "^1.0.3"
   },
   "engines": {
     "node": "10.x"
