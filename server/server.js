@@ -59,6 +59,7 @@ app.use(route.get('/register', function (ctx) {
         httpOnly: false,
         overwrite: true,
         domain:'netlify.com',
+        SameSite:'Lax'
         // secure:false
     });
     ctx.body = token;
