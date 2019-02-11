@@ -58,7 +58,8 @@ app.use(route.get('/register', function (ctx) {
         maxAge: 10 * 365 * 24 * 60 * 60 * 1000, /*10 years*/
         httpOnly: false,
         overwrite: true,
-        domain:'taki.netlify.com'
+        domain:'taki.netlify.com',
+        secure:false
     });
     ctx.body = token;
 }));
