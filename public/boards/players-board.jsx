@@ -27,7 +27,7 @@ export default connect('player, players, turn')(
 
 
         return (
-            <player-list class="unvisible-scrollbar">
+            <player-list class="invisible-scrollbar game-background">
 
 
                 {players.map((p) => {

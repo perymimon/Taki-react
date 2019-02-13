@@ -52,6 +52,7 @@ export function animate(element, animeName, vars, callback) {
 export function resetTransform(element, overwrite = {}) {
     var {transform, transformOrigin, transition} = element.style;
 
+    
     Object.assign(element.style, {
         transition: 'none',
         transform: 'none',

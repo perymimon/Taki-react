@@ -14,4 +14,11 @@
 * add score to player
 * create project with the name Ampoule for usful micro lib
   that  nice if was embeded in js system . but they not
+* cancel scroll to top when player take card
+* auto exist player when all is socket disconnect
+* fix boardgame despair in 3d;
+* update icons of sorting;
+* smaller text of the credit
+*    
+
    

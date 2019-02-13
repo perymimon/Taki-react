@@ -11,7 +11,6 @@ export function measurementPileToCard(pileCards, handCard, throwBottom = true) {
         transform: `translateY(${bottom}px)`,
     });
 
-
     const {x, y, right} = elementRectDiff(pileCards, handCard);
 
     restores();

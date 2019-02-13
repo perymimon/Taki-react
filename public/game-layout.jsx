@@ -28,9 +28,11 @@ function Stage({value, timeLeft, players}) {
                 <header className="top-header">
                     <PlayerList/>
                 </header>
-                <ControlBoard/>
+                <ControlBoard className="game-background"/>
                 <Sidebar/>
-                <BoardGame/>
+                <game-table class="x-game-background">
+                    <BoardGame/>
+                </game-table>
                 <Hand/>
             </Fragment>
         ),

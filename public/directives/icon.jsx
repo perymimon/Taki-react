@@ -18,6 +18,9 @@ import bee1 from "../assets/avatar/014-bee-1.html";
 import dog1 from "../assets/avatar/015-dog-1.html";
 
 import stopwatch from '../assets/icons/stopwatch.html'
+import hosting from '../assets/icons/hosting.html'
+import reset from '../assets/icons/reset.html'
+import exit from '../assets/icons/turn-on.html'
 
 // const parser = new DOMParser();
 // const svgElement = parser.parseFromString(chromeSvg, "image/svg+xml");
@@ -25,13 +28,13 @@ import stopwatch from '../assets/icons/stopwatch.html'
 const icons = {
     snail, dog, monkey, fox, bee, boy, student, 'girl-2': girl2,
     cat, penguin, bird, chicken, 'bee-1': bee1, 'dog-1': dog1, 'girl-1': girl1,
-    stopwatch,
+    stopwatch,hosting,reset,exit
 };
-export default function Icon({className, iconName, children}) {
+export default function Icon({className, iconName, children, title}) {
     // return <i className={`${'icon'} ${className}`}>
     //     {Array(27).fill('').map( (e,i)=> <span key={i} className={"path"+(i+1)}></span>)}
     // </i>
-    return <tk-icon class={(className|| '') + ' icon'}>
+    return <tk-icon class={(className|| '') + ' icon'} title={title}>
         {React.createElement('span', {
             dangerouslySetInnerHTML: {__html: icons[iconName]},
         })}

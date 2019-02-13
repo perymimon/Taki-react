@@ -1,7 +1,20 @@
 control-board{
-    display: inline-block;
+    display: inline-flex;
+    /* flex-direction: column; */
+    flex-wrap: wrap;
+    vertical-align: middle;
 
     tk-timer{
         font-size: 1em;
+    }
+    .control-icons{
+        flex: 1;
+        align-self: end;
+        vertical-align: middle;
+        text-align: end;
+
+        tk-icon{
+            font-size: 2em;
+        }
     }
 }

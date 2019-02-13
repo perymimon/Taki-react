@@ -2,6 +2,7 @@ import './signin-board.scss'
 import React from 'react';
 import Icon,{Icon2} from '../directives/icon'
 import {store,actions} from '../store/store'
+import {animate} from '../utils/utils';
 
 const avatars = [
     'snail', 'dog', 'monkey','fox', 'bee', 'boy',  'student','girl-2',
@@ -13,15 +14,17 @@ export default function SignInBoard(props) {
         <form className="sign-in-board board shiny-block" onSubmit={(e) => submit(e)}>
             <input placeholder="your name" name="name" />
             <input placeholder="slogan" name="slogan" />
-            <avatar-select>
+            <fieldset className={'avatar-select'} name="avatar-select">
+                <div className={'flex-inner-wrapper'}>
                 {avatars.map(iconName => (
                     <label key={iconName}>
                         <input name="avatar" type="radio" value={iconName} tabIndex="true"/>
                         <Icon iconName={iconName}/>
                     </label>
                 ))}
-            </avatar-select>
-            <button type="submit" className="main-button" tabIndex="true"> join</button>
+                </div>
+            </fieldset>
+            <button type="submit" className="main-button" tabIndex="true">join</button>
         </form>
     )
 }
@@ -35,6 +38,21 @@ function submit(event) {
         slogan: formElements.slogan.value,
         avatar: formElements.avatar.value,
     };
+
+    if(!data.name){
+        animate(formElements.name,'heartBeat');
+        return false
+    }
+
+    if(!data.slogan){
+        animate(formElements.slogan,'heartBeat');
+        return false
+    }
+
+    if(!data.avatar){
+        animate(formElements['avatar-select'],'heartBeat');
+        return false
+    }
 
     store.run.login(data);
     return false;
