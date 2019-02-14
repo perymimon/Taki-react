@@ -10,6 +10,7 @@ exports.SOCKET_EVENTS = {
     INCOMING_MESSAGE: 'incoming-message',
     CONNECTION: 'connection',
     DISCONNECT: 'disconnect',
+    CONNECT: 'connect',
     LOGIN: 'login',
     LOGOUT:'logout',
     LOGGED_IN: 'logged-in',
@@ -19,6 +20,7 @@ exports.SOCKET_EVENTS = {
     // SIGN_OUT:'sign-out',
     START_GAME: 'start-game',
     RESET_GAME:'reset-game'
+
 };
 
 exports.GAME_EVENTS = {

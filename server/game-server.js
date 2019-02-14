@@ -45,12 +45,27 @@ module.exports = function (io) {
     io.on(SOCKET_EVENTS.CONNECTION, (ctx, data) => {
         // ctx.token = ctx.socket.handshake.query.token;//todo: open issue for un consist
         const token = ctx.socket.token;
-        const player = game.getPlayer(token) || {};
+        const user = Users.letUser(token);
+        user.connections.add(ctx.socket);
+        // const player = game.getPlayer(token) || {};
+        //
         console.log(
-            `${token}: ${player.name || '\b'} connected`,
+            `${token}: ${user.name || '\banonymous'} connected`,
         );
 
         updatingGameState(ctx.socket);
+    });
+
+    Users.on(SOCKET_EVENTS.DISCONNECT,function (user) {
+        game.exitPlayer(user.token);
+    });
+
+    io.on(SOCKET_EVENTS.DISCONNECT, (ctx) => {
+
+        const token = ctx.socket.token;
+        const user = Users.letUser(token);
+        user.disconnect(ctx.socket.socket);
+
     });
 
     io.on(SOCKET_EVENTS.LOGIN, (ctx, data) => {

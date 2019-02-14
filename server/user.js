@@ -1,9 +1,21 @@
 const users = {};
 var color = "F44336,9C27B0,673AB7,3F51B5,2196f3,03a9f4,00BCD4,009688,4CAF50,8BC34A,cddc39,ffeb3b,ffc107,ff9800,ff5722".split(',');
+const EventEmitter = require('events');
 
+const {SOCKET_EVENTS, GAME_SETTING} = require('../common/game-consts');
+const {USER_TTL} = GAME_SETTING;
 
-class User {
+const userEventBus = new EventEmitter();
+
+class User extends EventEmitter {
+    static on(...args){
+        userEventBus.on(...args)
+    }
+    static off(...args){
+        userEventBus.off(...args)
+    }
     constructor(token, name, slogan, avatar) {
+        super();
         Object.assign(this, {
             hand: [],
             token,
@@ -11,7 +23,9 @@ class User {
             name,
             slogan,
             avatar,
-        })
+            connections: new Set(), /*socketsConnection*/
+        });
+        this._ttlTimeout = null;
     }
 
     get public() {
@@ -21,27 +35,53 @@ class User {
         return userClone;
     }
 
+    disconnect(socket) {
+        this.connections.delete(socket);
+        if (this.connections.size === 0) {
+            this.online = false;
+            this._ttlTimeout = setTimeout(() => {
+                this.emit(SOCKET_EVENTS.DISCONNECT);
+                userEventBus.emit(SOCKET_EVENTS.DISCONNECT, this);
+            }, USER_TTL);
+        }
+    }
+
+    connect(socket) {
+        clearTimeout(this._ttlTimeout);
+        this.online = true;
+        this.emit(SOCKET_EVENTS.CONNECT);
+        userEventBus.emit(SOCKET_EVENTS.CONNECT, this);
+        this.connections.add(socket);
+    }
+
+    set(data) {
+        Object.assign(this, data)
+    }
+
     toString() {
-        return `[${this.name}]`
+        return `[${this.token}]`
     }
 }
 
-exports.letUser = function (token, {name, slogan, avatar}) {
+User.letUser = function (token, {name, slogan, avatar}={}) {
     users[token] = users[token] || new User(token, name, slogan, avatar);
 
+    users[token].set({name, slogan, avatar});
     // users[token].name = name;
     // users[token].slogan = slogan;
     // users[token].avatar = avatar;
 
     return users[token];
 };
-exports.removeUser = function( token ){
+User.removeUser = function (token) {
     delete users[token];
 };
 
-exports.getUsers = () => users;
+User.getUsers = () => users;
 
 var colorPool = [...color];
+
+module.exports = User;
 
 function randomColor() {
     var i = (Math.random() * colorPool.length) | 1;
