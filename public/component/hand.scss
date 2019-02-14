@@ -33,6 +33,13 @@ hand-game {
       display: inline-block;
     }
     button{
+      &:hover{
+        transform: scale(1.1);
+      }
+      &:active{
+        transform: scale(0.9);
+      }
+
       tk-icon{
         margin-right: -1em;
         &:nth-child(1){
