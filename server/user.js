@@ -39,6 +39,7 @@ class User extends EventEmitter {
         this.connections.delete(socket);
         if (this.connections.size === 0) {
             this.online = false;
+            clearTimeout(this._ttlTimeout);
             this._ttlTimeout = setTimeout(() => {
                 this.emit(SOCKET_EVENTS.DISCONNECT);
                 userEventBus.emit(SOCKET_EVENTS.DISCONNECT, this);
@@ -55,7 +56,10 @@ class User extends EventEmitter {
     }
 
     set(data) {
-        Object.assign(this, data)
+        for(var i in data){
+            if( !data[i]) continue;
+            this[i] = data[i];
+        }
     }
 
     toString() {

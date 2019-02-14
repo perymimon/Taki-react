@@ -13,7 +13,6 @@
 * in begin play put option for number of round
 * add score to player
   that  nice if was embeded in js system . but they not
-* auto exist player when all is socket disconnect
 * update icons of sorting;
 
    

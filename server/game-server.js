@@ -46,9 +46,7 @@ module.exports = function (io) {
         // ctx.token = ctx.socket.handshake.query.token;//todo: open issue for un consist
         const token = ctx.socket.token;
         const user = Users.letUser(token);
-        user.connections.add(ctx.socket);
-        // const player = game.getPlayer(token) || {};
-        //
+        user.connect(ctx.socket);
         console.log(
             `${token}: ${user.name || '\banonymous'} connected`,
         );
@@ -57,13 +55,18 @@ module.exports = function (io) {
     });
 
     Users.on(SOCKET_EVENTS.DISCONNECT,function (user) {
+        console.log(
+            `${user.token}: ${user.name || '\banonymous'} left `,
+        );
         game.exitPlayer(user.token);
     });
 
     io.on(SOCKET_EVENTS.DISCONNECT, (ctx) => {
-
         const token = ctx.socket.token;
         const user = Users.letUser(token);
+        console.log(
+            `${token}: ${user.name || '\banonymous'} disconnected`,
+        );
         user.disconnect(ctx.socket.socket);
 
     });

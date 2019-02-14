@@ -14,6 +14,6 @@ export default function PlayerName({token}) {
     return (
         <player-name
             class="dramatic-text"
-            style={customProperties}>{token}</player-name>
+            style={customProperties}>{get(player,'name')}</player-name>
     )
 }
