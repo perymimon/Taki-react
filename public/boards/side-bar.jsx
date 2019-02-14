@@ -25,8 +25,8 @@ function Messages({message}) {
                     }
                     match = token.match(userExp);
                     if (match) {
-                        const [, playerName] = match;
-                        return <PlayerName name={playerName} key={playerName}/>;
+                        const [, playerToken] = match;
+                        return <PlayerName token={playerToken} key={playerToken}/>;
                     }
                     return token;
                 })
