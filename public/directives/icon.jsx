@@ -21,6 +21,12 @@ import stopwatch from '../assets/icons/stopwatch.html'
 import hosting from '../assets/icons/hosting.html'
 import reset from '../assets/icons/reset.html'
 import exit from '../assets/icons/turn-on.html'
+import sortNumericAsc from '../assets/icons/sort-numeric-asc.html'
+import sortNumericDesc from '../assets/icons/sort-numeric-desc.html'
+import sortColor from '../assets/icons/color-sort.html'
+import cardNumber1 from '../assets/icons/card0001.html'
+import cardNumber2 from '../assets/icons/card0002.html'
+import cardNumber3 from '../assets/icons/card0003.html'
 
 // const parser = new DOMParser();
 // const svgElement = parser.parseFromString(chromeSvg, "image/svg+xml");
@@ -28,13 +34,14 @@ import exit from '../assets/icons/turn-on.html'
 const icons = {
     snail, dog, monkey, fox, bee, boy, student, 'girl-2': girl2,
     cat, penguin, bird, chicken, 'bee-1': bee1, 'dog-1': dog1, 'girl-1': girl1,
-    stopwatch,hosting,reset,exit
+    stopwatch,hosting,reset,exit,sortColor,sortNumericAsc,sortNumericDesc,
+    cardNumber1,cardNumber2,cardNumber3
 };
-export default function Icon({className, iconName, children, title}) {
+export default function Icon({className, iconName, children, title,onClick,value}) {
     // return <i className={`${'icon'} ${className}`}>
     //     {Array(27).fill('').map( (e,i)=> <span key={i} className={"path"+(i+1)}></span>)}
     // </i>
-    return <tk-icon class={(className|| '') + ' icon'} title={title}>
+    return <tk-icon class={(className|| '') + ' icon'} title={title} onClick={onClick} value={value}>
         {React.createElement('span', {
             dangerouslySetInnerHTML: {__html: icons[iconName]},
         })}

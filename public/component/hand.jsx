@@ -1,4 +1,8 @@
 import React, {Component, useState} from "react";
+import cardNumber1 from '../assets/icons/card0001.html';
+import sortColor from '../assets/icons/color-sort.html';
+import sortNumericDesc from '../assets/icons/sort-numeric-desc.html';
+import Icon from '../directives/icon';
 import {Card, connect, get} from '../link'
 import './hand.scss';
 import './select-color.scss';
@@ -41,7 +45,7 @@ export default connect('turn, players, player, mode')(
         const playerCardHandSorted = sort(playerHand.slice());
 
         function updateSort(event) {
-            const sortKey = event.target.value;
+            const sortKey = event.currentTarget.value;
             addToSort(sortKey);
             forceUpdate();
             animeSortHandCard(playerCardHandSorted);
@@ -58,10 +62,41 @@ export default connect('turn, players, player, mode')(
                     }
                     {playerHand.length} cards
                     <div className="sorting">
-                        <tk-text>sort:</tk-text>
-                        <button value="symbol" onClick={updateSort}>by symbol</button>
-                        <button value="color" onClick={updateSort}>by color</button>
-                        <button value="symbol inv" onClick={updateSort}>by symbol descending</button>
+                        {/*<tk-text>sort:</tk-text>*/}
+                        {/*<Icon iconName="sortNumericAsc"*/}
+                              {/*value="symbol"*/}
+                              {/*onClick={updateSort}*/}
+                              {/*title="sort by symbol"/>*/}
+
+                        {/*<Icon iconName="sortNumericDesc"*/}
+                              {/*value="symbol inv"*/}
+                              {/*onClick={updateSort}*/}
+                              {/*title="sort by symbol descending"/>*/}
+
+                        {/*<Icon iconName="sortColor"*/}
+                              {/*value="color"*/}
+                              {/*onClick={updateSort}*/}
+                              {/*title="sort by symbol"/>*/}
+
+
+                        <button id="sortSymbolAsc" value="symbol" onClick={updateSort} title="by symbol" className="content">
+                            <Icon iconName="cardNumber1"/>
+                            <Icon iconName="cardNumber2"/>
+                            <Icon iconName="cardNumber3"/>
+                        </button>
+
+                        <button id="sortSymbolDesc" value="symbol inv" onClick={updateSort} title="by symbol descending" className="content">
+                            <Icon iconName="cardNumber3"/>
+                            <Icon iconName="cardNumber2"/>
+                            <Icon iconName="cardNumber1"/>
+                        </button>
+
+                        <button id="sortColor" value="color" onClick={updateSort} title="by color" className="content">
+                            <Icon iconName="cardNumber3"/>
+                            <Icon iconName="cardNumber2"/>
+                            <Icon iconName="cardNumber1"/>
+                        </button>
+
                     </div>
                 </div>
                 {

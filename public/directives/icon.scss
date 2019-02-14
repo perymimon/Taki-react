@@ -6,9 +6,12 @@ tk-icon{
   stroke: currentColor;
   fill: currentColor;
   color: black;
+
+  span,svg{
+    display: inline-block;
+    width: inherit;
+    height: inherit;
+  }
 }
 
-svg{
-  width: inherit;
-  height: inherit;
-}
+

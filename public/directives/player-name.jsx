@@ -3,9 +3,9 @@ import './player-name.scss'
 import {store} from '../store/store';
 import {get} from '../link'
 
-export default function PlayerName({name}) {
+export default function PlayerName({token}) {
     const state = store.getState();
-    const player = state.players.find(p => p.name === name);
+    const player = state.players.find(p => p.token === token);
 
     const customProperties = {
         '--player-color': get(player,'color')
@@ -14,6 +14,6 @@ export default function PlayerName({name}) {
     return (
         <player-name
             class="dramatic-text"
-            style={customProperties}>{name}</player-name>
+            style={customProperties}>{token}</player-name>
     )
 }

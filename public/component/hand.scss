@@ -1,5 +1,7 @@
-hand-game{
-  color : var(--player-color);
+@import "../common/variables";
+
+hand-game {
+  color: var(--player-color);
   display: block;
   position: relative;
   border-top: 2px solid;
@@ -19,11 +21,61 @@ hand-game{
   //  scroll-snap-align: start;
   //}
 
-  .sorting{
+  .sorting {
     float: right;
+
+    tk-icon {
+      pointer-events: all;
+      width: 2em;
+      height: 2em;
+      margin-right: 0.5em;
+      fill:white;
+      display: inline-block;
+    }
+    button{
+      tk-icon{
+        margin-right: -1em;
+        &:nth-child(1){
+          transform: rotate(10deg);
+        }
+        &:nth-child(2){
+          transform: rotate(10deg);
+        }
+        &:nth-child(3){
+          transform: rotate(-10deg);
+        }
+      }
+      svg {
+        width: 1.5em;
+        background: #eee;
+        color:black;
+        fill:currentColor;
+        padding: 0;
+        margin: 0;
+        border-radius: 0;
+        border: 1px solid currentColor;
+      }
+
+    }
+    button#sortColor{
+
+      tk-icon svg{
+        &:nth-child(1){
+          color: $card-green;
+        }
+        &:nth-child(2){
+          color:$card-green;
+        }
+        &:nth-child(3){
+          color:$card-green;
+        }
+      }
+
+    }
+
   }
 
-  .title{
+  .title {
     color: white;
     font-size: 1.5rem;
     position: sticky;
@@ -33,7 +85,7 @@ hand-game{
     overflow: hidden;
   }
 
-  .btn-end-turn{
+  .btn-end-turn {
     margin: 0 1em;
     //border: 0.2em solid;
     //height: 2em;
@@ -45,7 +97,7 @@ hand-game{
   }
 }
 
-[myturn="true"] hand{
+[myturn="true"] hand {
   background-color: currentColor;
   transform: translateY(0rem);
 }

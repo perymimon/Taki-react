@@ -135,10 +135,10 @@
       transform-origin: bottom center;
     }
 
-    50% {
-      transform:  translateX(var(--corrX));
-      transform-origin: bottom center;
-    }
+    //50% {
+    //  transform:  translateX(var(--corrX));
+    //  transform-origin: bottom center;
+    //}
 
   }
 }

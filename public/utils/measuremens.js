@@ -128,8 +128,8 @@ export function animeSortHandCard(cards){
                 const rect = handCard.getBoundingClientRect();
                 const {x,y} = rectDiff(originalRects[i], rect);
                 return animate(handCard,'sort-hand-cards',{
-                    '--corrX': 1 * x + 'px',
-                    '--corrY': 1 * y + 'px',
+                    '--corrX': -1 * x + 'px',
+                    '--corrY': -1 * y + 'px',
                     '--anim-delay': (i * 50) + 'ms',
                 })
             });
