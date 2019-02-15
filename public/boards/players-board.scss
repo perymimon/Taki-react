@@ -13,7 +13,6 @@ tk-player-board {
     isolation: auto;
 
     background-image:
-            //radial-gradient(#888 70%, ),
       radial-gradient(var(--player-color) 0%, #8888 );
     transform-origin: left center;
     filter: none;

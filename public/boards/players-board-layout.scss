@@ -58,6 +58,10 @@ tk-player-board.small-player-panel {
   align-items: center;
   justify-content: space-between;
 
+  //@media #{$on-small-screen}{
+  //  grid-template-areas: "avatar name score" "avatar slogan cards";
+  //}
+
 }
 
 
