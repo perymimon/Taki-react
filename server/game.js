@@ -57,7 +57,7 @@ function Game() {
         punishment: 0,
         direction: 1,
         round: 0,
-        victoryRank: [],
+        victoryScore: [],
         get timeLeft() {
             return (GAME_SETTING.TURN_COUNTER - counterDown.timePass)
         },
@@ -202,7 +202,7 @@ function Game() {
             }
 
             if (checkVictoryCondition()) {
-                calcualtePlayersRanks();
+                calcualtePlayersScores();
                 if (publicState.round >= GAME_SETTING.NUMBER_OF_ROUND) {
                     endGame()
                 }
@@ -216,14 +216,14 @@ function Game() {
         }
     }
 
-    function calcualtePlayersRanks() {
-        turnTracker.getCurrent().rank += GAME_SETTING.VICTORY_VALUE;
+    function calcualtePlayersScores() {
+        turnTracker.getCurrent().score += GAME_SETTING.VICTORY_VALUE;
         players.forEach(player => {
-            player.rank += getPlayerRank(player);
+            player.score += getPlayerScore(player);
         });
     }
 
-    function getPlayerRank(player) {
+    function getPlayerScore(player) {
         return player.hand.reduce(function (acc, card) {
             return acc + card.value;
         }, 0)
@@ -273,7 +273,7 @@ function Game() {
             const getPlayer = this.getPlayer;
             if (this.isPlayerInGame(player.token)) return false;
             player.index = players.length;
-            player.rank = 0;
+            player.score = 0;
             player.__defineGetter__('itHisTurn', function () {
                 return this.index === turnTracker.whatIndex();
             });

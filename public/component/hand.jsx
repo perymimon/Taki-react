@@ -11,13 +11,16 @@ import {store, actions} from '../store/store';
 
 import {GAME_MODE} from '../../common/game-consts';
 import {animeSortHandCard} from '../utils/measuremens';
+import {classnames} from '../utils/utils';
 
 
 const sortOrder = new Set();
+var lastSort = '';
 
 function addToSort(key) {
     sortOrder.delete(key);
     sortOrder.add(key);
+
 }
 
 function sort(objects) {
@@ -44,54 +47,76 @@ export default connect('turn, players, player, mode')(
         const playerHand = get(player, 'hand', []);
         const playerCardHandSorted = sort(playerHand.slice());
 
-        function updateSort(event) {
+        function handleSort(event) {
             const sortKey = event.currentTarget.value;
+            lastSort = event.currentTarget.id;
+
             addToSort(sortKey);
             forceUpdate();
             animeSortHandCard(playerCardHandSorted);
         }
 
+        const classes = classnames({
+            sorting: true,
+
+        });
+
         return (
             <hand-game>
 
-                <div className={'title dramatic-text'}>
+                <div className="title dramatic-text clearfix">
                     {
                         (mode === GAME_MODE.TAKI) ?
                             <button className={'btn-end-turn'}
                                     onClick={actions.endTurn}>end turn</button> : null
                     }
                     {playerHand.length} cards
-                    <div className="sorting">
-                        {/*<tk-text>sort:</tk-text>*/}
-                        {/*<Icon iconName="sortNumericAsc"*/}
-                              {/*value="symbol"*/}
-                              {/*onClick={updateSort}*/}
-                              {/*title="sort by symbol"/>*/}
 
-                        {/*<Icon iconName="sortNumericDesc"*/}
-                              {/*value="symbol inv"*/}
-                              {/*onClick={updateSort}*/}
-                              {/*title="sort by symbol descending"/>*/}
+                    <div className={`sorting ${lastSort}`}>
 
-                        {/*<Icon iconName="sortColor"*/}
-                              {/*value="color"*/}
-                              {/*onClick={updateSort}*/}
-                              {/*title="sort by symbol"/>*/}
+                        {/*<label className="content" id="sortSymbolAsc">*/}
+                            {/*<input name="sort" type="radio" value="symbol" tabIndex="true"/>*/}
+                            {/*<div class="checkmark">*/}
+                                {/*<Icon iconName="cardNumber3"/>*/}
+                                {/*<Icon iconName="cardNumber2"/>*/}
+                                {/*<Icon iconName="cardNumber1"/>*/}
+                            {/*</div>*/}
+                        {/*</label>*/}
 
+                        {/*<label className="content" id="sortSymbolDesc">*/}
+                            {/*<input name="sort" type="radio" value="symbol inv" tabIndex="true"/>div*/}
+                            {/*<div className="checkmark"> */}
+                                {/*<Icon iconName="cardNumber3"/>*/}
+                                {/*<Icon iconName="cardNumber2"/>*/}
+                                {/*<Icon iconName="cardNumber1"/>*/}
+                            {/*</div>*/}
+                        {/*</label>*/}
 
-                        <button id="sortSymbolAsc" value="symbol" onClick={updateSort} title="by symbol" className="content">
+                        {/*<label className="content" id="sortColor">*/}
+                            {/*<input name="sort" type="radio" value="color" tabIndex="true"/>*/}
+                            {/*<div className="checkmark">*/}
+                                {/*<Icon iconName="cardNumber3"/>*/}
+                                {/*<Icon iconName="cardNumber2"/>*/}
+                                {/*<Icon iconName="cardNumber1"/>*/}
+                            {/*</div>*/}
+                        {/*</label>*/}
+
+                        {/*button*/}
+                        <button id="sortSymbolAsc" value="symbol" onClick={handleSort} title="by symbol"
+                                className="content">
+                            <Icon iconName="cardNumber3"/>
+                            <Icon iconName="cardNumber2"/>
+                            <Icon iconName="cardNumber1"/>
+                        </button>
+
+                        <button id="sortSymbolDesc" value="symbol inv" onClick={handleSort} title="by symbol descending"
+                                className="content">
                             <Icon iconName="cardNumber1"/>
                             <Icon iconName="cardNumber2"/>
                             <Icon iconName="cardNumber3"/>
                         </button>
 
-                        <button id="sortSymbolDesc" value="symbol inv" onClick={updateSort} title="by symbol descending" className="content">
-                            <Icon iconName="cardNumber3"/>
-                            <Icon iconName="cardNumber2"/>
-                            <Icon iconName="cardNumber1"/>
-                        </button>
-
-                        <button id="sortColor" value="color" onClick={updateSort} title="by color" className="content">
+                        <button id="sortColor" value="color" onClick={handleSort} title="by color"  className="content">
                             <Icon iconName="cardNumber3"/>
                             <Icon iconName="cardNumber2"/>
                             <Icon iconName="cardNumber1"/>

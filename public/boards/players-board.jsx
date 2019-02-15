@@ -57,14 +57,17 @@ function MainPlayer({player, isActive}) {
     });
 
     var hand = player.hand.length;
+    var score = player.score || 0;
 
     return <tk-player-board class={className} style={customProperties}>
         <Icon className={`avatar`} iconName={player.avatar}/>
         <div className="player-name dramatic-text">{player.name}</div>
         <div className="player-slogan">{player.slogan}</div>
+        <SmallPanelValue value={score}/>
         <SmallPanelValue className="amount-hand-cards" icon={'icon-gambling'} value={hand}>
             <Card/>
         </SmallPanelValue>
+
     </tk-player-board>
 }
 
@@ -79,11 +82,13 @@ function Player({player, isActive}) {
         // 'drop-shadow':isActive,
     });
     var hand = player.hand;
+    var score = player.score;
 
     return <tk-player-board class={className} style={customProperties} id={player.token}>
         <Icon className={`avatar`} iconName={player.avatar}/>
         <div className="player-name dramatic-text">{player.name}</div>
         <div className="player-slogan">{player.slogan}</div>
+        <SmallPanelValue value={score}/>
         <SmallPanelValue className="amount-hand-cards" icon='icon-gambling' value={hand}>
             <Card/>
         </SmallPanelValue>

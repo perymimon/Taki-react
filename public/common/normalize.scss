@@ -105,12 +105,14 @@ h1, h2, h3 {
   border: solid transparent;
   border-width: 0 0 0 4px;
 }
-button{
+
+button, input {
   pointer-events: all;
   vertical-align: middle;
   margin: 0.1em;
   text-transform: capitalize;
 }
+
 /*button*/
 .tk-button {
   /* background-color: #616BA9; */
@@ -127,15 +129,29 @@ button{
   }
 }
 
-button.content{
+button.content {
   border: none;
   box-shadow: none;
   line-height: 1em;
   background: none;
   padding: 0;
   margin: 0 .5em;
+}
 
+label {
+  [type=radio] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    position: absolute;
+    top: 0;
+    bottom: 0;
 
+    margin: 0;
+    padding: 0;
+    z-index: 0;
+    width: 100%;
+  }
 }
 
 .flex-inner-wrapper {
@@ -143,4 +159,13 @@ button.content{
   flex-flow: inherit;
   justify-content: inherit;
   align-items: inherit;
+}
+
+
+.clearfix:before, .clearfix:after {
+  content: " ";
+  display: table;
+}
+.clearfix:after {
+  clear: both;
 }

@@ -17,71 +17,6 @@ hand-game {
   //scroll-snap-type: y proximity;
   scroll-behavior: smooth;
 
-  //tk-card{
-  //  scroll-snap-align: start;
-  //}
-
-  .sorting {
-    float: right;
-
-    tk-icon {
-      pointer-events: all;
-      width: 2em;
-      height: 2em;
-      margin-right: 0.5em;
-      fill:white;
-      display: inline-block;
-    }
-    button{
-      &:hover{
-        transform: scale(1.1);
-      }
-      &:active{
-        transform: scale(0.9);
-      }
-
-      tk-icon{
-        margin-right: -1em;
-        &:nth-child(1){
-          transform: rotate(10deg);
-        }
-        &:nth-child(2){
-          transform: rotate(10deg);
-        }
-        &:nth-child(3){
-          transform: rotate(-10deg);
-        }
-      }
-      svg {
-        width: 1.5em;
-        background: #eee;
-        color:black;
-        fill:currentColor;
-        padding: 0;
-        margin: 0;
-        border-radius: 0;
-        border: 1px solid currentColor;
-      }
-
-    }
-    button#sortColor{
-
-      tk-icon svg{
-        &:nth-child(1){
-          color: $card-green;
-        }
-        &:nth-child(2){
-          color:$card-green;
-        }
-        &:nth-child(3){
-          color:$card-green;
-        }
-      }
-
-    }
-
-  }
-
   .title {
     color: white;
     font-size: 1.5rem;
@@ -89,8 +24,90 @@ hand-game {
     top: 0;
     z-index: 1;
     pointer-events: none;
-    overflow: hidden;
+    //overflow: hidden;
   }
+
+  .sorting {
+    float: right;
+
+    &.sortSymbolAsc #sortSymbolAsc,
+    &.sortSymbolDesc #sortSymbolDesc,
+    &.sortColor #sortColor,
+    .active{
+      outline: 3px dotted white;
+      transform: translateY(-0.5em) scale(1.1);
+      padding: 0.1em;
+    }
+
+    button, label{
+      display: inline-flex;
+      flex-direction: row-reverse;;
+
+      &:hover{
+        transform: scale(1.1);
+      }
+      &:active{
+        transform: scale(0.9);
+      }
+
+
+
+
+      tk-icon{
+        height: 2em;
+        width: 1.5em;
+        display: inline-block;
+        margin-inline-start: -0.4em;
+
+        &:nth-child(-1n+2){
+          transform: rotate(10deg);
+        }
+        //&:nth-child(2){
+        //  transform: rotate(10deg);
+        //}
+
+        &:nth-child(3){
+          transform: rotate(-10deg);
+        }
+        &:last-child{
+          margin-inline-start: -0em;
+        }
+        svg {
+          background: #eee;
+          color:black;
+          fill:currentColor;
+          padding: 0;
+          margin: 0;
+          border-radius: 0;
+          border: 1px solid black;
+        }
+
+      }
+
+
+    }
+    button#sortColor{
+
+      tk-icon{
+        &:nth-child(1) svg{
+          color: $card-green;
+          background-color: $card-green;
+        }
+        &:nth-child(2) svg{
+          color: $card-red;
+          background-color: $card-red;
+        }
+        &:nth-child(3) svg{
+          color: $card-yellow;
+          background-color: $card-yellow;
+        }
+      }
+
+    }
+
+  }
+
+
 
   .btn-end-turn {
     margin: 0 1em;
