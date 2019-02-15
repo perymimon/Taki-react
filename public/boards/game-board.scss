@@ -1,3 +1,8 @@
+
+.it-his-turn board-game{
+  border-color: white;
+}
+
 board-game {
 
   overflow: visible;
@@ -150,7 +155,7 @@ board-game {
 
   &.deck-empty{
      .deck{
-       mix-blend-mode: multiply;
+       filter:brightness(.5);
      }
   }
 }

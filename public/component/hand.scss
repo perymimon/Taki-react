@@ -1,21 +1,19 @@
 @import "../common/variables";
 
 hand-game {
-  color: var(--player-color);
   display: block;
-  position: relative;
+
   border-top: 2px solid;
-  border-color: currentColor;
+  border-color: var(--player-color);
   padding: .1em;
   box-sizing: border-box;
   transition: background-color, transform;
   transition-duration: 0.1s;
   perspective-origin: center center;
-  //overflow-y: auto;
   margin-top: 2em;
-  //padding-top: 2em;
-  //scroll-snap-type: y proximity;
-  scroll-behavior: smooth;
+  background-color: var(--player-color);
+  background-image: radial-gradient(#749ba054 0%, #8888);
+  background-blend-mode: multiply;
 
   .title {
     color: white;

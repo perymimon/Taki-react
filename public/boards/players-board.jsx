@@ -31,9 +31,9 @@ export default connect('player, players, turn')(
 
 
                 {players.map((p) => {
-                    if(p.token === player.token){
-                        return   <MainPlayer player={player} isActive={player.itHisTurn} key={p.token}/>
-                    }
+                    // if(p.token === player.token){
+                    //     return   <MainPlayer player={player} isActive={player.itHisTurn} key={p.token}/>
+                    // }
                     return <Player player={p}
                                    isActive={p.itHisTurn}
                                    key={p.token}
@@ -63,7 +63,7 @@ function MainPlayer({player, isActive}) {
         <Icon className={`avatar`} iconName={player.avatar}/>
         <div className="player-name dramatic-text">{player.name}</div>
         <div className="player-slogan">{player.slogan}</div>
-        <SmallPanelValue value={score}/>
+        <SmallPanelValue className="amount-score" value={score}/>
         <SmallPanelValue className="amount-hand-cards" icon={'icon-gambling'} value={hand}>
             <Card/>
         </SmallPanelValue>
@@ -88,7 +88,7 @@ function Player({player, isActive}) {
         <Icon className={`avatar`} iconName={player.avatar}/>
         <div className="player-name dramatic-text">{player.name}</div>
         <div className="player-slogan">{player.slogan}</div>
-        <SmallPanelValue value={score}/>
+        <SmallPanelValue className="amount-score" value={score}/>
         <SmallPanelValue className="amount-hand-cards" icon='icon-gambling' value={hand}>
             <Card/>
         </SmallPanelValue>

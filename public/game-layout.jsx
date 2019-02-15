@@ -60,13 +60,11 @@ export default connect('isOnline, player, gameInProgress, stage, timeLeft, playe
 
         const classes = classnames({
             [stage]:true,
+            'it-his-turn':get(player, 'itHisTurn')
         });
 
         return (
-            <tk-stage class={classes}
-                     myturn={get(player, 'itHisTurn') + ''}
-                     style={customProperties}
-            >
+            <tk-stage class={classes} style={customProperties}>
                 <Stage value={stage} timeLeft={timeLeft} players={players}/>
                 <Preload/>
             </tk-stage>

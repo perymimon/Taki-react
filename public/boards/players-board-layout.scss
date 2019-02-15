@@ -1,0 +1,65 @@
+$border-round: .5em;
+
+player-list {
+  justify-content: flex-start;
+  //height: 9em;
+  align-content: flex-start;
+  grid-auto-columns: max-content;
+  grid-gap: 0.3em;
+
+}
+
+/*layout*/
+tk-player-board {
+  display: inline-grid;
+
+  /*positions*/
+  .avatar {
+    grid-area: avatar;
+  }
+
+  .player-name {
+    grid-area: name;
+  }
+
+  .player-slogan {
+    grid-area: slogan;
+  }
+
+  .amount-hand-cards {
+    grid-area: cards;
+  }
+
+  .amount-score {
+    grid-area: score;
+  }
+
+}
+
+tk-player-board.main-player {
+  grid-template-columns: 4em 1fr;
+  grid-template-areas: "avatar name" "cards slogan" "score slogan";
+  grid-row-gap: 0.3em;
+
+
+  .avatar {
+    font-size: 4em;
+  }
+
+}
+
+tk-player-board.small-player-panel {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-gap: .3em;
+  grid-template-areas: "avatar name score" "avatar slogan cards";
+
+  align-self: baseline;
+  align-items: center;
+  justify-content: space-between;
+
+}
+
+
+
+
