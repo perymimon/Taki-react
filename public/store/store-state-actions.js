@@ -110,8 +110,8 @@ export function storeStateActions(store, socket, actions) {
         startGame(state) {
             socket.emit('start-game');
         },
-        readyToPlay() {
-
+        joinGame() {
+            socket.emit('join-game');
         },
         /*meta action */
         resetGame(state) {
@@ -157,19 +157,17 @@ export function storeStateActions(store, socket, actions) {
         ,
 
         updateCurrentStage(state) {
-            if (state.gameEnd) {
-                store.setState({stage: GAME_STAGE.VICTORY})
-            } else if (state.playerInGame) {
-                if (state.gameInProgress) {
-                    store.setState({stage: GAME_STAGE.GAME_TABLE});
-                    // store.setState({stage: GAME_STAGE.VICTORY});
-                } else {
-                    store.setState({stage: GAME_STAGE.WELCOME});
-                }
+            const room = state.player.room;
+            if (room === 'lobby') {
+                store.setState({stage: GAME_STAGE.WELCOME});
+            } else if (room === 'game') {
+                store.setState({
+                    stage: state.gameEnd ? GAME_STAGE.VICTORY : GAME_STAGE.GAME_TABLE,
+                })
             } else {
                 store.setState({stage: GAME_STAGE.PLAYER_SIGNIN});
             }
-        }
-        ,
+        },
+
     }
 }

@@ -2,10 +2,10 @@ const {Timer} = require('../common/Timer');
 const {CycleIndexTracker} = require('../common/IndexTracker');
 
 const taki = require('./taki-cards');
+const {Card} = require('./taki-cards');
 const EventEmitter = require('events');
 const shortId = require('shortid');
 const {GAME_EVENTS, GAME_MODE, GAME_SETTING} = require('../common/game-consts');
-const {Card} = require('./taki-cards');
 const {isCardValid} = require('../common/common-methods');
 const colorCode$ColorName = {
     B: 'blue',
@@ -300,7 +300,7 @@ function Game() {
             player.hand.length = 0;
             player$messages.delete(player);
             if(players.length === 0){
-                endGame();
+                this.reset(false);
             }
             emitter.emit(GAME_EVENTS.STATE_UPDATE);
 

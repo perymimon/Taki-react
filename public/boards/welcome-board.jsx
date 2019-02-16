@@ -10,20 +10,23 @@ import {connect} from '../link';
 
 export default connect('player, gameInProgress')(
     function WelcomeBoard({player, gameInProgress}) {
+
+        const Join = <button className="main-button start-game"
+                             onClick={store.run.joinGame}>join game</button>;
+        const Start = <button className="main-button start-game"
+                              onClick={store.run.startGame}>start a game</button>;
+
         return (
             <welcome-board class="board">
                 <h1 className="four-color-background">welcome</h1>
                 <h2>
-                    <Icon iconName={get(player,'avatar')}/>
-                    {get(player,'name')}
+                    <Icon iconName={get(player, 'avatar')}/>
+                    {get(player, 'name')}
                 </h2>
-                <h3>{get(player,'slogan')}</h3>
-                <button className="main-button start-game"
-                        onClick={store.run.startGame}>
-
-                    {gameInProgress?'join':'start a'} game
-
-                </button>
+                <h3>{get(player, 'slogan')}</h3>
+                {
+                    gameInProgress ? Join : Start
+                }
             </welcome-board>
         )
     },

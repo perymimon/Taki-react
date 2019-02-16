@@ -13,6 +13,7 @@ exports.SOCKET_EVENTS = {
     CONNECT: 'connect',
     LOGIN: 'login',
     LOGOUT:'logout',
+    JOIN_GAME:'join-game',
     LOGGED_IN: 'logged-in',
     /*reserved event*/
     // logout: 'logout',

@@ -26,6 +26,7 @@ class User extends EventEmitter {
             connections: new Set(), /*socketsConnection*/
         });
         this._ttlTimeout = null;
+        this.room = '';
     }
 
     get public() {
@@ -41,6 +42,7 @@ class User extends EventEmitter {
             this.online = false;
             clearTimeout(this._ttlTimeout);
             this._ttlTimeout = setTimeout(() => {
+                this.disconnected = true;
                 this.emit(SOCKET_EVENTS.DISCONNECT);
                 userEventBus.emit(SOCKET_EVENTS.DISCONNECT, this);
             }, USER_TTL);
@@ -50,9 +52,22 @@ class User extends EventEmitter {
     connect(socket) {
         clearTimeout(this._ttlTimeout);
         this.online = true;
+        this.disconnected = false;
+        socket.join(this.room);
         this.emit(SOCKET_EVENTS.CONNECT);
         userEventBus.emit(SOCKET_EVENTS.CONNECT, this);
         this.connections.add(socket);
+    }
+    moveRoom(roomName){
+        this.exitRoom(this.room);
+        this.joinRoom(roomName);
+    }
+    joinRoom(roomName){
+        this.room = roomName;
+        this.connections.forEach( socket => socket.join(roomName));
+    }
+    exitRoom(roomName){
+        this.connections.forEach( socket => socket.leave(roomName));
     }
 
     set(data) {
@@ -83,6 +98,9 @@ User.removeUser = function (token) {
 
 User.getUsers = () => users;
 
+User.getConnected = function () {
+  return Object.entries(users).filter( (k,v)=> !v.disconnected )
+};
 var colorPool = [...color];
 
 module.exports = User;

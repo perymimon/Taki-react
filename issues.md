@@ -10,9 +10,7 @@
 * make hand sort render view : fix the animation for one line
 * build counter for the round number
 * in begin play put option for number of round
-* add score to player
-* if all player exit game restart
-   
+* style for offline player   
 more work: 
 
 * build lib to mange users on socket with muplitple connection

@@ -1,5 +1,7 @@
 const debounce = require('lodash/debounce');
 const Game = require('./game');
+const Lobby = require('./lobby');
+const socketIO = require( 'socket.io' );
 const Users = require('./user');
 const {SOCKET_EVENTS, GAME_EVENTS} = require('../common/game-consts');
 
@@ -7,22 +9,30 @@ const {SOCKET_EVENTS, GAME_EVENTS} = require('../common/game-consts');
 module.exports = function (io) {
     let messages = [];
     const game = /* new */Game();
+    const lobby = new Lobby();
 
-    function sockets() {
-        return Object.values(io.socket.clients().sockets);
+    function sockets(room) {
+        // return Object.values(io.socket.clients().sockets);
+        const sockets = io.socket.clients().sockets;
+
+        return Object.keys(io.socket.of('').adapter.rooms[room].sockets)
+                .map(key=> sockets[key]);
     }
 
     // game.joinPlayer(Users.letUser('a97a7eca', {name: 'pery'}));
     // game.joinPlayer(Users.letUser('c9e9ca9c', {name: 'poron'}));
     // game.joinPlayer(Users.letUser('97ce7a97', {name: 'doron'}));
-    // game.setup();
 
     const emitGameState = debounce(function emitClientsState() {
-        sockets().forEach(updatingGameState);
+        sockets('game').forEach(updatingGameState);
+    }, 200);
+
+    const emitLobbyState = debounce(function emitClientsState() {
+        sockets('lobby').forEach(updatingLobbyState);
     }, 200);
 
     const emitGameMessages = debounce(function (player$messages) {
-        sockets().forEach(function (socket) {
+        sockets('game').forEach(function (socket) {
             const token = socket.token;
             const player = game.getPlayer(token);
             messages = player$messages.get(player);
@@ -31,6 +41,8 @@ module.exports = function (io) {
         });
         game.flushMessages();
     }, 10);
+
+    lobby.on(GAME_EVENTS.STATE_UPDATE, emitLobbyState);
 
     game.on(GAME_EVENTS.STATE_UPDATE, emitGameState);
 
@@ -42,19 +54,30 @@ module.exports = function (io) {
         socket.emit(SOCKET_EVENTS.UPDATE_GAME_STATE, playerState);
     }
 
+    function updatingLobbyState(socket) {
+        const token = socket.token;
+        const userState = lobby.getUserState(token);
+        socket.emit(SOCKET_EVENTS.UPDATE_GAME_STATE, userState)
+    }
+
     io.on(SOCKET_EVENTS.CONNECTION, (ctx, data) => {
         // ctx.token = ctx.socket.handshake.query.token;//todo: open issue for un consist
         const token = ctx.socket.token;
         const user = Users.letUser(token);
         user.connect(ctx.socket);
         console.log(
-            `${token}: ${user.name || '\banonymous'} connected`,
+            `${token}: ${user.name || 'anonymous'} connected to room ${user.room || '"no room"'}`,
         );
+        if(user.room === 'game'){
+            updatingGameState(ctx.socket);
+        }
+        if(user.room === 'lobby'){
+            updatingLobbyState(ctx.socket);
+        }
 
-        updatingGameState(ctx.socket);
     });
 
-    Users.on(SOCKET_EVENTS.DISCONNECT,function (user) {
+    Users.on(SOCKET_EVENTS.DISCONNECT, function (user) {
         console.log(
             `${user.token}: ${user.name || '\banonymous'} left `,
         );
@@ -73,9 +96,24 @@ module.exports = function (io) {
 
     io.on(SOCKET_EVENTS.LOGIN, (ctx, data) => {
         const player = Users.letUser(ctx.token, data);
-        game.joinPlayer(player);
+        player.joinRoom('lobby');
+        lobby.join(player);
+        console.log(
+            `${player.token}: ${player.name || '\banonymous'} join lobby`,
+        );
         // ctx.socket.emit(SOCKET_EVENTS.LOGGED_IN);
     });
+
+    function joinGame(ctx, data){
+        const player = Users.letUser(ctx.token, data);
+        player.moveRoom('game');
+        console.log(
+            `${player.token}: ${player.name || '\banonymous'} join game`,
+        );
+        game.joinPlayer(player);
+    }
+
+    io.on(SOCKET_EVENTS.JOIN_GAME, joinGame);
 
     io.on(SOCKET_EVENTS.LOGOUT, (ctx, data) => {
         game.exitPlayer(ctx.token);
@@ -88,6 +126,7 @@ module.exports = function (io) {
     // });
 
     io.on(SOCKET_EVENTS.START_GAME, (ctx, data) => {
+        joinGame(ctx,data);
         game.setup();
     });
 

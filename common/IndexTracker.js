@@ -3,7 +3,7 @@ function CycleIndexTracker (trackedArray, resetIndex){
     var increment = 1;
 
     function normIndex(i){
-        return (trackedArray.length + i) % trackedArray.length;
+        return (trackedArray.length + i) % (trackedArray.length || 1);
     }
 
     const api =  {
