@@ -59,8 +59,8 @@ export default connect('isOnline, player, gameInProgress, stage, timeLeft, playe
             return <Loading/>;
 
         const classes = classnames({
-            [stage]:true,
-            'it-his-turn':get(player, 'itHisTurn')
+            [stage]: true,
+            'it-his-turn': get(player, 'itHisTurn'),
         });
 
         return (

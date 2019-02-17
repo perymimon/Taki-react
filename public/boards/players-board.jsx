@@ -32,10 +32,9 @@ export default connect('player, players, turn')(
 
                 {players.map((p) => {
                     // if(p.token === player.token){
-                    //     return   <MainPlayer player={player} isActive={player.itHisTurn} key={p.token}/>
+                    //     return   <MainPlayer player={player} key={p.token}/>
                     // }
                     return <Player player={p}
-                                   isActive={p.itHisTurn}
                                    key={p.token}
                     />
                 })}
@@ -45,14 +44,14 @@ export default connect('player, players, turn')(
     },
 );
 
-function MainPlayer({player, isActive}) {
+export function MainPlayer({player}) {
     const customProperties = {
         '--player-color': player.color,
     };
 
     const className = classnames({
         'main-player': true,
-        'active': isActive,
+        'active': player.itHisTurn,
         // 'drop-shadow':isActive,
     });
 
@@ -71,14 +70,15 @@ function MainPlayer({player, isActive}) {
     </tk-player-board>
 }
 
-function Player({player, isActive}) {
+export function Player({player}) {
 
     const customProperties = {
         '--player-color': player.color,
     };
     const className = classnames({
         'small-player-panel': true,
-        'active': isActive,
+        'active': player.itHisTurn,
+        'offline':!player.online
         // 'drop-shadow':isActive,
     });
     var hand = player.hand;

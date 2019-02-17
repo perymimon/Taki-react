@@ -11,6 +11,8 @@ exports.SOCKET_EVENTS = {
     CONNECTION: 'connection',
     DISCONNECT: 'disconnect',
     CONNECT: 'connect',
+    ONLINE:'online',
+    OFFLINE:'offline',
     LOGIN: 'login',
     LOGOUT:'logout',
     JOIN_GAME:'join-game',

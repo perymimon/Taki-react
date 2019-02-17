@@ -1,7 +1,7 @@
 const debounce = require('lodash/debounce');
 const Game = require('./game');
 const Lobby = require('./lobby');
-const socketIO = require( 'socket.io' );
+const socketIO = require('socket.io');
 const Users = require('./user');
 const {SOCKET_EVENTS, GAME_EVENTS} = require('../common/game-consts');
 
@@ -9,14 +9,15 @@ const {SOCKET_EVENTS, GAME_EVENTS} = require('../common/game-consts');
 module.exports = function (io) {
     let messages = [];
     const game = /* new */Game();
-    const lobby = new Lobby();
+    const lobby = new Lobby(game);
 
-    function sockets(room) {
+    function sockets(roomName) {
         // return Object.values(io.socket.clients().sockets);
         const sockets = io.socket.clients().sockets;
-
-        return Object.keys(io.socket.of('').adapter.rooms[room].sockets)
-                .map(key=> sockets[key]);
+        const room = io.socket.of('').adapter.rooms[roomName];
+        if (!room) return [];
+        return Object.keys(room.sockets)
+            .map(key => sockets[key]);
     }
 
     // game.joinPlayer(Users.letUser('a97a7eca', {name: 'pery'}));
@@ -25,6 +26,7 @@ module.exports = function (io) {
 
     const emitGameState = debounce(function emitClientsState() {
         sockets('game').forEach(updatingGameState);
+        // emitLobbyState();
     }, 200);
 
     const emitLobbyState = debounce(function emitClientsState() {
@@ -68,20 +70,30 @@ module.exports = function (io) {
         console.log(
             `${token}: ${user.name || 'anonymous'} connected to room ${user.room || '"no room"'}`,
         );
-        if(user.room === 'game'){
+        if (user.room === 'game') {
             updatingGameState(ctx.socket);
         }
-        if(user.room === 'lobby'){
+        if (user.room === 'lobby') {
             updatingLobbyState(ctx.socket);
         }
 
+    });
+
+    Users.on(SOCKET_EVENTS.OFFLINE, function (user) {
+        emitGameState();
+        emitLobbyState();
+    });
+    Users.on(SOCKET_EVENTS.ONLINE, function (user) {
+        emitGameState();
+        emitLobbyState();
     });
 
     Users.on(SOCKET_EVENTS.DISCONNECT, function (user) {
         console.log(
             `${user.token}: ${user.name || '\banonymous'} left `,
         );
-        game.exitPlayer(user.token);
+        // user.moveRoom('lobby');
+        // game.exitPlayer(user.token);
     });
 
     io.on(SOCKET_EVENTS.DISCONNECT, (ctx) => {
@@ -96,7 +108,7 @@ module.exports = function (io) {
 
     io.on(SOCKET_EVENTS.LOGIN, (ctx, data) => {
         const player = Users.letUser(ctx.token, data);
-        player.joinRoom('lobby');
+        player.moveRoom('lobby');
         lobby.join(player);
         console.log(
             `${player.token}: ${player.name || '\banonymous'} join lobby`,
@@ -104,7 +116,7 @@ module.exports = function (io) {
         // ctx.socket.emit(SOCKET_EVENTS.LOGGED_IN);
     });
 
-    function joinGame(ctx, data){
+    function joinGame(ctx, data) {
         const player = Users.letUser(ctx.token, data);
         player.moveRoom('game');
         console.log(
@@ -126,7 +138,7 @@ module.exports = function (io) {
     // });
 
     io.on(SOCKET_EVENTS.START_GAME, (ctx, data) => {
-        joinGame(ctx,data);
+        joinGame(ctx, data);
         game.setup();
     });
 

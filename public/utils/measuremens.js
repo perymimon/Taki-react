@@ -1,4 +1,13 @@
-import {animate, elementRectDiff, rectDiff, resetTransform, resetTransforms} from './utils';
+import {
+    animate, distanceFromXY,
+    elementRectDiff,
+    random,
+    randomProps,
+    rectDiff,
+    resetTransform,
+    resetTransforms,
+    setStyle,
+} from './utils';
 
 
 export function measurementPileToCard(pileCards, handCard, throwBottom = true) {
@@ -52,7 +61,7 @@ export function animeTakeCards(cards, initialize) {
             const animesEnds = cards.map((card, i) => {
                 const handCard = document.getElementById(card.id);
                 const {x, y, z} = measurementPileToCard(deckCard, handCard);
-                const animeName = initialize? 'initialize-take-card':'take-card';
+                const animeName = initialize ? 'initialize-take-card' : 'take-card';
                 return animate(handCard, animeName, {
                     '--corrX': -1 * x + 'px',
                     '--corrY': -1 * y + 'px',
@@ -115,19 +124,19 @@ export function animeOtherPutCard(player, callback) {
 
 }
 
-export function animeSortHandCard(cards){
+export function animeSortHandCard(cards) {
     return new Promise(function (resolve) {
-        const originalRects = cards.map( card =>{
+        const originalRects = cards.map(card => {
             const handCard = document.querySelector(`hand-game [id="${card.id}"]`);
             return handCard.getBoundingClientRect();
         });
 
-        requestAnimationFrame( _=>{
-            const animusEnds = cards.map( (card,i) =>{
+        requestAnimationFrame(_ => {
+            const animusEnds = cards.map((card, i) => {
                 const handCard = document.querySelector(`hand-game [id="${card.id}"]`);
                 const rect = handCard.getBoundingClientRect();
-                const {x,y} = rectDiff(originalRects[i], rect);
-                return animate(handCard,'sort-hand-cards',{
+                const {x, y} = rectDiff(originalRects[i], rect);
+                return animate(handCard, 'sort-hand-cards', {
                     '--corrX': -1 * x + 'px',
                     '--corrY': -1 * y + 'px',
                     '--anim-delay': (i * 50) + 'ms',
@@ -139,3 +148,90 @@ export function animeSortHandCard(cards){
         })
     })
 }
+
+export function animeFloatingElement(element, speed) {
+    setStyle(element, {
+    //     top: '50%',
+    //     left: '50%',
+        transform: 'translate(50%,50%)',
+    });
+    const boundaryRect = elementRectDiff(element, element.offsetParent);
+    const generated = randomProps({
+        x: [0, boundaryRect.width],
+        y: [0, boundaryRect.height],
+    });
+
+    return function reposition() {
+        requestAnimationFrame(function () {
+            var {x, y} = generated();
+            const time = distanceFromXY(element, {x, y}) / speed;
+
+            setStyle(element, {
+                transform: `translate(${x}px,${y}px)`,
+                'transition-duration': `${time}s`,
+                // top: '0%',
+                // left: '0%',
+            });
+        })
+    }
+
+
+}
+
+export function animeFloatingElements(elements) {
+    const speed = 50; // pixel per second
+    const interval = 1000;
+
+    const repositions = [...elements].map(el => animeFloatingElement(el, speed));
+
+    const run = () => repositions.forEach(fn => fn());
+    run();
+    const intId = setInterval(run, interval);
+
+    function stop(){
+        clearInterval(intId);
+    }
+
+}
+
+
+// export function animeFloatingElement(elements, contaniner) {
+//     // return new Promise(function (resolve, reject) {
+//         const conRect = contaniner.getBoundingClientRect();
+//         const midX = (conRect.width / 2) | 1;
+//         const midY = (conRect.height / 2) | 1;
+//         const {width, height} = conRect;
+//         const spd = 50; //pixel per sec
+//         const interval = 2000;
+//
+//         const pos = {
+//             x:[midX - midX / 2, midX + midX / 2],
+//             y:[midY - midY / 2, midY + midY / 2]
+//         };
+//
+//         elements.forEach(function (el) {
+//             const x = random(midX - midX / 2, midX + midX / 2);
+//             const y = random(midY - midY / 2, midY + midY / 2);
+//             setStyle(el, {
+//                 transform: `translate(${x}px,${y}px)`,
+//             })
+//         });
+//
+//         function setCoordinate(){
+//             elements.forEach(function (el) {
+//                 const x = random(0, width);
+//                 const y = random(0, height);
+//                 const time = Math.sqrt(x**2 + y**2) / spd;
+//
+//                 setStyle(el,{
+//                     'transform': `translate(${x}px,${y}px)`,
+//                     'transition-duration':`${time}s`
+//                 })
+//             });
+//         }
+//
+//         setInterval(setCoordinate,interval)
+//
+//
+//     // })
+// }

@@ -5,8 +5,8 @@ $border-round: .5em;
 /*layout*/
 tk-player-board {
   color: white;
-  filter: brightness(0.5) sepia(1);
   border: 3px solid var(--player-color);
+  filter: brightness(0.8) sepia(1) blur(1px);
 
   &.active {
     background-blend-mode: hue, hue;
@@ -19,7 +19,7 @@ tk-player-board {
   }
 
   &.offline{
-    filter:grayscale(1);
+    filter: brightness(0.5) grayscale(1);
   }
 
   .player-name, .player-slogan {

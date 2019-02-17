@@ -1,16 +1,15 @@
 * timer visual contrast not good
 * private message should apear front of the use with big font 
-* welcome screen should show player logged in ( floating ראש)
-* not move player directly to the game , stop on welcome 
 * fix: other player take multi card animation
 * build victory screen 
     * check it again
 * bug: flikers when take card
-* better active user view
-* make hand sort render view : fix the animation for one line
+    * card not animate
 * build counter for the round number
 * in begin play put option for number of round
-* style for offline player   
+
+* better active user view
+
 more work: 
 
 * build lib to mange users on socket with muplitple connection

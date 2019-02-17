@@ -23,24 +23,37 @@ class User extends EventEmitter {
             name,
             slogan,
             avatar,
-            connections: new Set(), /*socketsConnection*/
+
         });
         this._ttlTimeout = null;
+        this._connections = new Set() /*socketsConnection*/;
         this.room = '';
     }
 
     get public() {
         const userClone = Object.create(User.prototype);
         Object.assign(userClone, this);
+        for(let k in userClone){
+            if( k[0]==='_'){
+                delete userClone[k];
+            }
+        }
         userClone.hand = this.hand.length;
         return userClone;
     }
 
+    // get room(){
+    //     return this.room;
+    // }
+
     disconnect(socket) {
-        this.connections.delete(socket);
-        if (this.connections.size === 0) {
+        this._connections.delete(socket);
+        if (this._connections.size === 0) {
             this.online = false;
             clearTimeout(this._ttlTimeout);
+            this.emit(SOCKET_EVENTS.OFFLINE);
+            userEventBus.emit(SOCKET_EVENTS.OFFLINE, this);
+
             this._ttlTimeout = setTimeout(() => {
                 this.disconnected = true;
                 this.emit(SOCKET_EVENTS.DISCONNECT);
@@ -54,9 +67,11 @@ class User extends EventEmitter {
         this.online = true;
         this.disconnected = false;
         socket.join(this.room);
+        this.emit(SOCKET_EVENTS.ONLINE);
         this.emit(SOCKET_EVENTS.CONNECT);
+        userEventBus.emit(SOCKET_EVENTS.ONLINE, this);
         userEventBus.emit(SOCKET_EVENTS.CONNECT, this);
-        this.connections.add(socket);
+        this._connections.add(socket);
     }
     moveRoom(roomName){
         this.exitRoom(this.room);
@@ -64,10 +79,10 @@ class User extends EventEmitter {
     }
     joinRoom(roomName){
         this.room = roomName;
-        this.connections.forEach( socket => socket.join(roomName));
+        this._connections.forEach(socket => socket.join(roomName));
     }
     exitRoom(roomName){
-        this.connections.forEach( socket => socket.leave(roomName));
+        this._connections.forEach(socket => socket.leave(roomName));
     }
 
     set(data) {

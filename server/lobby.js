@@ -3,16 +3,20 @@ const {GAME_EVENTS, GAME_MODE, GAME_SETTING} = require('../common/game-consts');
 
 
 class Lobby extends EventEmitter {
-    constructor() {
+    constructor(game ) {
         super();
         this.users = [];
+        this.gameSesstion = game;
     }
 
     getUserState(token) {
         const user = this.users.find( user => user.token == token);
+        const gameState = this.gameSesstion.getPlayerState(user.token);
         return {
             player: user,
             players: this.users.map(p => p.public),
+            gameInProgress:gameState.gameInProgress
+
         };
     }
 

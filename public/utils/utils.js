@@ -5,6 +5,22 @@ export function random(from, to) {
     return ((Math.random() * (to - from)) + from) | 1;
 }
 
+export function randoms(from, to, amount){
+    return Array(amount).fill(null).map( _=> random(from,to))
+}
+
+export  function randomProps(vars){
+
+    return function generated(){
+        const ret = {};
+        for(let k in vars){
+            const [min,max] = vars[k];
+            ret[k] =random(min,max);
+        }
+        return ret;
+    }
+}
+
 export function classnames(obj) {
     return Object.entries(obj).filter(p => p[1]).map(p => p[0]).join(' ');
 }
@@ -49,10 +65,22 @@ export function animate(element, animeName, vars, callback) {
     })
 }
 
+export function setStyle(element,vars){
+    Object.entries(vars).forEach(function ([k, v]) {
+        element.style.setProperty(k, v);
+    });
+
+    return function clear(){
+        Object.keys(vars).forEach(function (k) {
+            element.style.removeProperty(k)
+        });
+    }
+}
+
 export function resetTransform(element, overwrite = {}) {
     var {transform, transformOrigin, transition} = element.style;
 
-    
+
     Object.assign(element.style, {
         transition: 'none',
         transform: 'none',
@@ -70,6 +98,11 @@ export function resetTransform(element, overwrite = {}) {
         })
 
     }
+}
+
+export function distanceFromXY(element, point){
+    const {x, y} = element.getBoundingClientRect();
+    return Math.sqrt((point.x-x)*2+(point.y-y)**2);
 }
 
 export function resetTransforms(elements, overwrite) {
@@ -96,6 +129,8 @@ export function rectDiff(r1, r2){
         top: r2.top - r1.top,
         right: r2.right - r1.right,
         left: r2.left - r1.left,
+        width: r2.width - r1.width,
+        height: r2.height - r1.height
     };
 
 }

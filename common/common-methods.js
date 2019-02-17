@@ -27,3 +27,10 @@ function isCardValid(state, card) {
     return true;
 
 }
+
+
+function serverPrivate(object,key){
+    Object.defineProperties(object,key,{
+        enumerable:false
+    })
+}

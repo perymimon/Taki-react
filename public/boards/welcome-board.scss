@@ -1,4 +1,5 @@
 welcome-board {
+  z-index: 10;
 
   .icon {
     margin-right: 0.3em;
@@ -18,5 +19,35 @@ welcome-board {
 
   .main-button{
     min-height: 2em;
+  }
+}
+
+.connected-player{
+  //background-color: red;
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  top:0; left: 0;
+  z-index: 0;
+  //display: flex;
+  //justify-items: center;
+  //align-items: center;
+
+  tk-player-board.small-player-panel{
+    width: min-content;
+    position: absolute;
+    transition: transform;
+    transition-timing-function: linear;
+    transform: translate(0,0);
+    filter: none;
+    grid-template-areas: "avatar" "name" "slogan" !important;
+    justify-items: center;
+    .player-name,.player-slogan{
+      font-size: 0.9em !important;
+    }
+    small-panel-value,.player-slogan{
+
+      display: none;
+    }
   }
 }
