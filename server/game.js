@@ -106,7 +106,7 @@ function Game() {
         return cards;
     }
 
-    function drawCards(amount = 1, player  ) {
+    function drawCards(amount = 1, player) {
         player = player || turnTracker.getCurrent();
         const punishmentMode = (publicState.mode === GAME_MODE.PLUS_TWO);
         if (punishmentMode) {
@@ -204,7 +204,7 @@ function Game() {
 
             if (checkVictoryCondition()) {
                 calcualtePlayersScores();
-                if (publicState.round >= GAME_SETTING.NUMBER_OF_ROUND) {
+                if (publicState.round >= publicState.endRound) {
                     endGame()
                 }
             }
@@ -246,15 +246,14 @@ function Game() {
             publicState.gameEnd = false;
             publicState.gameInProgress = false;
 
-
-            if(players.length === 0 ){
+            if (players.length === 0) {
                 emitter.emit(GAME_EVENTS.STATE_UPDATE);
 
-            }else{
-                this.setup(false);
+            } else {
+                this.setup({isNewRound: false});
             }
         },
-        setup(isNewRound) {
+        setup({isNewRound = false, rounds = GAME_SETTING.NUMBER_OF_ROUND}) {
             deck = taki.getNewDeck();
             stack.length = 0;
             players.sort(_ => Math.random() - .5).forEach((player, i) => {
@@ -263,7 +262,9 @@ function Game() {
                 player.index = i;
             });
             // Object.freeze(players);
-            publicState.round++;
+            publicState.endRound = rounds;
+            publicState.round = isNewRound ? publicState.round + 1 : 0;
+
             publicState.gameInProgress = true;
             moveToNextPlayer();
             notifyPlayers(isNewRound ? SENTENCE.newRound : SENTENCE.setup);
@@ -279,7 +280,7 @@ function Game() {
                 return this.index === turnTracker.whatIndex();
             });
             player.__defineGetter__('inGame', function () {
-                return !! getPlayer(this.token) || null;
+                return !!getPlayer(this.token) || null;
             });
             players.push(player);
             if (publicState.gameInProgress) {
@@ -292,15 +293,15 @@ function Game() {
         exitPlayer(playerToken) {
             if (!this.isPlayerInGame(playerToken)) return false;
             const player = getPlayer(playerToken);
-            if(player.index === turnTracker.whatIndex()){
+            if (player.index === turnTracker.whatIndex()) {
                 moveToNextPlayer();
             }
             const i = players.indexOf(player);
             players.splice(i, 1);
-            deck.splice(0,0, ... player.hand);
+            deck.splice(0, 0, ...player.hand);
             player.hand.length = 0;
             player$messages.delete(player);
-            if(players.length === 0){
+            if (players.length === 0) {
                 this.reset(false);
             }
             emitter.emit(GAME_EVENTS.STATE_UPDATE);

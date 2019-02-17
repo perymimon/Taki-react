@@ -139,7 +139,7 @@ module.exports = function (io) {
 
     io.on(SOCKET_EVENTS.START_GAME, (ctx, data) => {
         joinGame(ctx, data);
-        game.setup();
+        game.setup({rounds:data.rounds});
     });
 
     io.on(SOCKET_EVENTS.RESET_GAME, (ctx, data) => {

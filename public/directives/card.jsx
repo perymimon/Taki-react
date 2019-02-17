@@ -10,19 +10,9 @@ export default function Card({card, onClick, className, children}) {
         transform: `rotate(${layRotate}deg)`,
         transformOrigin: `${layOrigin[0]}% ${layOrigin[1]}%`,
     };
-    // const [anime, setAnime] = useState('');
     const state = {
         isInvalid: false,
     };
-
-    // const [stateClass, setState] = useState(state);
-
-    // function updateState(){
-    //     setState(state);
-    // }
-    //
-    //
-    // const animations = `animated ${classnames(stateClass)}` ${animations};
 
     return <tk-card class={`${className || ""} ${get(card, 'color') || ''}`}
                     onClick={onClick}

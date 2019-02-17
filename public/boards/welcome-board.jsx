@@ -10,6 +10,10 @@ import {connect} from '../link';
 import {animeFloatingElements} from '../utils/measuremens';
 import {Player} from './players-board';
 
+function startGame(){
+    const rounds = document.querySelector('input[type=number]').value;
+    store.run.startGame(rounds)
+}
 
 export default connect('player, gameInProgress,players')(
     function WelcomeBoard({player, gameInProgress, players}) {
@@ -17,7 +21,7 @@ export default connect('player, gameInProgress,players')(
         const JoinButton = <button className="main-button start-game"
                                    onClick={store.run.joinGame}>join game</button>;
         const StartButton = <button className="main-button start-game"
-                                    onClick={store.run.startGame}>start a game</button>;
+                                    onClick={startGame}>start a game</button>;
 
         const Players = () => players.map(p => <Player player={p} key={p.token}/>);
         var stopFloating = () => {
@@ -44,6 +48,15 @@ export default connect('player, gameInProgress,players')(
                         {get(player, 'name')}
                     </h2>
                     <h3>{get(player, 'slogan')}</h3>
+                    {
+                        !gameInProgress &&(
+                            <label className="input-round">
+                                <input type="number" name="rounds" className="tk-button" max={6} min={1} defaultValue={6}/>
+                                rounds
+                            </label>
+                        )
+                    }
+
                     {
                         gameInProgress ? JoinButton : StartButton
                     }

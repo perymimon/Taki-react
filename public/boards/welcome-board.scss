@@ -4,48 +4,70 @@ welcome-board {
   .icon {
     margin-right: 0.3em;
   }
-  h1{
+
+  h1 {
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: #00000024;
 
-    tk-icon{
+    tk-icon {
       color: black;
+
     }
   }
-  h2{
+
+  h2 {
     margin: 0;
   }
 
-  .main-button{
+  .input-round {
+    margin-bottom: .5em;
+
+    input {
+      font-size: 2em;
+      text-align: left;
+      font-weight: bold;
+      background: #ffffff63;
+      line-height: 1em;
+      width: 5em;
+      align-self: center;
+      margin-right: -3em;
+      padding-left: 1em;
+    }
+  }
+
+  .main-button {
     min-height: 2em;
   }
 }
 
-.connected-player{
+.connected-player {
   //background-color: red;
   width: 100vw;
   height: 100vh;
   position: absolute;
-  top:0; left: 0;
+  top: 0;
+  left: 0;
   z-index: 0;
   //display: flex;
   //justify-items: center;
   //align-items: center;
 
-  tk-player-board.small-player-panel{
+  tk-player-board.small-player-panel {
     width: min-content;
     position: absolute;
     transition: transform;
     transition-timing-function: linear;
-    transform: translate(0,0);
+    transform: translate(0, 0);
     filter: none;
     grid-template-areas: "avatar" "name" "slogan" !important;
     justify-items: center;
-    .player-name,.player-slogan{
+
+    .player-name, .player-slogan {
       font-size: 0.9em !important;
     }
-    small-panel-value,.player-slogan{
+
+    small-panel-value, .player-slogan {
 
       display: none;
     }

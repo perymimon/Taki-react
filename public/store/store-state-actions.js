@@ -107,8 +107,8 @@ export function storeStateActions(store, socket, actions) {
         logout(state, data) {
             socket.emit('logout');
         },
-        startGame(state) {
-            socket.emit('start-game');
+        startGame(state,rounds) {
+            socket.emit('start-game',{rounds});
         },
         joinGame() {
             socket.emit('join-game');

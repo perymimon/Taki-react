@@ -1,20 +1,34 @@
-control-board{
-    display: inline-flex;
-    /* flex-direction: column; */
-    flex-wrap: wrap;
+control-board {
+  display: inline-flex;
+  /* flex-direction: column; */
+  flex-wrap: wrap;
+  vertical-align: middle;
+
+  tk-timer {
+    font-size: 1em;
+  }
+
+  .control-icons {
+    flex: 1;
+    align-self: end;
     vertical-align: middle;
+    text-align: end;
 
-    tk-timer{
-        font-size: 1em;
+    tk-icon {
+      font-size: 2em;
     }
-    .control-icons{
-        flex: 1;
-        align-self: end;
-        vertical-align: middle;
-        text-align: end;
+  }
 
-        tk-icon{
-            font-size: 2em;
-        }
-    }
+  [name="rounds"] {
+    font-size: 1em;
+    text-align: left;
+    font-weight: bold;
+    background: #ffffff63;
+    line-height: 1em;
+    width: max-content;
+    align-self: center;
+    padding: 0.2em;
+    //margin-block-end: -3em;
+  }
+
 }
