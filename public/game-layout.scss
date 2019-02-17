@@ -13,7 +13,9 @@ game{
   perspective-origin: top center;
   perspective: 260em;
   //overflow-y: overlay;
-  overflow-y: scroll;
+  @media #{$on-medium-screen}{
+    overflow-y: auto;
+  }
   height: 100vh;
 }
 

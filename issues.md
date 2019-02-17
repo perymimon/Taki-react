@@ -1,15 +1,17 @@
-* timer visual contrast not good
+* build counter for the round number
+* in begin play put option for number of round
+
 * private message should apear front of the use with big font 
 * fix: other player take multi card animation
 * build victory screen 
     * check it again
     
-* bug: flikers when take card
-    * animation die
-    
-* build counter for the round number
-* in begin play put option for number of round
 
+
+
+* front game not auto move to currect room when 
+  when server restart
+* timer visual contrast not good
 
 more work: 
 
