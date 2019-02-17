@@ -14,10 +14,10 @@ function CycleIndexTracker (trackedArray, resetIndex){
             return normIndex(currentIndex - increment * step)
         },
         whatIndex(){
-          return currentIndex;
+          return Math.min(currentIndex,0);
         },
         getCurrent(){
-            return trackedArray[currentIndex];
+            return trackedArray[this.whatIndex()];
         },
         moveNext(step = 1){
             currentIndex = this.whatNext(step);

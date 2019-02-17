@@ -25,14 +25,14 @@
 .initialize-take-card{
   animation: initialize-take-card 1s ease-out;
   animation-delay: var(--anim-delay);
-  visibility: hidden;
+  //visibility: hidden;
 }
 
 @keyframes initialize-take-card {
   from {
     transform: translate(var(--corrX), var(--corrY)) rotateX(45deg) translateY(var(--corrZ)) rotateY(-180deg);
     transform-origin: bottom center;
-    visibility: visible;
+    //visibility: visible;
   }
   20% {
     transform:
@@ -51,7 +51,7 @@
 .take-card {
   animation: take-card 1s ease-out;
   animation-delay: var(--anim-delay);
-  visibility: hidden;
+  //visibility: hidden;
 }
 
 

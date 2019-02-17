@@ -106,7 +106,8 @@ function Game() {
         return cards;
     }
 
-    function drawCards(amount = 1, player = turnTracker.getCurrent() ) {
+    function drawCards(amount = 1, player  ) {
+        player = player || turnTracker.getCurrent();
         const punishmentMode = (publicState.mode === GAME_MODE.PLUS_TWO);
         if (punishmentMode) {
             amount = (publicState.punishment);

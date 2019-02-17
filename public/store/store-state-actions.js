@@ -29,15 +29,15 @@ export const initState = {
 export function storeStateActions(store, socket, actions) {
     let itInitializeState = true;
 
-    // store.subscribe(function stateToAction([newState, state], action) {
-    //     const newHand = get(state, 'player.hand', []),
-    //         oldHand = get(newState, 'player.hand', []);
-    //     const {added, deleted} = arrayDiff2(newHand, oldHand, 'id');
-    //     if (state.stage === GAME_STAGE.GAME_TABLE)
-    //         animeTakeCards(added, itInitializeState);
-    //     /* can't be dane because card element is already gone
-    //      animePutCards(deleted);*/
-    // });
+    store.subscribe(function stateToAction([newState, state], action) {
+        const newHand = get(state, 'player.hand', []),
+            oldHand = get(newState, 'player.hand', []);
+        const {added, deleted} = arrayDiff2(newHand, oldHand, 'id');
+        if (state.stage === GAME_STAGE.GAME_TABLE)
+            animeTakeCards(added, itInitializeState);
+        /* can't be dane because card element is already gone
+         animePutCards(deleted);*/
+    });
 
     function itIsYourTurn() {
         const state = store.getState();

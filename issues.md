@@ -3,12 +3,13 @@
 * fix: other player take multi card animation
 * build victory screen 
     * check it again
+    
 * bug: flikers when take card
-    * card not animate
+    * animation die
+    
 * build counter for the round number
 * in begin play put option for number of round
 
-* better active user view
 
 more work: 
 
