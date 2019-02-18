@@ -13,10 +13,14 @@ game{
   perspective-origin: top center;
   perspective: 260em;
   //overflow-y: overlay;
-  @media #{$on-medium-screen}{
-    overflow-y: auto;
-  }
+  //@media #{$on-medium-screen}{
+  //}
   height: 100vh;
+
+  @media #{$on-medium-screen} {
+    overflow-y: auto; /*defeat 3D*/
+  }
+
 }
 
 tk-player-board {
@@ -44,8 +48,9 @@ tk-stage {
 
 tk-stage.in-game {
   display: grid;
-  grid-template-columns: 1fr 25vw;
-  grid-template-rows: max-content 1fr 1fr;
+  grid-template-columns: 1fr minmax(max-content,25vw);
+  grid-template-rows: max-content ;
+  //grid-template-rows: max-content 1fr minmax(min-content,2fr);
   //grid-auto-rows: minmax(max-content,1fr);
   grid-auto-flow: row;
   grid-template-areas: "players control" "board sidebar" "hand sidebar";
@@ -79,6 +84,8 @@ tk-stage.in-game {
     grid-area: hand;
     flex-shrink: 0;
     min-height: 10em;
+    max-height: 100%;
+    overflow-y: auto;
     //transform: translateZ(-12em);
     //position: absolute;
 
@@ -86,6 +93,8 @@ tk-stage.in-game {
       overflow: visible;
       min-height: max-content;
       transform: translateZ(-13em);
+      max-height: unset;
+
       .title {
         font-size: 1em;
 
@@ -117,17 +126,16 @@ tk-stage.in-game {
   }
 
   side-bar {
-    //transform: translateZ(-14em);
     grid-area: sidebar;
-    //top: 0;
-    //right: 0;
-    //height: 100vh;
-    //margin-right: 2em;
-    min-width: 15em;
-    width: 100%;
     height: 100%;
     justify-self: center;
     overflow-y: auto;
+    min-width: 15em;
+    width: 100%;
+    justify-self: center;
+    position: absolute;
+    bottom: 0;
+    top: 0;
 
     @media #{$on-medium-screen} {
       height: max-content;
