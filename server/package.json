@@ -9,9 +9,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "server": "nodemon --inspect",
+    "dev": "nodemon --inspect",
     "server:debug": "nodemon --inspect-brk",
-    "start": "nodemon --inspect"
+    "start": "node ."
   },
   "author": "",
   "license": "ISC",
