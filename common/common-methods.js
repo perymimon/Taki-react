@@ -1,8 +1,6 @@
-const {GAME_MODE} = require('./game-consts');
+import {GAME_MODE} from './game-consts.js';
 
-exports.isCardValid = isCardValid;
-
-function isCardValid(state, card) {
+export function isCardValid(state, card) {
     /*if this is first card any card valid*/
     if (state.stack.topCards[0]){
         const lastCard = state.stack.topCards[0];

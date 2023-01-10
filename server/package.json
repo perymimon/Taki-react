@@ -1,0 +1,28 @@
+{
+  "name": "taki-server",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "engines": {
+    "node": ">v18.x"
+  },
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "server": "nodemon --inspect",
+    "server:debug": "nodemon --inspect-brk",
+    "start": "nodemon --inspect"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  },
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "lodash": "^4.17.21",
+    "shortid": "^2.2.16",
+    "socket.io": "^4.5.4"
+  }
+}

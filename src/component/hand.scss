@@ -1,0 +1,125 @@
+@import "../common/variables";
+
+hand-game {
+  display: block;
+
+  border: 2px solid;
+  border-color: var(--player-color);
+  padding: 0.1em;
+  box-sizing: border-box;
+  transition: background-color, transform;
+  transition-duration: 0.1s;
+  perspective-origin: center center;
+  margin-top: 2em;
+  background-color: var(--player-color);
+  background-image: linear-gradient(357deg, black, transparent);
+  background-clip: padding-box;
+
+  .title {
+    color: white;
+    font-size: 1.5rem;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    pointer-events: none;
+    //overflow: hidden;
+  }
+
+  .sorting {
+    float: right;
+
+    &.sortSymbolAsc #sortSymbolAsc,
+    &.sortSymbolDesc #sortSymbolDesc,
+    &.sortColor #sortColor,
+    .active{
+      outline: 3px dotted white;
+      transform: translateY(-0.5em) scale(1.1);
+      padding: 0.1em;
+    }
+
+    button, label{
+      display: inline-flex;
+      flex-direction: row-reverse;;
+
+      &:hover{
+        transform: scale(1.1);
+      }
+      &:active{
+        transform: scale(0.9);
+      }
+
+
+
+
+      tk-icon{
+        height: 2em;
+        width: 1.5em;
+        display: inline-block;
+        margin-inline-start: -0.4em;
+
+        &:nth-child(-1n+2){
+          transform: rotate(10deg);
+        }
+        //&:nth-child(2){
+        //  transform: rotate(10deg);
+        //}
+
+        &:nth-child(3){
+          transform: rotate(-10deg);
+        }
+        &:last-child{
+          margin-inline-start: -0em;
+        }
+        svg {
+          background: #eee;
+          color:black;
+          fill:currentColor;
+          padding: 0;
+          margin: 0;
+          border-radius: 0;
+          border: 1px solid black;
+        }
+
+      }
+
+
+    }
+    button#sortColor{
+
+      tk-icon{
+        &:nth-child(1) svg{
+          color: $card-green;
+          background-color: $card-green;
+        }
+        &:nth-child(2) svg{
+          color: $card-red;
+          background-color: $card-red;
+        }
+        &:nth-child(3) svg{
+          color: $card-yellow;
+          background-color: $card-yellow;
+        }
+      }
+
+    }
+
+  }
+
+
+
+  .btn-end-turn {
+    margin: 0 1em;
+    //border: 0.2em solid;
+    //height: 2em;
+    //float: right;
+    //border-radius: 1em;
+    //text-transform: capitalize;
+    //font-size: 1rem;
+    //font-weight: bold;
+  }
+}
+
+[myturn="true"] hand {
+  background-color: currentColor;
+  transform: translateY(0rem);
+}

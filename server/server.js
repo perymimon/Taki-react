@@ -1,119 +1,54 @@
-/*basic*/
-const path = require('path');
-const http = require('http');
-const socketCookies = require('./socket-cookie');
+// loads environment variables from a .env file into process.env
+import * as dotenv from 'dotenv'
 
-require('dotenv').config();
-/*build client*/
-// require('./parcel');
-/*extra*/
-// const socket = require('socket.io');
-const Koa = require('koa');
-const route = require('koa-route');
-const IO = require('koa-socket');
-const app = new Koa();
-const lobbyIO = new IO();
+import http from 'node:http'
+import express from "express"
+import path from "node:path"
+import {Server} from 'socket.io'
 
-lobbyIO.attach(app); // Socket is now available as app.io if you prefer
+dotenv.config()
+export var app = express();
 
-app.keys = ["some key loop", "another key loop"];
+export const httpServer = http.createServer(app);
+const serverPort = process.env.SERVER_PORT;
 
-// app.use(function resetCookieToken(ctx, next){
-//     const tokenName = 'game-token';
-//     const token = ctx.cookies.get(tokenName) || createToken();
-//     ctx.cookies.set(tokenName, token, {
-//         maxAge: 10 * 365 * 24 * 60 * 60 * 1000, /*10 years*/
-//         httpOnly: false,
-//         overwrite: true
-//     });
-//     return next();
-// });
-
-
-app.use(require('koa-static')(path.resolve('public/.dist'), {extensions: ['html']}));
-app.use(require('koa-static')(path.resolve('public'), {extensions: ['html']}));
-app.use(require('koa-static')(path.resolve('bower_components')));
-app.use(require('koa-static')(path.resolve('node_modules')));
-
-app.use(function (ctx, next) {
-    ctx.response.set("Access-Control-Allow-Origin", '*');
-    ctx.response.set("Access-Control-Allow-Credentials", true);
-    ctx.response.set('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
-    ctx.response.set("Access-Control-Allow-Headers", 'Origin,X-Requested-With,Content-Type,Accept,content-type,application/json,Set-Cookie,cookie');
-    next();
-});
-app.use(function (ctx, next) {
-    console.log(ctx.url);
-    next();
-});
-
-app.use(route.get('/ping', function (ctx) {
-    ctx.body = 'pong';
-}));
-
-app.use(route.get('/register', function (ctx) {
-    const tokenName = 'game-token';
-    const token = ctx.cookies.get(tokenName) || createToken();
-    const maxAge = 10 * 365 * 24 * 60 * 60 * 1000 /*10 years*/;
-    const expires = new Date(Date.now() + maxAge);
-    ctx.cookies.set(tokenName, token, {
+export const io = new Server(httpServer, {
+    cors: {
+        origin: '*',
+        methods: 'GET,PUT,POST,DELETE,OPTIONS'.split(','),
+        credentials: true
+    },
+    cookie: {
+        name: "game-token",
+        path: "/",
         maxAge: 10 * 365 * 24 * 60 * 60 * 1000, /*10 years*/
         httpOnly: false,
-        overwrite: true,
-        // domain:'netlify.com',
-        // sameSite:'Lax'
-        // secure:false
-    });
-    ctx.set("Access-Control-Allow-Origin", ctx.headers.origin );
-    // ctx.set("Access-Control-Allow-Origin", 'https://taki.netlify.com/' );
-    ctx.set('Cache-Control', 'no-cache');
-    // ctx.set('Set-Cookie', `game-token=${token}; path=/; expires=${expires.toUTCString()}`);
-    ctx.body = token;
-    // console.log('ctx.origin', ctx.origin);
-    // console.log('ctx.headers', Object.keys(ctx.headers));
-    // console.log('register', ctx);
-}));
-
-app.use(async function (ctx) {
-    const send = require('koa-send');
-    await send(ctx, 'public/.dist/index.html');
-});
-// app.use(require('koa-bodyparser')());
-app.use(require('koa-session')({secret: 'keyboard cat', resave: true, saveUninitialized: true}, app));
-
-lobbyIO.use((ctx, next) => {
-    // ctx.token = ctx.socket.socket.handshake.query.token;
-    // const cookief  = ctx.socket.handshake.headers.cookie;
-    // ctx.token = cookief.replace(/.*token=(\w+).*/, '$1');
-    ctx.token = ctx.socket.socket.token;
-
-    if (!ctx.token) {
-        return next(new Error('not registered, call `http get /register` '))
+        sameSite: "lax"
     }
-    return next();
+});
+// called for each HTTP request (including the WebSocket upgrade)
+io.engine.on("headers", (headers, request) => {
+    if (!request.headers.cookie) return;
+    // const cookies = parse(request.headers.cookie);
+    // if (!cookies.randomId) {
+    //     headers["set-cookie"] = serialize("randomId", "abc", { maxAge: 86400 });
+    // }
+});
+io.on('connection', socket => {
+
+
 });
 
-lobbyIO.on('connection', function (ctx, data) {
-    const tokenName = 'game-token';
-    const cookie = socketCookies(ctx.socket);
-    const token = cookie.get(tokenName);
-    // cookie.set(tokenName, token, 10 * 365 /*10 years*/);
-    ctx.socket.token = ctx.data.token = token;
-});
+app.use(express.static(path.resolve('public/.dist'), {extensions: ['html']}));
+app.use(express.static(path.resolve('public'), {extensions: ['html']}));
+app.use(express.static(path.resolve('bower_components')));
+app.use(express.static(path.resolve('node_modules')));
 
-require('./game-server')(lobbyIO, app);
+app.get('/', (req, res) => {
+    // res.send('server up')
+    res.send('public/.dist/index.html');
+})
+httpServer.listen(serverPort, () => {
+    console.log(`server listening on port ${serverPort}`)
+})
 
-if(!process.env.PORT){
-    console.log('use default port')
-}
-const PORT = process.env.PORT || 8080;
-
-app.listen(PORT, function () {
-    console.log('Server listening at port %d', PORT);
-});
-
-
-/*middleware*/
-function createToken() {
-    return Array(8).fill(null).map(_ => '67890abcdef'[(Math.random() * 10) | 1]).join('');
-}

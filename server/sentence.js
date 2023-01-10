@@ -1,4 +1,4 @@
-module.exports.factoryMessages = function (_state) {
+export function factoryMessages (_state) {
     const state = Object.create(_state);
 
     state.__defineGetter__('player', () => state.players[state.turn]);

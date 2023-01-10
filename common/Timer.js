@@ -6,7 +6,7 @@ const COOL_NOTIFY_TIMER = Symbol('cool notify timer');
 
 
 
-class Timer {
+export class Timer {
     constructor(time, autostart = false, infinity, callback) {
         this.setTime(time);
         const lastArg = arguments[arguments.length -1];
@@ -162,7 +162,7 @@ function igniteAllNotify() {
 }
 
 /**--------------SIMPLE TIMER------------------**/
- function simpleTimer(callback, time) {
+ export function simpleTimer(callback, time) {
     var cancel = setTimeout(callback, time);
     return function () {
         clearTimeout(cancel);
@@ -171,5 +171,3 @@ function igniteAllNotify() {
 }
 
 
-exports.Timer = Timer;
-exports.simpleTimer = simpleTimer;

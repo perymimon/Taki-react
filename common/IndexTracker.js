@@ -1,4 +1,4 @@
-function CycleIndexTracker (trackedArray, resetIndex){
+export function CycleIndexTracker (trackedArray, resetIndex){
     var currentIndex = resetIndex || 0;
     var increment = 1;
 
@@ -42,5 +42,3 @@ function CycleIndexTracker (trackedArray, resetIndex){
 
     return api;
 }
-
-exports.CycleIndexTracker = CycleIndexTracker;

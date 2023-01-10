@@ -1,12 +1,15 @@
-const {Timer} = require('../common/Timer');
-const {CycleIndexTracker} = require('../common/IndexTracker');
+import EventEmitter from 'node:events';
 
-const taki = require('./taki-cards');
-const {Card} = require('./taki-cards');
-const EventEmitter = require('events');
-const shortId = require('shortid');
-const {GAME_EVENTS, GAME_MODE, GAME_SETTING} = require('../common/game-consts');
-const {isCardValid} = require('../common/common-methods');
+import {Timer} from '../common/Timer.js';
+import {CycleIndexTracker} from '../common/IndexTracker.js';
+import  {Card, getNewDeck}  from './taki-cards.js';
+
+import shortId from 'shortid';
+import {GAME_EVENTS, GAME_MODE, GAME_SETTING} from '../common/game-consts.js';
+import {isCardValid} from '../common/common-methods.js';
+
+import {factoryMessages} from "./sentence.js";
+
 const colorCode$ColorName = {
     B: 'blue',
     R: 'red',
@@ -15,16 +18,14 @@ const colorCode$ColorName = {
     '': 'uncolor',
 };
 
-module.exports = Game;
-
-function Game() {
+export function Game() {
     const emitter = new EventEmitter();
     const counterDown = new Timer(GAME_SETTING.TURN_COUNTER, false, true, function () {
         notifyPlayers(SENTENCE.timeEnd);
         drawCards()
     });
 
-    let deck = taki.getNewDeck();
+    let deck = getNewDeck();
     const stack = [];
     const players = [];
     const turnTracker = new CycleIndexTracker(players, -1);
@@ -62,21 +63,24 @@ function Game() {
             return (GAME_SETTING.TURN_COUNTER - counterDown.timePass)
         },
     };
-    const SENTENCE = require('./sentence').factoryMessages(publicState);
 
-    function notifyPlayers(messageFactory, args = {}, referrer) {
+
+
+    const SENTENCE = factoryMessages(publicState);
+
+    function notifyPlayers(message, args = {}, referrer) {
         referrer = referrer || turnTracker.getCurrent();
         args.player = args.player || referrer;
-        var {code, private, public, meta} = messageFactory(args);
+        var msg = message(args);
         var id = shortId.generate();
 
-        if (private) {
-            var personal = {id, code, text: private, meta, private: true};
+        if (msg.private) {
+            var personal = {...msg, id, text: msg.private, private: true};
             player$messages.get(referrer).push(personal);
         }
 
-        if (public) {
-            var other = {id, code, text: public, meta, private: false};
+        if (msg.public) {
+            var other = {...msg, id, text: msg.public, private: false};
             getOtherPlayer(referrer).forEach(function (p, i) {
                 player$messages.get(p).push(other)
             });
@@ -254,7 +258,7 @@ function Game() {
             }
         },
         setup({isNewRound = false, rounds = GAME_SETTING.NUMBER_OF_ROUND}) {
-            deck = taki.getNewDeck();
+            deck = getNewDeck();
             stack.length = 0;
             players.sort(_ => Math.random() - .5).forEach((player, i) => {
                 player.hand.length = 0;
@@ -273,6 +277,7 @@ function Game() {
         },
         joinPlayer(player) {
             const getPlayer = this.getPlayer;
+            player.moveRoom('game');
             if (this.isPlayerInGame(player.token)) return false;
             player.index = players.length;
             player.score = 0;
@@ -327,17 +332,17 @@ function Game() {
         endTurn() {
             drawCards(0);
         },
-        drawCards(token, amount) {
-            if (isPlayerInvalid(token)) return;
-            if (publicState.mode === GAME_MODE.TAKI) {
+        drawCards(player, amount) {
+            if (isPlayerInvalid(player)) return;
+            if (publicState.mode === GAME_MODE.taki) {
                 notifyPlayers(SENTENCE.drawCardInTakiMode);
                 return false;
             }
             return drawCards(amount);
         },
 
-        playCard(token, card) {
-            if (isPlayerInvalid(token)) return false;
+        playCard(player, card) {
+            if (isPlayerInvalid(player)) return false;
             playCard(card);
         },
 
@@ -347,8 +352,7 @@ function Game() {
         return players.find(p => p.token === token)
     }
 
-    function isPlayerInvalid(token) {
-        const player = getPlayer(token);
+    function isPlayerInvalid(player) {
         if (player === turnTracker.getCurrent()) {
             return false;
         }

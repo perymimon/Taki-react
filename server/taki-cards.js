@@ -1,4 +1,4 @@
-const {GAME_SETTING} = require('../common/game-consts');
+import {GAME_SETTING} from '../common/game-consts.js';
 /*
 T - Taki
 S - Stop
@@ -8,7 +8,7 @@ P - Plus
 W - +2
 */
 
-class Card {
+export class Card {
     constructor(symbol, color, set) {
         Object.assign(this, {
             symbol,
@@ -32,7 +32,7 @@ class Card {
 }
 
 
-const cards = (function createCardsPack() {
+export const cards = (function createCardsPack() {
     let basicSymbols = "13456789TSDWP".split('');
     let magicSet = "CCCC".split('');
     let basicColor = "RGBY".split('');
@@ -56,10 +56,8 @@ const cards = (function createCardsPack() {
     return [].concat(...cards);
 })();
 
-exports.getNewDeck = getNewDeck;
-exports.Card = Card;
 
-function getNewDeck() {
+export function getNewDeck() {
     /* shuffle and clone*/
     return cards.sort(_ => Math.random() - 0.5).slice();
 }

@@ -1,0 +1,61 @@
+side-bar{
+    background: hsla(219deg, 84%, 10%, 0.22);
+    padding: 1em 0.3em;
+    color: #b3f5e9;
+    z-index: -1;
+
+    .message{
+        display: block;
+
+        font-family: "Helvetica Neue" ;
+        * {
+            vertical-align: middle;
+        }
+        tk-card{
+            display: inline-block;
+            height: 2em;
+            font-size: inherit;
+            width: 1.8em;
+            -webkit-margin-end: 0.3em;
+            margin-bottom: 0.3em;
+        }
+
+
+    }
+
+    tk-separator{
+        color: #9ce2e238;
+        display: block;
+        height: 0;
+        border-bottom: 1px solid currentColor;
+        margin: 0.5em 0.3em;
+        position: relative;
+
+        &:first-child,&:last-child{
+            display: none;
+        }
+
+
+
+        &:before,&:after{
+            content: '';
+            display: block;
+            position: absolute;
+            width: 0.4em;
+            height: 0.4em;
+            top: 50%;
+            transform: translateY(-50%) rotate(45deg);
+            background-color: currentColor;
+            box-shadow: 0px 0px 2px currentColor;
+        }
+
+        &:before{
+            right: 100%;
+        }
+        &:after{
+            left: 100%;
+        }
+
+    }
+
+}

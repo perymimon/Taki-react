@@ -1,13 +1,13 @@
+import EventEmitter from 'node:events';
+import {SOCKET_EVENTS, GAME_SETTING} from '../common/game-consts.js';
+
 const users = {};
 var color = "F44336,9C27B0,673AB7,3F51B5,2196f3,03a9f4,00BCD4,009688,4CAF50,8BC34A,cddc39,ffeb3b,ffc107,ff9800,ff5722".split(',');
-const EventEmitter = require('events');
 
-const {SOCKET_EVENTS, GAME_SETTING} = require('../common/game-consts');
 const {USER_TTL} = GAME_SETTING;
-
 const userEventBus = new EventEmitter();
 
-class User extends EventEmitter {
+export class User extends EventEmitter {
     static on(...args){
         userEventBus.on(...args)
     }
@@ -118,7 +118,6 @@ User.getConnected = function () {
 };
 var colorPool = [...color];
 
-module.exports = User;
 
 function randomColor() {
     var i = (Math.random() * colorPool.length) | 1;
