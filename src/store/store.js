@@ -1,13 +1,14 @@
 import {createStore} from 'unistore/src/combined/react'
-import devtools from 'unistore/devtools' //todo: remove it in production
+// import devtools from 'unistore/devtools' //todo: remove it in production
 import io from "socket.io-client"
 
 import {storeStateActions, initState} from './store-state-actions';
 
 
-export const store = import.meta.env.NODE_ENV === 'production' ?
-    createStore(initState) : devtools(createStore(initState));
+// export const store = import.meta.env.NODE_ENV === 'production' ?
+//     createStore(initState) : devtools(createStore(initState));
 // export const store = devtools(createStore(initState));
+export const store = createStore(initState)
 export const actions = {};
 
 /*modified store*/
